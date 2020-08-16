@@ -1,0 +1,83 @@
+/**
+ *  Artemis game
+ *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *
+ *  This library is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#include <glad.h>
+#include <OpenGL/Debug.hpp>
+#include <OpenGL/Context.hpp>
+#include <NanoVG/NanoVG.hpp>
+#include <Blendish/Blendish.hpp>
+#include <OpenGL/Gui.hpp>
+#include <oui.h>
+
+using namespace std;
+
+using namespace OpenGL;
+
+Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW_OPENGL) {
+    int w, h;
+    GLuint VertexArrayID;
+
+    _context = SDL_GL_CreateContext(_window);
+    if (_context == nullptr) {
+        throw runtime_error("Cannot create GL context!");
+    }
+
+    SDL_GetWindowSize(_window, &w, &h);
+
+    gladLoadGL();
+
+    glEnable(GL_DEPTH_TEST);
+    glViewport(0, 0, w, h);
+    glDepthFunc(GL_LESS);
+
+    glGenVertexArrays(1, &VertexArrayID);
+    glBindVertexArray(VertexArrayID);
+
+    _nvgContext = NVG::nvgCreateGL3(NVG::NVG_ANTIALIAS);
+}
+
+Context::~Context() {
+    SDL_GL_DeleteContext(_context);
+}
+
+void Context::Render() {
+    int w, h;
+
+    SDL_GetWindowSize(_window, &w, &h);
+
+    glClearColor(0.2, 0.4, 0.1, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    for (Graphics::DrawFunc func : _drawables) {
+        func(*this);
+        CheckOpenGLErrors();
+    }
+
+    if (uiGetItemCount() > 0) {
+        NVG::nvgBeginFrame(_nvgContext, w, h, w / h);
+
+        DrawUI(_nvgContext, 0, Blendish::BND_CORNER_NONE);
+
+        NVG::nvgEndFrame(_nvgContext);
+    }
+
+    SDL_GL_SwapWindow(_window);
+}

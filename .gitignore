@@ -1,0 +1,6 @@
+TODO.md
+build
+nbproject
+*.a
+*.so
+*.dump
