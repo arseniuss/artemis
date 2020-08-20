@@ -43,13 +43,39 @@ MenuState::~MenuState() {
 void MenuState::OnPush() {
     uiBeginLayout();
 
-    int root = Gui::Panel();
+    int root = Gui::CreatePanel();
     auto windowSize = _app.GetGraphics().GetSize();
 
     uiSetSize(root, windowSize.x, windowSize.y);
     uiSetBox(root, UI_COLUMN);
 
+    int layout1 = Gui::CreatePanel();
+    uiSetLayout(layout1, UI_CENTER);
+    uiSetBox(layout1, UI_COLUMN);
+    uiSetMargins(layout1, 0, 0, 0, 0);
+    uiSetSize(layout1, 200, 200);
+
+    uiInsert(root, layout1);
+
+    int button1 = Gui::CreateButton(-1, "BEGIN", nullptr);
+    uiSetLayout(button1, UI_HFILL | UI_TOP);
+    uiSetMargins(button1, 0, 1, 0, 0);
+
+    uiInsert(layout1, button1);
+
+    auto e = std::bind(&MenuState::onExitButton, this, std::placeholders::_1, std::placeholders::_2);
+
+    int button2 = Gui::CreateButton(-1, "EXIT", e);
+    uiSetLayout(button2, UI_HFILL | UI_TOP);
+    uiSetMargins(button2, 0, 1, 0, 0);
+
+    uiInsert(layout1, button2);
+
     uiEndLayout();
+}
+
+void MenuState::onExitButton(int item, UIevent event) {
+    _app.PopState();
 }
 
 void MenuState::HandleInput() {

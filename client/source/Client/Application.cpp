@@ -23,6 +23,8 @@
 #include <Client/Application.hpp>
 #include <Client/State.hpp>
 
+#include "oui.h"
+
 using namespace std;
 
 using namespace Client;
@@ -62,6 +64,7 @@ void Application::Run() {
         start = stop;
 
         current.Update(deltaTime);
+        uiProcess(deltaTime);
 
         _graphics->Render();
 

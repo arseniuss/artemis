@@ -4,6 +4,8 @@ BUILDDIR = build
 OBJDIR = $(BUILDDIR)/obj
 
 SOURCES = \
+    source/Blendish/blendish.cpp \
+    source/Gui/Oui.cpp \
     source/NanoVG/NanoVG.cpp \
     source/NanoVG/nanovg.c \
     source/OpenGL/Context.cpp \

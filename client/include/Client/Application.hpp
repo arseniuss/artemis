@@ -37,7 +37,7 @@ namespace Client {
 
         Graphics::Context& GetGraphics() {
             return *_graphics;
-        }    
+        }
     private:
         std::shared_ptr<Graphics::Context> _graphics;
     };

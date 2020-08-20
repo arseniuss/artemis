@@ -23,12 +23,13 @@
 #include <Client/Application.hpp>
 
 namespace Client {
+
     class State : public Common::State {
     protected:
         Application& _app;
     public:
         State(Application* app, const std::string& name);
-        
+
         virtual void HandleEvent(const SDL_Event& event);
     };
 }

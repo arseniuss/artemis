@@ -16,24 +16,10 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <string>
+#define BLENDISH_IMPLEMENTATION
 
-#include <OpenGL/Context.hpp>
+#include <NanoVG/NanoVG.hpp>
 
-#include "Gui/internal.hpp"
+using namespace NVG;
 
-extern "C" {
-
-    void InitGraphics(void) {
-        Gui::CreateButton = &Gui::Button;
-        Gui::CreatePanel = &Gui::Panel;
-        Gui::CreateRadio = &Gui::Radio;
-    }
-
-    OpenGL::Context* CreateContext(const std::string& title) {
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-
-        return new OpenGL::Context(title);
-    }
-}
+#include <Blendish/blendish.h>

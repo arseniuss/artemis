@@ -7,6 +7,7 @@ SOURCES = \
     source/Common/Debug.cpp \
     source/Common/PluginManager.cpp \
     source/Common/State.cpp \
+    source/Gui/Oui.cpp \
     source/World/Block.cpp \
     source/World/Chunk.cpp \
     source/World/ChunkManager.cpp \

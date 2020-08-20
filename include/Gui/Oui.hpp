@@ -20,26 +20,42 @@
 #define GUI_OUI_HPP
 
 #include <oui.h>
+#include <functional>
 
 namespace Gui {
-    typedef enum {
+    
+    typedef enum class UIType {
         Label,
+        Button,
+        Radio,
+        Slider,
+        Column,
+        Row,
+        Check,
+        Panel,
+        Text,
+        Ignore,
+        Rect,
+        HBox,
+        VBox
     } UIType;
+    
+    using UIHandlerFunc = std::function<void(int item, UIevent event)>;
     
     typedef struct {
         UIType type;
-        UIhandler handler;
+        UIHandlerFunc handler;
     } UIData;
     
-    static inline int Panel() {
-        int item = uiItem();
-        UIData *data = (UIData *)uiAllocHandle(item, sizeof(UIData));
-        
-        data->type = Label;
-        data->handler = nullptr;
-        
-        return item;
-    }
+    typedef int (*CreatePanelFunc)();
+    typedef int (*CreateButtonFunc)(int iconId, const char *label, UIHandlerFunc handler);
+    typedef int (*CreateRadioFunc)(int iconId, const char *label, int* value);
+    
+    extern CreatePanelFunc CreatePanel;
+    extern CreateButtonFunc CreateButton;
+    extern CreateRadioFunc CreateRadio;
+    
+    void Validate();
 }
 
 #endif /* !GUI_OUI_HPP */

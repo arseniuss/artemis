@@ -23,10 +23,14 @@
 #include <Blendish/Blendish.hpp>
 #include <OpenGL/Gui.hpp>
 #include <oui.h>
+#include <experimental/filesystem>
 
 using namespace std;
 
 using namespace OpenGL;
+
+const string& fontFilename = "data/DejaVuSans.ttf";
+const string& iconFilename = "data/blender_icons16.png";
 
 Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW_OPENGL) {
     int w, h;
@@ -49,6 +53,15 @@ Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW
     glBindVertexArray(VertexArrayID);
 
     _nvgContext = NVG::nvgCreateGL3(NVG::NVG_ANTIALIAS);
+
+    if (!std::experimental::filesystem::exists(fontFilename))
+        throw runtime_error("Font file not found: " + fontFilename);
+
+    if (!std::experimental::filesystem::exists(iconFilename))
+        throw runtime_error("Icon file not found: " + iconFilename);
+
+    Blendish::bndSetFont(nvgCreateFont(_nvgContext, "system", fontFilename.c_str()));
+    Blendish::bndSetIconImage(nvgCreateImage(_nvgContext, iconFilename.c_str(), 0));
 }
 
 Context::~Context() {

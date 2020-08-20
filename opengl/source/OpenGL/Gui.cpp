@@ -16,13 +16,18 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cassert>
+
 #include <NanoVG/NanoVG.hpp>
 #include <Blendish/Blendish.hpp>
 #include <OpenGL/Gui.hpp>
 #include <Gui/Oui.hpp>
-#include <oui.h>
+
+#include "../Gui/internal.hpp"
 
 using namespace NVG;
+using namespace Gui;
+using namespace Blendish;
 
 static void DrawTestRect(NVG::NVGcontext *vg, UIrect rect) {
 #ifndef NDEBUG
@@ -52,6 +57,63 @@ void OpenGL::DrawUI(NVG::NVGcontext *vg, int item, int corners) {
 
     if (head) {
         switch (head->type) {
+            case UIType::Label:
+                assert(head);
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Button:
+            {
+                const UIButtonData *data = (UIButtonData *) head;
+
+                bndToolButton(vg, rect.x, rect.y, rect.w, rect.h,
+                        corners, (BNDwidgetState) uiGetState(item),
+                        data->iconId, data->label);
+                break;
+            }
+            case UIType::Radio:
+            {
+                const UIRadioData *data = (UIRadioData *) head;
+                BNDwidgetState state = (BNDwidgetState) uiGetState(item);
+
+                if (data->value && *data->value == item)
+                    state = BND_ACTIVE;
+                bndRadioButton(vg, rect.x, rect.y, rect.w, rect.h,
+                        corners, state,
+                        data->iconId, data->label);
+                break;
+            }
+            case UIType::Slider:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Column:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Row:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Check:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Panel:
+                DrawTestRect(vg, rect);
+                bndBevel(vg, rect.x, rect.y, rect.w, rect.h);
+                DrawUIItems(vg, item, corners);
+                break;
+            case UIType::Text:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Ignore:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::Rect:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::HBox:
+                DrawTestRect(vg, rect);
+                break;
+            case UIType::VBox:
+                DrawTestRect(vg, rect);
+                break;
             default:
                 DrawTestRect(vg, rect);
                 DrawUIItems(vg, item, corners);

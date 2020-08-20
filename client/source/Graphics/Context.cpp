@@ -21,6 +21,7 @@
 #include <SDL2/SDL_image.h>
 
 #include <Graphics/Context.hpp>
+#include <Gui/Oui.hpp>
 
 #include "oui.h"
 
@@ -44,6 +45,8 @@ shared_ptr<Context> Context::Create(const string& name, const string& title) {
         init();
     }
 
+    Gui::Validate();
+
     CreateContextFunc func = (CreateContextFunc) dlsym(handle, "CreateContext");
 
     if (func == nullptr) {
@@ -66,7 +69,7 @@ Context::Context(const std::string& title, SDL_WindowFlags flags) {
             SDL_WINDOWPOS_CENTERED, 800, 600, flags | SDL_WINDOW_SHOWN);
     if (_window == nullptr) {
         throw runtime_error("Cannot create window!");
-    }  
+    }
 }
 
 Context::~Context() {

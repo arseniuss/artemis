@@ -21,6 +21,7 @@
 
 #include <Client/State.hpp>
 #include <Client/Application.hpp>
+#include <Gui/Oui.hpp>
 
 namespace Client {
 
@@ -30,10 +31,13 @@ namespace Client {
         ~MenuState();
 
         void OnPush() override;
-        
+
         void HandleInput() override;
 
         void HandleEvent(const SDL_Event& event) override;
+
+
+        void onExitButton(int item, UIevent event);
     };
 }
 
