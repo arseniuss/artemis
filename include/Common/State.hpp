@@ -34,6 +34,10 @@ namespace Common {
         virtual void OnPush();
 
         virtual void OnPop();
+        
+        virtual void OnDisable();
+        
+        virtual void OnEnable();
 
         virtual void HandleInput();
 

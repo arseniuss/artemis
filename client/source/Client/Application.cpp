@@ -22,6 +22,7 @@
 
 #include <Client/Application.hpp>
 #include <Client/State.hpp>
+#include <Gui/Oui.hpp>
 
 #include "oui.h"
 
@@ -29,8 +30,25 @@ using namespace std;
 
 using namespace Client;
 
+static void UIHandler(int item, UIevent event) {
+    Gui::UIData *data = (Gui::UIData *)uiGetHandle(item);
+
+    if (data) {
+        if (data->handler1) {
+            data->handler1(item, event);
+        } else if (data->handler2) {
+            data->handler2(item, event);
+        }
+    }
+}
+
 Application::Application() : Common::Application() {
     _graphics = Graphics::Context::Create("opengl", "Artemis");
+
+    UIcontext * ctx = uiCreateContext(4096, 1 << 20);
+
+    uiMakeCurrent(ctx);
+    uiSetHandler(UIHandler);
 }
 
 Application::~Application() {
@@ -54,12 +72,12 @@ void Application::Run() {
 
         State& current = *(State *) _states.back().get();
         SDL_Event event;
-        
+
         mouse = SDL_GetMouseState(&mousex, &mousey);
         mod = SDL_GetModState();
-        
+
         uiSetCursor(mousex, mousey);
-        
+
         uiSetButton(0, mod, mouse & SDL_BUTTON_LMASK ? 1 : 0);
         uiSetButton(1, mod, mouse & SDL_BUTTON_MMASK ? 1 : 0);
         uiSetButton(2, mod, mouse & SDL_BUTTON_RMASK ? 1 : 0);
@@ -83,6 +101,11 @@ void Application::Run() {
             current.OnPop();
 
             _states.pop_back();
+            if (_states.size()) {
+                auto&c = _states.back();
+
+                c->OnEnable();
+            }
             _isPoping = false;
         }
     }

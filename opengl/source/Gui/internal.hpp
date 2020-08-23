@@ -26,21 +26,15 @@ namespace Gui {
 
     typedef struct {
         UIData head;
+        int iconId;
         const char *label;
-        NVG::NVGcolor color;
-    } UIRectData;
+    } UILabelData;
 
     typedef struct {
         UIData head;
         int iconId;
         const char *label;
     } UIButtonData;
-
-    typedef struct {
-        UIData head;
-        const char *label;
-        int *option;
-    } UICheckData;
 
     typedef struct {
         UIData head;
@@ -57,13 +51,36 @@ namespace Gui {
 
     typedef struct {
         UIData head;
+        const char *label;
+        NVG::NVGcolor color;
+    } UIRectData;
+
+    typedef struct {
+        UIData head;
+        const char *label;
+        int *option;
+    } UICheckData;
+
+    typedef struct {
+        UIData head;
         char *text;
         int maxsize;
     } UITextData;
 
+    typedef struct {
+        UIData head;
+        const char *title;
+        int iconId;
+    } UIWindowData;
+
+    int Label(int iconId, const char * label);
     int Button(int iconId, const char *label, UIHandlerFunc handler);
-    int Panel();
     int Radio(int iconId, const char *label, int* value);
+    int Slider(const char *label, float *progress);
+    int Column();
+    int Panel();
+    int Window(int iconId, const char *title);
+
 }
 
 #endif /* INTERNAL_HPP */

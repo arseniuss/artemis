@@ -95,7 +95,7 @@ void OpenGL::DrawUI(NVG::NVGcontext *vg, int item, int corners) {
                 DrawTestRect(vg, rect);
                 break;
             case UIType::Panel:
-                DrawTestRect(vg, rect);
+                bndBackground(vg, rect.x, rect.y, rect.w, rect.h);
                 bndBevel(vg, rect.x, rect.y, rect.w, rect.h);
                 DrawUIItems(vg, item, corners);
                 break;
@@ -114,10 +114,27 @@ void OpenGL::DrawUI(NVG::NVGcontext *vg, int item, int corners) {
             case UIType::VBox:
                 DrawTestRect(vg, rect);
                 break;
+            case UIType::Window:
+            {
+                BNDwidgetState state = (BNDwidgetState) uiGetState(item);
+                UIWindowData *data = (UIWindowData *) head;
+
+                bndNodeBackground(vg, rect.x, rect.y, rect.w, rect.h, state,
+                        data->iconId, data->title,
+                        nvgRGBf(0.392f, 0.392f, 0.392f));
+                break;
+            }
             default:
                 DrawTestRect(vg, rect);
                 DrawUIItems(vg, item, corners);
                 break;
         }
+    } else {
+        DrawTestRect(vg, rect);
+        DrawUIItems(vg, item, corners);
+    }
+
+    if (uiGetState(item) == UI_FROZEN) {
+        nvgGlobalAlpha(vg, 1.0);
     }
 }

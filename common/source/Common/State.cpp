@@ -40,6 +40,14 @@ void State::OnPop() {
 
 }
 
+void State::OnDisable() {
+
+}
+
+void State::OnEnable() {
+
+}
+
 void State::Update(float deltaTime) {
 }
 

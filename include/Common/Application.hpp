@@ -35,6 +35,12 @@ namespace Common {
 
         template<typename T, typename... Args>
         void PushState(Args&&... args) {
+            if(_states.size()) {
+                auto& c = _states.back();
+                
+                c->OnDisable();
+            }
+            
             _states.push_back(std::make_unique<T>(std::forward<Args>(args)...));
             auto& s = _states.back();
 

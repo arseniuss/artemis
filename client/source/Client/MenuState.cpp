@@ -18,22 +18,12 @@
 
 #include <Client/MenuState.hpp>
 #include <Gui/Oui.hpp>
+#include <Client/TestState.hpp>
 
 using namespace Client;
 
-static void UIHandler(int item, UIevent event) {
-    Gui::UIData *data = (Gui::UIData *)uiGetHandle(item);
-
-    if (data && data->handler) {
-        data->handler(item, event);
-    }
-}
-
 MenuState::MenuState(Application* app) : State(app, "Menu state") {
-    UIcontext * ctx = uiCreateContext(4096, 1 << 20);
 
-    uiMakeCurrent(ctx);
-    uiSetHandler(UIHandler);
 }
 
 MenuState::~MenuState() {
@@ -41,9 +31,13 @@ MenuState::~MenuState() {
 }
 
 void MenuState::OnPush() {
+    OnEnable();
+}
+
+void MenuState::OnEnable() {
     uiBeginLayout();
 
-    int root = Gui::CreatePanel();
+    int root = uiItem();
     auto windowSize = _app.GetGraphics().GetSize();
 
     uiSetSize(root, windowSize.x, windowSize.y);
@@ -62,6 +56,15 @@ void MenuState::OnPush() {
     uiSetMargins(button1, 0, 1, 0, 0);
 
     uiInsert(layout1, button1);
+
+    int testButton = Gui::CreateButton(-1, "TEST",
+            [this](int item, UIevent event) {
+                _app.PushState<TestState>(&_app);
+            });
+    uiSetLayout(testButton, UI_HFILL | UI_TOP);
+    uiSetMargins(testButton, 0, 1, 0, 0);
+
+    uiInsert(layout1, testButton);
 
     auto e = std::bind(&MenuState::onExitButton, this, std::placeholders::_1, std::placeholders::_2);
 

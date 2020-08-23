@@ -23,7 +23,7 @@
 #include <functional>
 
 namespace Gui {
-    
+
     typedef enum class UIType {
         Label,
         Button,
@@ -37,24 +37,34 @@ namespace Gui {
         Ignore,
         Rect,
         HBox,
-        VBox
+        VBox,
+        Window
     } UIType;
-    
+
     using UIHandlerFunc = std::function<void(int item, UIevent event)>;
-    
+
     typedef struct {
         UIType type;
-        UIHandlerFunc handler;
+        UIHandlerFunc handler1;
+        void (*handler2)(int item, UIevent event);
     } UIData;
-    
-    typedef int (*CreatePanelFunc)();
+
+    typedef int (*CreateLabelFunc)(int iconId, const char *label);
     typedef int (*CreateButtonFunc)(int iconId, const char *label, UIHandlerFunc handler);
     typedef int (*CreateRadioFunc)(int iconId, const char *label, int* value);
-    
-    extern CreatePanelFunc CreatePanel;
+    typedef int (*CreateSliderFunc)(const char *label, float *progress);
+    typedef int (*CreateColumnFunc)();
+    typedef int (*CreatePanelFunc)();
+    typedef int (*CreateWindowFunc)(int iconId, const char *title);
+
+    extern CreateLabelFunc CreateLabel;
     extern CreateButtonFunc CreateButton;
     extern CreateRadioFunc CreateRadio;
-    
+    extern CreateSliderFunc CreateSlider;
+    extern CreateColumnFunc CreateColumn;
+    extern CreatePanelFunc CreatePanel;
+    extern CreateWindowFunc CreateWindow;
+
     void Validate();
 }
 

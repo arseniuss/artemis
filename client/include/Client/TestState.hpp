@@ -16,32 +16,23 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#ifndef CLIENT_TESTSTATE_HPP
+#define CLIENT_TESTSTATE_HPP
 
 #include <Client/State.hpp>
 #include <Client/Application.hpp>
-#include <Gui/Oui.hpp>
 
 namespace Client {
-
-    class MenuState : public State {
+    class TestState : public State {
     public:
-        MenuState(Application* app);
-        ~MenuState();
-
+        TestState(Application* app);
+        ~TestState();
+        
         void OnPush() override;
-        void OnEnable() override;
-
-
-        void HandleInput() override;
 
         void HandleEvent(const SDL_Event& event) override;
 
-
-        void onExitButton(int item, UIevent event);
     };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
-
+#endif /* !CLIENT_TESTSTATE_HPP */

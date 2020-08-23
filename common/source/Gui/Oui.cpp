@@ -22,15 +22,27 @@
 
 using namespace Gui;
 
-CreatePanelFunc Gui::CreatePanel = nullptr;
+CreateLabelFunc Gui::CreateLabel = nullptr;
 CreateButtonFunc Gui::CreateButton = nullptr;
 CreateRadioFunc Gui::CreateRadio = nullptr;
+CreateSliderFunc Gui::CreateSlider = nullptr;
+CreateColumnFunc Gui::CreateColumn = nullptr;
+CreatePanelFunc Gui::CreatePanel = nullptr;
+CreateWindowFunc Gui::CreateWindow = nullptr;
 
 void Gui::Validate() {
-    if (!CreatePanel)
-        throw std::runtime_error("No function to create panel");
+    if (!CreateLabel)
+        throw std::runtime_error("No function to create label");
     if (!CreateButton)
         throw std::runtime_error("No function to create button");
-    if(!CreateRadio)
+    if (!CreateRadio)
         throw std::runtime_error("No function to create radio");
+    if (!CreateSlider)
+        throw std::runtime_error("No function to create slider");
+    if (!CreateColumn)
+        throw std::runtime_error("No function to create column");
+    if (!CreatePanel)
+        throw std::runtime_error("No function to create panel");
+    if (!CreateWindow)
+        throw std::runtime_error("No function to create window");
 }

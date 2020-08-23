@@ -25,9 +25,13 @@
 extern "C" {
 
     void InitGraphics(void) {
+        Gui::CreateLabel = &Gui::Label;
         Gui::CreateButton = &Gui::Button;
-        Gui::CreatePanel = &Gui::Panel;
         Gui::CreateRadio = &Gui::Radio;
+        Gui::CreateSlider = &Gui::Slider;
+        Gui::CreateColumn = &Gui::Column;
+        Gui::CreatePanel = &Gui::Panel;
+        Gui::CreateWindow = &Gui::Window;
     }
 
     OpenGL::Context* CreateContext(const std::string& title) {
