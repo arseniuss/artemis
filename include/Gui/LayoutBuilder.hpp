@@ -27,7 +27,7 @@
 #include <Gui/Panel.hpp>
 
 namespace Gui {
-    
+
     template<typename T>
     struct Type {
         size_t hash;
@@ -37,8 +37,9 @@ namespace Gui {
     protected:
         virtual Gui::Widget* create(Type<Gui::Widget> type) = 0;
         virtual Gui::Panel* create(Type<Gui::Panel> type) = 0;
-        
-        virtual void insert(size_t hash_code, void *widget) = 0;
+
+        virtual void insert(Gui::Widget*) = 0;
+        virtual void insert(Gui::Panel*) = 0;
     public:
 
         LayoutBuilder() {
@@ -47,15 +48,15 @@ namespace Gui {
         template<typename T>
         T* Create() {
             Type<T> type;
-            
-            type.hash = typeid(T).hash_code();
-            
+
+            type.hash = typeid (T).hash_code();
+
             return create(type);
         }
-        
+
         template<typename T>
-        void Insert(T& widget) {
-            insert(typeid(T).hash_code(), &widget);
+        void Insert(T* t) {
+            insert(t);
         }
     };
 }

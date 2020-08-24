@@ -24,10 +24,21 @@
 
 namespace OpenGL {
 
-    struct Widget : Gui::Widget {
+    struct OpenGLWidget {
         int item;
-        
-        virtual void Draw(NVG::NVGcontext* context) const {}
+
+        OpenGLWidget(int i) : item(i) {
+        }
+
+        virtual void Draw(NVG::NVGcontext* context) const {
+        }
+    };
+
+    struct Widget : OpenGLWidget, Gui::Widget {
+
+        Widget(int i) : OpenGLWidget(i) {
+
+        }
     };
 }
 

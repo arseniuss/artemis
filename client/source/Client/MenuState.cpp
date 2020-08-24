@@ -32,14 +32,14 @@ MenuState::~MenuState() {
 }
 
 void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
-    auto* panel = builder.Create<Gui::Panel>();
+    auto panel = builder.Create<Gui::Panel>();
 
     panel->SetLayout(Gui::LayoutType::Center);
     panel->SetBox(Gui::BoxType::Column);
     panel->SetMargins(0, 0, 0, 0);
     panel->SetSize(200, 200);
     
-    //builder.Insert(panel);
+    builder.Insert(panel);
 }
 
 

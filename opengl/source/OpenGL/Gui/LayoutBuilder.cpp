@@ -18,6 +18,8 @@
 
 #include <cxxabi.h>
 
+#include <SDL2/SDL_video.h>
+
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 #include <OpenGL/Gui/Panel.hpp>
@@ -28,8 +30,17 @@ using namespace OpenGL;
 
 std::map<size_t, std::function<void*(void) >> LayoutBuilder::_registredWidgets;
 
-LayoutBuilder::LayoutBuilder() {
+LayoutBuilder::LayoutBuilder(SDL_Window* window) {
+    int w, h;
+
+    SDL_GetWindowSize(window, &w, &h);
+
     uiBeginLayout();
+
+    int root = uiItem();
+
+    uiSetSize(root, w, h);
+    uiSetBox(root, UI_COLUMN);
 }
 
 LayoutBuilder::~LayoutBuilder() {
@@ -41,11 +52,17 @@ Gui::Widget* LayoutBuilder::create(Gui::Type<Gui::Widget> type) {
 }
 
 Gui::Panel* LayoutBuilder::create(Gui::Type<Gui::Panel> type) {
-    return static_cast<Gui::Panel*>(createUi<OpenGL::Panel>());
+    return static_cast<Gui::Panel*> (createUi<OpenGL::Panel>());
 }
 
-void LayoutBuilder::insert(size_t hash_code, void* widget) {
-    
+void LayoutBuilder::insert(Gui::Widget* w) {
+    OpenGLWidget* o = (OpenGLWidget *) w;
+
+    uiInsert(0, o->item);
 }
 
+void LayoutBuilder::insert(Gui::Panel* w) {
+    OpenGLWidget* o = dynamic_cast<OpenGLWidget*>(w);
 
+    uiInsert(0, o->item);
+}

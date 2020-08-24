@@ -54,7 +54,7 @@ Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW
 
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
-    
+
     uiMakeCurrent(uiCreateContext(4096, 1 << 20));
 
     _nvgContext = NVG::nvgCreateGL3(NVG::NVG_ANTIALIAS);
@@ -100,16 +100,25 @@ void Context::Render() {
     SDL_GL_SwapWindow(_window);
 }
 
-void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&)> build) {
-    OpenGL::LayoutBuilder builder;
-    
+void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build) {
+    OpenGL::LayoutBuilder builder(_window);
+
     build(builder);
 }
 
 void Context::DrawLayout(int item, int corners) {
-    const OpenGL::Widget* widget = (const OpenGL::Widget *)uiGetHandle(item);
-    
-    if(widget) widget->Draw(this->_nvgContext);
+    const OpenGLWidget* widget = static_cast<const OpenGLWidget*>(uiGetHandle(item));
+
+    if (widget) {
+        widget->Draw(this->_nvgContext);
+    }
+
+    int kid = uiFirstChild(item);
+    while (kid > 0) {
+        this->DrawLayout(kid, corners);
+        
+        kid = uiNextSibling(kid);
+    }
 }
 
 

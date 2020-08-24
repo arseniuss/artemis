@@ -23,15 +23,18 @@
 #include <OpenGL/Gui/Widget.hpp>
 
 namespace OpenGL {
-    struct Panel : public Widget,  public Gui::Panel {  
-        int item;
-        
+
+    struct Panel : OpenGLWidget, Gui::Panel {        
+        Panel(int i) : OpenGLWidget(i) {
+
+        }
+
         void SetLayout(Gui::LayoutType layoutType) override;
         void SetBox(Gui::BoxType boxType) override;
         void SetMargins(int a, int b, int c, int d) override;
         void SetSize(int w, int h) override;
-        
-        void Draw(NVG::NVGcontext* context) const override;
+
+        void Draw(NVG::NVGcontext* context) const;
 
     };
 }

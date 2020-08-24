@@ -40,12 +40,15 @@ namespace OpenGL {
             int item = uiItem();
             void *data = uiAllocHandle(item, sizeof (T));
 
-            return new(data) T;
+            T* t = new(data) T(item);
+            
+            return t;
         }
-
-        void insert(size_t hash_code, void* widget) override;
+        
+        void insert(Gui::Widget*) override;
+        void insert(Gui::Panel*) override;
     public:
-        LayoutBuilder();
+        LayoutBuilder(SDL_Window* window);
         ~LayoutBuilder();
 
         template<typename T, typename U>
@@ -62,6 +65,7 @@ namespace OpenGL {
             _registredWidgets.emplace(typeid (T).hash_code(), f);
         }
 
+      
 
     };
 }

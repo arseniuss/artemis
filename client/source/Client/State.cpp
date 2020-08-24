@@ -34,7 +34,7 @@ void State::OnEnable() {
 }
 
 void State::BuildUI(Gui::LayoutBuilder& builder) {
-    auto* root = builder.Create<Gui::Widget>();
+    
 }
 
 void State::HandleEvent(const SDL_Event& event) {
