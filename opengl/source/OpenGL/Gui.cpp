@@ -20,15 +20,10 @@
 
 #include <NanoVG/NanoVG.hpp>
 #include <Blendish/Blendish.hpp>
-#include <OpenGL/Gui.hpp>
-#include <Gui/Oui.hpp>
-
-#include "../Gui/internal.hpp"
 
 using namespace NVG;
-using namespace Gui;
 using namespace Blendish;
-
+/*
 static void DrawTestRect(NVG::NVGcontext *vg, UIrect rect) {
 #ifndef NDEBUG
     nvgBeginPath(vg);
@@ -138,3 +133,4 @@ void OpenGL::DrawUI(NVG::NVGcontext *vg, int item, int corners) {
         nvgGlobalAlpha(vg, 1.0);
     }
 }
+ * */

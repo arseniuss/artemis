@@ -34,10 +34,11 @@ void State::HandleInput() {
 }
 
 void State::OnPush() {
+    OnEnable();
 }
 
 void State::OnPop() {
-
+    OnDisable();
 }
 
 void State::OnDisable() {
@@ -45,7 +46,7 @@ void State::OnDisable() {
 }
 
 void State::OnEnable() {
-
+    
 }
 
 void State::Update(float deltaTime) {

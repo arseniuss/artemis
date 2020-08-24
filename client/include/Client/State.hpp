@@ -27,9 +27,14 @@ namespace Client {
     class State : public Common::State {
     protected:
         Application& _app;
+        int root;
     public:
         State(Application* app, const std::string& name);
 
+        void OnEnable() override;
+        
+        virtual void BuildUI(Gui::LayoutBuilder& builder);
+        
         virtual void HandleEvent(const SDL_Event& event);
     };
 }

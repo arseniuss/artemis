@@ -16,24 +16,25 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#ifndef OPENGL_GUI_PANEL_HPP
+#define OPENGL_GUI_PANEL_HPP
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <Gui/Panel.hpp>
+#include <OpenGL/Gui/Widget.hpp>
 
-namespace Client {
+namespace OpenGL {
+    struct Panel : public Widget,  public Gui::Panel {  
+        int item;
+        
+        void SetLayout(Gui::LayoutType layoutType) override;
+        void SetBox(Gui::BoxType boxType) override;
+        void SetMargins(int a, int b, int c, int d) override;
+        void SetSize(int w, int h) override;
+        
+        void Draw(NVG::NVGcontext* context) const override;
 
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        ~MenuState();
-
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-
-        void HandleEvent(const SDL_Event& event) override;
     };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
+#endif /* !OPENGL_GUI_PANEL_HPP */
 

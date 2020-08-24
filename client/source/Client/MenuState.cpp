@@ -17,8 +17,9 @@
  */
 
 #include <Client/MenuState.hpp>
-#include <Gui/Oui.hpp>
 #include <Client/TestState.hpp>
+#include <Client/GameState.hpp>
+#include <Gui/Panel.hpp>
 
 using namespace Client;
 
@@ -30,18 +31,21 @@ MenuState::~MenuState() {
 
 }
 
-void MenuState::OnPush() {
-    OnEnable();
+void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
+    auto* panel = builder.Create<Gui::Panel>();
+
+    panel->SetLayout(Gui::LayoutType::Center);
+    panel->SetBox(Gui::BoxType::Column);
+    panel->SetMargins(0, 0, 0, 0);
+    panel->SetSize(200, 200);
+    
+    //builder.Insert(panel);
 }
 
-void MenuState::OnEnable() {
-    uiBeginLayout();
 
-    int root = uiItem();
-    auto windowSize = _app.GetGraphics().GetSize();
+/* void MenuState::OnEnable() {
+    
 
-    uiSetSize(root, windowSize.x, windowSize.y);
-    uiSetBox(root, UI_COLUMN);
 
     int layout1 = Gui::CreatePanel();
     uiSetLayout(layout1, UI_CENTER);
@@ -51,7 +55,10 @@ void MenuState::OnEnable() {
 
     uiInsert(root, layout1);
 
-    int button1 = Gui::CreateButton(-1, "BEGIN", nullptr);
+    int button1 = Gui::CreateButton(-1, "BEGIN",
+            [this](int item, UIevent event) {
+                _app.PushState<GameState>(&_app);
+            });
     uiSetLayout(button1, UI_HFILL | UI_TOP);
     uiSetMargins(button1, 0, 1, 0, 0);
 
@@ -66,7 +73,8 @@ void MenuState::OnEnable() {
 
     uiInsert(layout1, testButton);
 
-    auto e = std::bind(&MenuState::onExitButton, this, std::placeholders::_1, std::placeholders::_2);
+    auto e = std::bind(&MenuState::onExitButton, this,
+            std::placeholders::_1, std::placeholders::_2);
 
     int button2 = Gui::CreateButton(-1, "EXIT", e);
     uiSetLayout(button2, UI_HFILL | UI_TOP);
@@ -74,16 +82,8 @@ void MenuState::OnEnable() {
 
     uiInsert(layout1, button2);
 
-    uiEndLayout();
-}
-
-void MenuState::onExitButton(int item, UIevent event) {
-    _app.PopState();
-}
-
-void MenuState::HandleInput() {
-
-}
+    uiEndLayout(); 
+} */
 
 void MenuState::HandleEvent(const SDL_Event& event) {
     switch (event.type) {

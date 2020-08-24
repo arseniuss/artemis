@@ -7,12 +7,10 @@ SOURCES = \
     source/Common/Debug.cpp \
     source/Common/PluginManager.cpp \
     source/Common/State.cpp \
-    source/Gui/Oui.cpp \
     source/World/Block.cpp \
     source/World/Chunk.cpp \
     source/World/ChunkManager.cpp \
-    source/World/Coordinates.cpp \
-    source/oui.cpp
+    source/World/Coordinates.cpp
 
 CFLAGS = -Iinclude -I../include -fPIC
 CXXFLAGS = -Iinclude -I../include -fPIC -std=c++2a

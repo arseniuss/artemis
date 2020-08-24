@@ -16,24 +16,36 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#include <cxxabi.h>
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <OpenGL/Gui/LayoutBuilder.hpp>
+#include <OpenGL/Gui/Widget.hpp>
+#include <OpenGL/Gui/Panel.hpp>
 
-namespace Client {
+#include "oui.h"
 
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        ~MenuState();
+using namespace OpenGL;
 
-        void BuildUI(Gui::LayoutBuilder& builder) override;
+std::map<size_t, std::function<void*(void) >> LayoutBuilder::_registredWidgets;
 
-        void HandleEvent(const SDL_Event& event) override;
-    };
+LayoutBuilder::LayoutBuilder() {
+    uiBeginLayout();
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
+LayoutBuilder::~LayoutBuilder() {
+    uiEndLayout();
+}
+
+Gui::Widget* LayoutBuilder::create(Gui::Type<Gui::Widget> type) {
+    return createUi<OpenGL::Widget>();
+}
+
+Gui::Panel* LayoutBuilder::create(Gui::Type<Gui::Panel> type) {
+    return static_cast<Gui::Panel*>(createUi<OpenGL::Panel>());
+}
+
+void LayoutBuilder::insert(size_t hash_code, void* widget) {
+    
+}
+
 

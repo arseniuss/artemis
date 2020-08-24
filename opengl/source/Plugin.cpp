@@ -19,19 +19,16 @@
 #include <string>
 
 #include <OpenGL/Context.hpp>
+#include <OpenGL/Gui/LayoutBuilder.hpp>
+#include <OpenGL/Gui/Widget.hpp>
+#include <OpenGL/Gui/Panel.hpp>
 
-#include "Gui/internal.hpp"
 
 extern "C" {
 
     void InitGraphics(void) {
-        Gui::CreateLabel = &Gui::Label;
-        Gui::CreateButton = &Gui::Button;
-        Gui::CreateRadio = &Gui::Radio;
-        Gui::CreateSlider = &Gui::Slider;
-        Gui::CreateColumn = &Gui::Column;
-        Gui::CreatePanel = &Gui::Panel;
-        Gui::CreateWindow = &Gui::Window;
+        OpenGL::LayoutBuilder::Add<Gui::Widget, OpenGL::Widget>();
+        OpenGL::LayoutBuilder::Add<Gui::Panel, OpenGL::Panel>();
     }
 
     OpenGL::Context* CreateContext(const std::string& title) {

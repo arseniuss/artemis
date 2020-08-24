@@ -21,9 +21,6 @@
 #include <SDL2/SDL_image.h>
 
 #include <Graphics/Context.hpp>
-#include <Gui/Oui.hpp>
-
-#include "oui.h"
 
 using namespace std;
 using namespace Graphics;
@@ -44,8 +41,6 @@ shared_ptr<Context> Context::Create(const string& name, const string& title) {
     if (init != nullptr) {
         init();
     }
-
-    Gui::Validate();
 
     CreateContextFunc func = (CreateContextFunc) dlsym(handle, "CreateContext");
 

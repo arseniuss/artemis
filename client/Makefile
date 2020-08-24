@@ -8,6 +8,7 @@ PLUGINDIR = $(BUILDDIR)/plugins
 
 SOURCES = \
     source/Client/Application.cpp \
+    source/Client/GameState.cpp \
     source/Client/MenuState.cpp \
     source/Client/State.cpp \
     source/Client/TestState.cpp \

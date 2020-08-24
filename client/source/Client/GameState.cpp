@@ -16,24 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#include <Client/GameState.hpp>
+#include <Gui/Gui.hpp>
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <Gui/Widget.hpp>
 
-namespace Client {
+using namespace Client;
 
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        ~MenuState();
+GameState::GameState(Application *app) : State(app, "Game state") {
 
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-
-        void HandleEvent(const SDL_Event& event) override;
-    };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
+GameState::~GameState() {
 
+}

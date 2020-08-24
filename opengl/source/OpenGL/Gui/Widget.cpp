@@ -16,24 +16,7 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#include <OpenGL/Gui/Widget.hpp>
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
-
-namespace Client {
-
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        ~MenuState();
-
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-
-        void HandleEvent(const SDL_Event& event) override;
-    };
-}
-
-#endif /* !CLIENT_MENUSTATE_HPP */
+using namespace OpenGL;
 

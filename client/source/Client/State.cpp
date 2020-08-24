@@ -17,6 +17,8 @@
  */
 
 #include <Client/State.hpp>
+#include <Gui/Widget.hpp>
+#include <Gui/Layout.hpp>
 
 using namespace Client;
 
@@ -25,6 +27,18 @@ Common::State(app, name), _app(*app) {
 
 }
 
-void State::HandleEvent(const SDL_Event& event) {
-
+void State::OnEnable() {
+    _app.GetContext().BuildLayout([this](Gui::LayoutBuilder& b) {
+        this->BuildUI(b);
+    });
 }
+
+void State::BuildUI(Gui::LayoutBuilder& builder) {
+    auto* root = builder.Create<Gui::Widget>();
+}
+
+void State::HandleEvent(const SDL_Event& event) {
+    
+}
+
+

@@ -35,6 +35,9 @@ namespace OpenGL {
 
         void Render() override;
 
+        void BuildLayout(std::function<void(Gui::LayoutBuilder&)>) override;
+
+        void DrawLayout(int item, int corners);
     };
 }
 

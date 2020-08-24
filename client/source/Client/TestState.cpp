@@ -17,9 +17,6 @@
  */
 
 #include <Client/TestState.hpp>
-#include <Gui/Oui.hpp>
-
-#include "oui.h"
 
 using namespace Client;
 
@@ -32,6 +29,7 @@ TestState::~TestState() {
 }
 
 void TestState::OnPush() {
+    /*
     uiBeginLayout();
 
     int root = uiItem();
@@ -49,6 +47,7 @@ void TestState::OnPush() {
     uiInsert(root, window2);
 
     uiEndLayout();
+     */
 }
 
 void TestState::HandleEvent(const SDL_Event& event) {

@@ -16,24 +16,14 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#ifndef GUI_CONTEXT_HPP
+#define GUI_CONTEXT_HPP
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
-
-namespace Client {
-
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        ~MenuState();
-
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-
-        void HandleEvent(const SDL_Event& event) override;
+namespace Gui {
+    class Context {
+        
     };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
+#endif /* !GUI_CONTEXT_HPP */
 

@@ -16,24 +16,18 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#ifndef GUI_PANEL_HPP
+#define GUI_PANEL_HPP
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <Gui/Widget.hpp>
 
-namespace Client {
-
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        ~MenuState();
-
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-
-        void HandleEvent(const SDL_Event& event) override;
+namespace Gui {
+    struct Panel {        
+        virtual void SetLayout(LayoutType layoutType) = 0;
+        virtual void SetBox(BoxType boxType) = 0;
+        virtual void SetMargins(int a, int b, int c, int d) = 0;
+        virtual void SetSize(int w, int h) = 0;
     };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
-
+#endif /* !GUI_PANEL_HPP */

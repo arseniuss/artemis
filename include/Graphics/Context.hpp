@@ -28,6 +28,8 @@
 
 #include <SDL2/SDL_video.h>
 
+#include <Gui/LayoutBuilder.hpp>
+
 namespace Graphics {
 
     class Context;
@@ -52,6 +54,8 @@ namespace Graphics {
         virtual void Render() = 0;
         
         virtual void Draw(DrawFunc func);
+        
+        virtual void BuildLayout(std::function<void(Gui::LayoutBuilder& b)>) = 0;
     };
 }
 

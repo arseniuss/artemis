@@ -16,14 +16,22 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_HPP
-#define OPENGL_GUI_HPP
+#ifndef GUI_WIDGET_HPP
+#define GUI_WIDGET_HPP
 
-#include <NanoVG/NanoVG.hpp>
+namespace Gui {
 
-namespace OpenGL {
-    void DrawUI(NVG::NVGcontext *context, int item, int corners);
+    enum class BoxType {
+        Column
+    };
+    
+    enum class LayoutType {
+        Center
+    };
+
+    struct Widget {
+
+    };
 }
 
-#endif /* !OPENGL_GUI_HPP */
-
+#endif /* !GUI_WIDGET_HPP */

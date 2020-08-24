@@ -16,14 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glad.h>
-#include <OpenGL/Debug.hpp>
-#include <OpenGL/Context.hpp>
-#include <NanoVG/NanoVG.hpp>
-#include <Blendish/Blendish.hpp>
-#include <OpenGL/Gui.hpp>
-#include <oui.h>
 #include <experimental/filesystem>
+
+#include <Blendish/Blendish.hpp>
+#include <NanoVG/NanoVG.hpp>
+#include <OpenGL/Context.hpp>
+#include <OpenGL/Debug.hpp>
+#include <OpenGL/Gui/LayoutBuilder.hpp>
+#include <glad.h>
+#include <oui.h>
+
+#include "OpenGL/Gui/Widget.hpp"
 
 using namespace std;
 
@@ -51,6 +54,8 @@ Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW
 
     glGenVertexArrays(1, &VertexArrayID);
     glBindVertexArray(VertexArrayID);
+    
+    uiMakeCurrent(uiCreateContext(4096, 1 << 20));
 
     _nvgContext = NVG::nvgCreateGL3(NVG::NVG_ANTIALIAS);
 
@@ -87,10 +92,24 @@ void Context::Render() {
     if (uiGetItemCount() > 0) {
         NVG::nvgBeginFrame(_nvgContext, w, h, w / h);
 
-        DrawUI(_nvgContext, 0, Blendish::BND_CORNER_NONE);
+        DrawLayout(0, Blendish::BND_CORNER_NONE);
 
         NVG::nvgEndFrame(_nvgContext);
     }
 
     SDL_GL_SwapWindow(_window);
 }
+
+void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&)> build) {
+    OpenGL::LayoutBuilder builder;
+    
+    build(builder);
+}
+
+void Context::DrawLayout(int item, int corners) {
+    const OpenGL::Widget* widget = (const OpenGL::Widget *)uiGetHandle(item);
+    
+    if(widget) widget->Draw(this->_nvgContext);
+}
+
+
