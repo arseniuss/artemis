@@ -16,30 +16,20 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_PANEL_HPP
-#define OPENGL_GUI_PANEL_HPP
+#ifndef GUI_BUTTON_HPP
+#define GUI_BUTTON_HPP
 
-#include <Gui/Panel.hpp>
-#include <OpenGL/Gui/Widget.hpp>
+#include <functional>
 
-namespace OpenGL {
+namespace Gui {
 
-    struct Panel : OpenGLWidget, Gui::Panel {        
-        Panel(int i) : OpenGLWidget(i) {
-
-        }
-
-        void SetLayout(unsigned int layoutType) override;
-        void SetBox(unsigned int boxType) override;
-        void SetMargins(int a, int b, int c, int d) override;
-        void SetSize(int w, int h) override;
-        void Insert(Gui::Button* btn) override;
-
-
-        void Draw(NVG::NVGcontext* context) const;
-
+    struct Button {
+        virtual void SetLabel(const std::string& label) = 0;
+        virtual void OnClick(std::function<void() > onClickFunction) = 0;
+        virtual void SetLayout(unsigned int layout) = 0;
+        virtual void SetMargins(int a, int b, int c, int d) = 0;
     };
 }
 
-#endif /* !OPENGL_GUI_PANEL_HPP */
+#endif /* !GUI_BUTTON_HPP */
 

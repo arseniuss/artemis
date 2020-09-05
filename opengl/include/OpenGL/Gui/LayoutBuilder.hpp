@@ -34,12 +34,14 @@ namespace OpenGL {
 
         Gui::Widget* create(Gui::Type<Gui::Widget> type) override;
         Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
+        Gui::Button* create(Gui::Type<Gui::Button> type) override;
+        Gui::Window* create(Gui::Type<Gui::Window> type) override;
 
         template<typename T>
         T* createUi() {
             int item = uiItem();
             void *data = uiAllocHandle(item, sizeof (T));
-
+        
             T* t = new(data) T(item);
             
             return t;
@@ -47,6 +49,7 @@ namespace OpenGL {
         
         void insert(Gui::Widget*) override;
         void insert(Gui::Panel*) override;
+        void insert(Gui::Window*) override;
     public:
         LayoutBuilder(SDL_Window* window);
         ~LayoutBuilder();

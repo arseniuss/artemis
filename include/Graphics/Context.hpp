@@ -50,6 +50,10 @@ namespace Graphics {
         
         glm::ivec2 GetSize() const;
         SDL_Window *GetWindow();
+        
+        virtual void HandleInput() = 0;
+        
+        virtual void Update(float deltaTime) = 0;
 
         virtual void Render() = 0;
         

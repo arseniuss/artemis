@@ -20,6 +20,7 @@
 #include <Client/TestState.hpp>
 #include <Client/GameState.hpp>
 #include <Gui/Panel.hpp>
+#include <Gui/Button.hpp>
 
 using namespace Client;
 
@@ -27,63 +28,49 @@ MenuState::MenuState(Application* app) : State(app, "Menu state") {
 
 }
 
-MenuState::~MenuState() {
-
-}
-
 void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
     auto panel = builder.Create<Gui::Panel>();
 
-    panel->SetLayout(Gui::LayoutType::Center);
-    panel->SetBox(Gui::BoxType::Column);
+    panel->SetLayout(LAYOUT_CENTER);
+    panel->SetBox(BOX_COLUMN);
     panel->SetMargins(0, 0, 0, 0);
     panel->SetSize(200, 200);
-    
+
     builder.Insert(panel);
+
+    auto startGameButton = builder.Create<Gui::Button>();
+
+    startGameButton->SetLabel("BEGIN");
+    startGameButton->OnClick([this]() {
+        _app.PushState<GameState>(&_app);
+    });
+    startGameButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
+    startGameButton->SetMargins(0, 1, 0, 0);
+
+    panel->Insert(startGameButton);
+
+    auto testButton = builder.Create<Gui::Button>();
+
+    testButton->SetLabel("TEST");
+    testButton->OnClick([this]() {
+        _app.PushState<TestState>(&_app);
+    });
+    testButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
+    testButton->SetMargins(0, 1, 0, 0);
+
+    panel->Insert(testButton);
+
+    auto exitButton = builder.Create<Gui::Button>();
+
+    exitButton->SetLabel("EXIT");
+    exitButton->OnClick([this]() {
+        _app.PopState();
+    });
+    exitButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
+    exitButton->SetMargins(0, 1, 0, 0);
+
+    panel->Insert(exitButton);
 }
-
-
-/* void MenuState::OnEnable() {
-    
-
-
-    int layout1 = Gui::CreatePanel();
-    uiSetLayout(layout1, UI_CENTER);
-    uiSetBox(layout1, UI_COLUMN);
-    uiSetMargins(layout1, 0, 0, 0, 0);
-    uiSetSize(layout1, 200, 200);
-
-    uiInsert(root, layout1);
-
-    int button1 = Gui::CreateButton(-1, "BEGIN",
-            [this](int item, UIevent event) {
-                _app.PushState<GameState>(&_app);
-            });
-    uiSetLayout(button1, UI_HFILL | UI_TOP);
-    uiSetMargins(button1, 0, 1, 0, 0);
-
-    uiInsert(layout1, button1);
-
-    int testButton = Gui::CreateButton(-1, "TEST",
-            [this](int item, UIevent event) {
-                _app.PushState<TestState>(&_app);
-            });
-    uiSetLayout(testButton, UI_HFILL | UI_TOP);
-    uiSetMargins(testButton, 0, 1, 0, 0);
-
-    uiInsert(layout1, testButton);
-
-    auto e = std::bind(&MenuState::onExitButton, this,
-            std::placeholders::_1, std::placeholders::_2);
-
-    int button2 = Gui::CreateButton(-1, "EXIT", e);
-    uiSetLayout(button2, UI_HFILL | UI_TOP);
-    uiSetMargins(button2, 0, 1, 0, 0);
-
-    uiInsert(layout1, button2);
-
-    uiEndLayout(); 
-} */
 
 void MenuState::HandleEvent(const SDL_Event& event) {
     switch (event.type) {

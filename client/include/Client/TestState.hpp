@@ -26,12 +26,11 @@ namespace Client {
     class TestState : public State {
     public:
         TestState(Application* app);
-        ~TestState();
-        
-        void OnPush() override;
+        virtual ~TestState() = default;
 
         void HandleEvent(const SDL_Event& event) override;
 
+        void BuildUI(Gui::LayoutBuilder& builder) override;
     };
 }
 

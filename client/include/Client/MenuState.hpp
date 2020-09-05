@@ -27,7 +27,7 @@ namespace Client {
     class MenuState : public State {
     public:
         MenuState(Application* app);
-        ~MenuState();
+        virtual ~MenuState() = default;
 
         void BuildUI(Gui::LayoutBuilder& builder) override;
 

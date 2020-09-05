@@ -22,16 +22,18 @@
 #include <Gui/Widget.hpp>
 #include <NanoVG/NanoVG.hpp>
 
+#include "oui.h"
+
 namespace OpenGL {
 
     struct OpenGLWidget {
         int item;
 
-        OpenGLWidget(int i) : item(i) {
-        }
+        OpenGLWidget(int i);
 
-        virtual void Draw(NVG::NVGcontext* context) const {
-        }
+        virtual void Draw(NVG::NVGcontext* context) const;
+        
+        virtual void HandleEvent(UIevent event) {}
     };
 
     struct Widget : OpenGLWidget, Gui::Widget {

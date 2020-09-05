@@ -32,6 +32,10 @@ namespace OpenGL {
     public:
         Context(const std::string& title);
         ~Context();
+        
+        void HandleInput() override;
+        
+        void Update(float deltaTime) override;
 
         void Render() override;
 

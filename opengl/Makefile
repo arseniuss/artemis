@@ -7,9 +7,11 @@ SOURCES = \
     source/Blendish/blendish.cpp \
     source/NanoVG/NanoVG.cpp \
     source/NanoVG/nanovg.c \
+    source/OpenGL/Gui/Button.cpp \
     source/OpenGL/Gui/LayoutBuilder.cpp \
     source/OpenGL/Gui/Panel.cpp \
     source/OpenGL/Gui/Widget.cpp \
+    source/OpenGL/Gui/Window.cpp \
     source/OpenGL/Context.cpp \
     source/OpenGL/Gui.cpp \
     source/Plugin.cpp \

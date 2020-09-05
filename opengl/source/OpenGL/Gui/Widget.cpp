@@ -17,6 +17,17 @@
  */
 
 #include <OpenGL/Gui/Widget.hpp>
+#include <Blendish/Blendish.hpp>    
+
+#include "oui.h"
 
 using namespace OpenGL;
+
+OpenGLWidget::OpenGLWidget(int i) : item(i) {
+    
+}
+    
+void OpenGLWidget::Draw(NVG::NVGcontext* context) const {
+    
+}
 

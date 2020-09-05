@@ -17,6 +17,7 @@
  */
 
 #include <Client/TestState.hpp>
+#include <Gui/Window.hpp>
 
 using namespace Client;
 
@@ -24,30 +25,20 @@ TestState::TestState(Application* app) : State(app, "Test state") {
 
 }
 
-TestState::~TestState() {
+void TestState::BuildUI(Gui::LayoutBuilder& builder) {
+    auto window1 = builder.Create<Gui::Window>();
 
-}
+    window1->SetSize(100, 200);
+    window1->SetTitle("WINDOW1");
 
-void TestState::OnPush() {
-    /*
-    uiBeginLayout();
+    builder.Insert(window1);
 
-    int root = uiItem();
-    auto windowSize = _app.GetGraphics().GetSize();
+    auto window2 = builder.Create<Gui::Window>();
 
-    uiSetSize(root, windowSize.x, windowSize.y);
-    uiSetBox(root, UI_COLUMN);
+    window2->SetSize(100, 200);
+    window2->SetTitle("WINDOW2");
 
-    int window1 = Gui::CreateWindow(-1, "Window 1");
-    uiSetSize(window1, 100, 200);
-    uiInsert(root, window1);
-
-    int window2 = Gui::CreateWindow(-1, "Window 2");
-    uiSetSize(window2, 100, 200);
-    uiInsert(root, window2);
-
-    uiEndLayout();
-     */
+    builder.Insert(window2);
 }
 
 void TestState::HandleEvent(const SDL_Event& event) {

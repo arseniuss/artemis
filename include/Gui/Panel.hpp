@@ -20,13 +20,16 @@
 #define GUI_PANEL_HPP
 
 #include <Gui/Widget.hpp>
+#include <Gui/Button.hpp>
 
 namespace Gui {
     struct Panel {        
-        virtual void SetLayout(LayoutType layoutType) = 0;
-        virtual void SetBox(BoxType boxType) = 0;
+        virtual void SetLayout(unsigned int layoutType) = 0;
+        virtual void SetBox(unsigned int boxType) = 0;
         virtual void SetMargins(int a, int b, int c, int d) = 0;
         virtual void SetSize(int w, int h) = 0;
+        
+        virtual void Insert(Gui::Button* btn) = 0;
     };
 }
 

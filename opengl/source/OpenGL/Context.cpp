@@ -18,15 +18,17 @@
 
 #include <experimental/filesystem>
 
+#include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_keyboard.h>
+
 #include <Blendish/Blendish.hpp>
 #include <NanoVG/NanoVG.hpp>
 #include <OpenGL/Context.hpp>
 #include <OpenGL/Debug.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
+#include <OpenGL/Gui/Widget.hpp>
 #include <glad.h>
 #include <oui.h>
-
-#include "OpenGL/Gui/Widget.hpp"
 
 using namespace std;
 
@@ -34,6 +36,14 @@ using namespace OpenGL;
 
 const string& fontFilename = "data/DejaVuSans.ttf";
 const string& iconFilename = "data/blender_icons16.png";
+
+void ui_handler(int item, UIevent event) {
+    OpenGLWidget* w = (OpenGLWidget *) uiGetHandle(item);
+
+    if (w) {
+        w->HandleEvent(event);
+    }
+}
 
 Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW_OPENGL) {
     int w, h;
@@ -56,6 +66,7 @@ Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW
     glBindVertexArray(VertexArrayID);
 
     uiMakeCurrent(uiCreateContext(4096, 1 << 20));
+    uiSetHandler(&ui_handler);
 
     _nvgContext = NVG::nvgCreateGL3(NVG::NVG_ANTIALIAS);
 
@@ -71,6 +82,24 @@ Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW
 
 Context::~Context() {
     SDL_GL_DeleteContext(_context);
+}
+
+void Context::HandleInput() {
+    int mousex, mousey;
+    uint32_t mouse, mod;
+
+    mouse = SDL_GetMouseState(&mousex, &mousey);
+    mod = SDL_GetModState();
+
+    uiSetCursor(mousex, mousey);
+
+    uiSetButton(0, mod, mouse & SDL_BUTTON_LMASK ? 1 : 0);
+    uiSetButton(1, mod, mouse & SDL_BUTTON_MMASK ? 1 : 0);
+    uiSetButton(2, mod, mouse & SDL_BUTTON_RMASK ? 1 : 0);
+}
+
+void Context::Update(float deltaTime) {
+    uiProcess(deltaTime);
 }
 
 void Context::Render() {
@@ -107,7 +136,11 @@ void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build) {
 }
 
 void Context::DrawLayout(int item, int corners) {
-    const OpenGLWidget* widget = static_cast<const OpenGLWidget*>(uiGetHandle(item));
+    const OpenGLWidget* widget = static_cast<const OpenGLWidget*> (uiGetHandle(item));
+
+    if (uiGetState(item) == UI_FROZEN) {
+        nvgGlobalAlpha(this->_nvgContext, BND_DISABLED_ALPHA);
+    }
 
     if (widget) {
         widget->Draw(this->_nvgContext);
@@ -116,8 +149,12 @@ void Context::DrawLayout(int item, int corners) {
     int kid = uiFirstChild(item);
     while (kid > 0) {
         this->DrawLayout(kid, corners);
-        
+
         kid = uiNextSibling(kid);
+    }
+
+    if (uiGetState(item) == UI_FROZEN) {
+        nvgGlobalAlpha(this->_nvgContext, 1.0);
     }
 }
 

@@ -18,18 +18,15 @@
 
 #include <OpenGL/Gui/Panel.hpp>
 #include <Blendish/Blendish.hpp>
+#include <OpenGL/Gui/Button.hpp>
 
 #include "oui.h"
 
 using namespace OpenGL;
 using namespace Blendish;
 
-void Panel::SetLayout(Gui::LayoutType layoutType) {
-    switch (layoutType) {
-        case Gui::LayoutType::Center:
-            uiSetLayout(item, UI_CENTER);
-            break;
-    }
+void Panel::SetLayout(unsigned int layoutType) {
+    uiSetLayout(item, layoutType);
 }
 
 void Panel::SetMargins(int a, int b, int c, int d) {
@@ -40,15 +37,19 @@ void Panel::SetSize(int w, int h) {
     uiSetSize(item, w, h);
 }
 
-void Panel::SetBox(Gui::BoxType boxType) {
-    switch (boxType) {
-        case Gui::BoxType::Column:
-            uiSetBox(item, UI_COLUMN);
-            break;
-    }
+void Panel::Insert(Gui::Button* btn) {
+    OpenGL::Button* w = static_cast<OpenGL::Button*>(btn);
+    
+    uiInsert(item, w->item);
+}
+
+void Panel::SetBox(unsigned int boxType) {
+    uiSetBox(item, boxType);
 }
 
 void Panel::Draw(NVG::NVGcontext* context) const {
+    OpenGLWidget::Draw(context);
+    
     UIrect rect = uiGetRect(item);
 
     bndBackground(context, rect.x, rect.y, rect.w, rect.h);

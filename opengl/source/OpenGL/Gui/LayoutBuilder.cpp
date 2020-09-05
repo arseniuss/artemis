@@ -23,6 +23,8 @@
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 #include <OpenGL/Gui/Panel.hpp>
+#include <OpenGL/Gui/Button.hpp>
+#include <OpenGL/Gui/Window.hpp>
 
 #include "oui.h"
 
@@ -55,6 +57,14 @@ Gui::Panel* LayoutBuilder::create(Gui::Type<Gui::Panel> type) {
     return static_cast<Gui::Panel*> (createUi<OpenGL::Panel>());
 }
 
+Gui::Button* LayoutBuilder::create(Gui::Type<Gui::Button> type) {
+    return static_cast<Gui::Button*> (createUi<OpenGL::Button>());
+}
+
+Gui::Window* LayoutBuilder::create(Gui::Type<Gui::Window> type) {
+    return static_cast<Gui::Window*> (createUi<OpenGL::Window>());
+}
+
 void LayoutBuilder::insert(Gui::Widget* w) {
     OpenGLWidget* o = (OpenGLWidget *) w;
 
@@ -62,7 +72,13 @@ void LayoutBuilder::insert(Gui::Widget* w) {
 }
 
 void LayoutBuilder::insert(Gui::Panel* w) {
-    OpenGLWidget* o = dynamic_cast<OpenGLWidget*>(w);
+    OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
+
+    uiInsert(0, o->item);
+}
+
+void LayoutBuilder::insert(Gui::Window* w) {
+    OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
 
     uiInsert(0, o->item);
 }

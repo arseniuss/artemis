@@ -25,6 +25,8 @@
 
 #include <Gui/Widget.hpp>
 #include <Gui/Panel.hpp>
+#include <Gui/Button.hpp>
+#include <Gui/Window.hpp>
 
 namespace Gui {
 
@@ -37,9 +39,12 @@ namespace Gui {
     protected:
         virtual Gui::Widget* create(Type<Gui::Widget> type) = 0;
         virtual Gui::Panel* create(Type<Gui::Panel> type) = 0;
+        virtual Gui::Button* create(Type<Gui::Button> type) = 0;
+        virtual Gui::Window* create(Type<Gui::Window> type) = 0;
 
         virtual void insert(Gui::Widget*) = 0;
         virtual void insert(Gui::Panel*) = 0;
+        virtual void insert(Gui::Window*) = 0;
     public:
 
         LayoutBuilder() {

@@ -45,8 +45,8 @@ void Application::Run() {
     std::chrono::high_resolution_clock timer;
     bool running = true;
     auto start = timer.now();
-    int mousex, mousey;
-    uint32_t mouse, mod;
+    //int mousex, mousey;
+    //uint32_t mouse, mod;
 
     while (running) {
         if (_states.empty())
@@ -54,15 +54,8 @@ void Application::Run() {
 
         State& current = *(State *) _states.back().get();
         SDL_Event event;
-
-        mouse = SDL_GetMouseState(&mousex, &mousey);
-        mod = SDL_GetModState();
-
-        //uiSetCursor(mousex, mousey);
-
-        //uiSetButton(0, mod, mouse & SDL_BUTTON_LMASK ? 1 : 0);
-        //uiSetButton(1, mod, mouse & SDL_BUTTON_MMASK ? 1 : 0);
-        //uiSetButton(2, mod, mouse & SDL_BUTTON_RMASK ? 1 : 0);
+        
+        _graphics->HandleInput();
 
         current.HandleInput();
 
@@ -75,7 +68,7 @@ void Application::Run() {
         start = stop;
 
         current.Update(deltaTime);
-        //uiProcess(deltaTime);
+        _graphics->Update(deltaTime);
 
         _graphics->Render();
 
