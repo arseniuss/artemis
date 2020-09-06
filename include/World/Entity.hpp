@@ -16,23 +16,19 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GAMESTATE_HPP
-#define CLIENT_GAMESTATE_HPP
+#ifndef WORLD_ENTITY_HPP
+#define WORLD_ENTITY_HPP
 
-#include <Client/State.hpp>
-#include <Graphics/Camera.hpp>
+#include <glm/ext/vector_float3.hpp>
 
-namespace Client {
-    class GameState : public State {
-    private:
-        Graphics::Camera* _camera;
-    public:
-        GameState(Application *app);
-        virtual ~GameState() = default;
-        
-        void HandleEvent(const SDL_Event& event) override;
 
+namespace World {
+
+    struct Entity {
+        glm::vec3 position{0.0f};
+        glm::vec3 rotation{0.0f};
+        glm::vec3 velocity{0.0f};
     };
 }
 
-#endif /* !CLIENT_GAMESTATE_HPP */
+#endif /* !WORLD_ENTITY_HPP */

@@ -16,23 +16,34 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GAMESTATE_HPP
-#define CLIENT_GAMESTATE_HPP
+#include <glm/ext/matrix_clip_space.hpp>
 
-#include <Client/State.hpp>
 #include <Graphics/Camera.hpp>
+#include <Graphics/Utils.hpp>
 
-namespace Client {
-    class GameState : public State {
-    private:
-        Graphics::Camera* _camera;
-    public:
-        GameState(Application *app);
-        virtual ~GameState() = default;
-        
-        void HandleEvent(const SDL_Event& event) override;
+using namespace Graphics;
 
-    };
+Camera::Camera(float w, float h) {
+    _projectionMatrix = glm::perspective(3.14f / 2.0f, w / h, 0.01f, 2000.0f);
 }
 
-#endif /* !CLIENT_GAMESTATE_HPP */
+void Camera::Update(World::Entity& entity) {
+    _frustum.Update(_projectionViewMatrix);
+    _position = entity.position;
+    _rotation = entity.rotation;
+
+    _projectionViewMatrix =
+            CreateProjectionViewMatrix(_position, _rotation, _projectionMatrix);
+}
+
+const ViewFrustum& Camera::GetFrustum() const {
+    return _frustum;
+}
+
+const glm::vec3& Camera::GetPosition() const {
+    return _position;
+}
+
+const glm::mat4& Camera::GetProjectionView() const {
+    return _projectionViewMatrix;
+}

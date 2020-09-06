@@ -24,9 +24,18 @@
 using namespace Client;
 
 GameState::GameState(Application *app) : State(app, "Game state") {
-
+    
+    auto size = _app.GetContext().GetSize();
+    
+    _camera = new Graphics::Camera(size.x, size.y);
 }
 
-GameState::~GameState() {
-
+void GameState::HandleEvent(const SDL_Event& event) {
+    if (event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+                _app.PopState();
+                break;
+        }
+    }
 }

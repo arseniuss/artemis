@@ -16,23 +16,22 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GAMESTATE_HPP
-#define CLIENT_GAMESTATE_HPP
+#ifndef GRAPHICS_UTILS_HPP
+#define GRAPHICS_UTILS_HPP
 
-#include <Client/State.hpp>
-#include <Graphics/Camera.hpp>
+#include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
 
-namespace Client {
-    class GameState : public State {
-    private:
-        Graphics::Camera* _camera;
-    public:
-        GameState(Application *app);
-        virtual ~GameState() = default;
-        
-        void HandleEvent(const SDL_Event& event) override;
 
-    };
+namespace Graphics {
+    glm::mat4 CreateProjectionViewMatrix(const glm::vec3& position, 
+            const glm::vec3& rotation,
+            const glm::mat4& projection);
+    
+    void RotateMatrix(glm::mat4& matrix, const glm::vec3& degrees);
+    
+    void TranslateMatrix(glm::mat4& matrix, const glm::vec3& offset);
 }
 
-#endif /* !CLIENT_GAMESTATE_HPP */
+#endif /* !GRAPHICS_UTILS_HPP */
+

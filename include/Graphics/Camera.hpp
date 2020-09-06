@@ -16,23 +16,35 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GAMESTATE_HPP
-#define CLIENT_GAMESTATE_HPP
+#ifndef GRAPHICS_CAMERA_HPP
+#define GRAPHICS_CAMERA_HPP
 
-#include <Client/State.hpp>
-#include <Graphics/Camera.hpp>
+#include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
 
-namespace Client {
-    class GameState : public State {
+#include <World/Entity.hpp>
+#include <Graphics/ViewFrustum.hpp>
+
+namespace Graphics {
+
+    class Camera {
     private:
-        Graphics::Camera* _camera;
-    public:
-        GameState(Application *app);
-        virtual ~GameState() = default;
-        
-        void HandleEvent(const SDL_Event& event) override;
+        glm::mat4 _projectionMatrix{1.0f};
+        glm::mat4 _projectionViewMatrix{1.0f};
+        glm::vec3 _position{1.0f};
+        glm::vec3 _rotation{1.0f};
 
+        Graphics::ViewFrustum _frustum;
+    public:
+        Camera(float w, float h);
+
+        void Update(World::Entity& entity);
+
+        const Graphics::ViewFrustum& GetFrustum() const;
+        const glm::mat4& GetProjectionView() const;
+        const glm::vec3& GetPosition() const;
     };
 }
 
-#endif /* !CLIENT_GAMESTATE_HPP */
+#endif /* !GRAPHICS_CAMERA_HPP */
+

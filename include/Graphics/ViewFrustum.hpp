@@ -16,23 +16,30 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_GAMESTATE_HPP
-#define CLIENT_GAMESTATE_HPP
+#ifndef GRAPHICS_VIEWFRUSTUM_HPP
+#define GRAPHICS_VIEWFRUSTUM_HPP
 
-#include <Client/State.hpp>
-#include <Graphics/Camera.hpp>
+#include <array>
 
-namespace Client {
-    class GameState : public State {
+#include <glm/vec3.hpp>
+#include <glm/matrix.hpp>
+
+namespace Graphics {
+    class ViewFrustum {
     private:
-        Graphics::Camera* _camera;
-    public:
-        GameState(Application *app);
-        virtual ~GameState() = default;
+        struct Plane {
+            float DistanceToPoint(const glm::vec3& point) const;
+            
+            float distanceToOrigin;
+            glm::vec3 normal;
+        };
         
-        void HandleEvent(const SDL_Event& event) override;
-
+        std::array<Plane, 6> _planes;
+    public:
+        void Update(const glm::mat4& projViewMatrix) noexcept;
+        
+        bool ChunkIsInFrustum(/* TODO */) const noexcept;
     };
 }
 
-#endif /* !CLIENT_GAMESTATE_HPP */
+#endif /* !GRAPHICS_VIEWFRUSTUM_HPP */
