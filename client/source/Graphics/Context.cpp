@@ -58,10 +58,9 @@ Context::Context(const std::string& title, SDL_WindowFlags flags) {
 
     IMG_Init(IMG_INIT_PNG);
 
-    //TODO: window size
-
     _window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED, 800, 600, flags | SDL_WINDOW_SHOWN);
+            SDL_WINDOWPOS_CENTERED, 800, 600, flags | SDL_WINDOW_SHOWN |
+            SDL_WINDOW_FULLSCREEN_DESKTOP);
     if (_window == nullptr) {
         throw runtime_error("Cannot create window!");
     }

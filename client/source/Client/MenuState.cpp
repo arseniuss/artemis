@@ -16,11 +16,12 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Client/MenuState.hpp>
-#include <Client/TestState.hpp>
 #include <Client/GameState.hpp>
-#include <Gui/Panel.hpp>
+#include <Client/MenuState.hpp>
+#include <Client/SettingState.hpp>
+#include <Client/TestState.hpp>
 #include <Gui/Button.hpp>
+#include <Gui/Panel.hpp>
 
 using namespace Client;
 
@@ -59,6 +60,17 @@ void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
     testButton->SetMargins(0, 1, 0, 0);
 
     panel->Insert(testButton);
+
+    auto settingButton = builder.Create<Gui::Button>();
+
+    settingButton->SetLabel("Settings");
+    settingButton->OnClick([this]() {
+        _app.PushState<SettingState>(&_app);
+    });
+    settingButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
+    settingButton->SetMargins(0, 1, 0, 0);
+
+    panel->Insert(settingButton);
 
     auto exitButton = builder.Create<Gui::Button>();
 

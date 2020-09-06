@@ -16,30 +16,23 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_PANEL_HPP
-#define OPENGL_GUI_PANEL_HPP
+#ifndef CLIENT_SETTINGSTATE_HPP
+#define CLIENT_SETTINGSTATE_HPP
 
-#include <Gui/Panel.hpp>
-#include <OpenGL/Gui/Widget.hpp>
+#include <Client/State.hpp>
+#include <Client/Application.hpp>
 
-namespace OpenGL {
+namespace Client {
+    
+    class SettingState : public State {
+    public:
+        SettingState(Application* app);
+        
+        void BuildUI(Gui::LayoutBuilder& builder) override;
 
-    struct Panel : OpenGLWidget, Gui::Panel {        
-        Panel(int i) : OpenGLWidget(i) {
-
-        }
-
-        Gui::Panel* SetLayout(unsigned int layoutType) override;
-        Gui::Panel* SetBox(unsigned int boxType) override;
-        Gui::Panel* SetMargins(int a, int b, int c, int d) override;
-        Gui::Panel* SetSize(int w, int h) override;
-        Gui::Panel* Insert(Gui::Button* btn) override;
-
-
-        void Draw(NVG::NVGcontext* context) const;
+        void HandleEvent(const SDL_Event& event) override;
 
     };
 }
 
-#endif /* !OPENGL_GUI_PANEL_HPP */
-
+#endif /* !CLIENT_SETTINGSTATE_HPP */

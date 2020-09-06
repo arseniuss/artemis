@@ -24,10 +24,10 @@
 namespace Gui {
 
     struct Button {
-        virtual void SetLabel(const std::string& label) = 0;
-        virtual void OnClick(std::function<void() > onClickFunction) = 0;
-        virtual void SetLayout(unsigned int layout) = 0;
-        virtual void SetMargins(int a, int b, int c, int d) = 0;
+        virtual Button* SetLabel(const std::string& label) = 0;
+        virtual Button* OnClick(std::function<void() > onClickFunction) = 0;
+        virtual Button* SetLayout(unsigned int layout) = 0;
+        virtual Button* SetMargins(int a, int b, int c, int d) = 0;
     };
 }
 

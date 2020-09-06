@@ -16,30 +16,30 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_PANEL_HPP
-#define OPENGL_GUI_PANEL_HPP
+#include "Client/SettingState.hpp"
 
-#include <Gui/Panel.hpp>
-#include <OpenGL/Gui/Widget.hpp>
+using namespace Client;
 
-namespace OpenGL {
+SettingState::SettingState(Application* app) : State(app, "Setting state") {
 
-    struct Panel : OpenGLWidget, Gui::Panel {        
-        Panel(int i) : OpenGLWidget(i) {
-
-        }
-
-        Gui::Panel* SetLayout(unsigned int layoutType) override;
-        Gui::Panel* SetBox(unsigned int boxType) override;
-        Gui::Panel* SetMargins(int a, int b, int c, int d) override;
-        Gui::Panel* SetSize(int w, int h) override;
-        Gui::Panel* Insert(Gui::Button* btn) override;
-
-
-        void Draw(NVG::NVGcontext* context) const;
-
-    };
 }
 
-#endif /* !OPENGL_GUI_PANEL_HPP */
+void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
+    auto panel = builder.Create<Gui::Panel>()
+            ->SetLayout(LAYOUT_CENTER)
+            ->SetBox(BOX_COLUMN)
+            ->SetMargins(0, 0, 0, 0)
+            ->SetSize(700, 500);
 
+    builder.Insert(panel);
+}
+
+void SettingState::HandleEvent(const SDL_Event& event) {
+    if (event.type == SDL_KEYDOWN) {
+        switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+                _app.PopState();
+                break;
+        }
+    }
+}

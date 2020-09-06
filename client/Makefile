@@ -10,6 +10,7 @@ SOURCES = \
     source/Client/Application.cpp \
     source/Client/GameState.cpp \
     source/Client/MenuState.cpp \
+    source/Client/SettingState.cpp \
     source/Client/State.cpp \
     source/Client/TestState.cpp \
     source/Graphics/Context.cpp \

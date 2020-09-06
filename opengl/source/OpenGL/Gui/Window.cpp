@@ -28,20 +28,28 @@ Window::Window(int i) : OpenGLWidget(i) {
             UI_BUTTON0_HOT_UP);
 }
 
-void Window::SetTitle(const std::string& title) {
+Gui::Window* Window::SetTitle(const std::string& title) {
     this->title = title;
+
+    return this;
 }
 
-void Window::SetBox(unsigned int boxType) {
+Gui::Window* Window::SetBox(unsigned int boxType) {
     uiSetBox(item, boxType);
+
+    return this;
 }
 
-void Window::SetIcon(int iconId) {
+Gui::Window* Window::SetIcon(int iconId) {
     this->iconId = iconId;
+
+    return this;
 }
 
-void Window::SetSize(int w, int h) {
+Gui::Window* Window::SetSize(int w, int h) {
     uiSetSize(item, w, h);
+
+    return this;
 }
 
 void Window::Draw(NVG::NVGcontext* context) const {

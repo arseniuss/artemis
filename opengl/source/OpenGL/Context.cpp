@@ -99,6 +99,12 @@ void Context::HandleInput() {
 }
 
 void Context::Update(float deltaTime) {
+    int w, h;
+
+    SDL_GetWindowSize(this->_window, &w, &h);
+
+    uiSetSize(0, w, h);
+
     uiProcess(deltaTime);
 }
 
@@ -119,7 +125,7 @@ void Context::Render() {
     }
 
     if (uiGetItemCount() > 0) {
-        NVG::nvgBeginFrame(_nvgContext, w, h, w / h);
+        NVG::nvgBeginFrame(_nvgContext, w, h, (float)w / (float)h);
 
         DrawLayout(0, Blendish::BND_CORNER_NONE);
 

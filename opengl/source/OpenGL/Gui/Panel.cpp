@@ -25,34 +25,44 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-void Panel::SetLayout(unsigned int layoutType) {
+Gui::Panel* Panel::SetLayout(unsigned int layoutType) {
     uiSetLayout(item, layoutType);
+
+    return this;
 }
 
-void Panel::SetMargins(int a, int b, int c, int d) {
+Gui::Panel* Panel::SetMargins(int a, int b, int c, int d) {
     uiSetMargins(item, a, b, c, d);
+
+    return this;
 }
 
-void Panel::SetSize(int w, int h) {
+Gui::Panel* Panel::SetSize(int w, int h) {
     uiSetSize(item, w, h);
+
+    return this;
 }
 
-void Panel::Insert(Gui::Button* btn) {
-    OpenGL::Button* w = static_cast<OpenGL::Button*>(btn);
-    
+Gui::Panel* Panel::Insert(Gui::Button* btn) {
+    OpenGL::Button* w = static_cast<OpenGL::Button*> (btn);
+
     uiInsert(item, w->item);
+
+    return this;
 }
 
-void Panel::SetBox(unsigned int boxType) {
+Gui::Panel* Panel::SetBox(unsigned int boxType) {
     uiSetBox(item, boxType);
+
+    return this;
 }
 
 void Panel::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
-    
+
     UIrect rect = uiGetRect(item);
 
     bndBackground(context, rect.x, rect.y, rect.w, rect.h);
-    bndBevel(context, rect.x, rect.y, rect.w, rect.h);
+    bndBevelInset(context, rect.x, rect.y, rect.w, rect.h, 4, 4);
 }
 

@@ -33,21 +33,28 @@ Button::Button(int i) : OpenGLWidget(i) {
     uiSetEvents(i, UI_BUTTON0_HOT_UP);
 }
 
-void Button::SetLabel(const std::string& label) {
+Gui::Button* Button::SetLabel(const std::string& label) {
     this->label = label;
     
+    return this;
 }
 
-void Button::OnClick(std::function<void() > onClickFunction) {
+Gui::Button* Button::OnClick(std::function<void() > onClickFunction) {
     this->onClick = onClickFunction;
+    
+    return this;
 }
 
-void Button::SetLayout(unsigned int layout) {
+Gui::Button* Button::SetLayout(unsigned int layout) {
     uiSetLayout(this->item, layout);
+    
+    return this;
 }
 
-void Button::SetMargins(int a, int b, int c, int d) {
+Gui::Button* Button::SetMargins(int a, int b, int c, int d) {
     uiSetMargins(this->item, a, b, c, d);
+    
+    return this;
 }
 
 void Button::Draw(NVG::NVGcontext* context) const {

@@ -22,11 +22,12 @@
 #include <string>
 
 namespace Gui {
+
     struct Window {
-        virtual void SetTitle(const std::string& title) = 0;
-        virtual void SetIcon(int iconId) = 0;
-        virtual void SetSize(int w, int h) = 0;
-        virtual void SetBox(unsigned int boxType) = 0;
+        virtual Window* SetTitle(const std::string& title) = 0;
+        virtual Window* SetIcon(int iconId) = 0;
+        virtual Window* SetSize(int w, int h) = 0;
+        virtual Window* SetBox(unsigned int boxType) = 0;
     };
 }
 

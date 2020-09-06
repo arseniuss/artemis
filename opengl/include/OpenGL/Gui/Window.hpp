@@ -30,10 +30,10 @@ namespace OpenGL {
         
         Window(int i);
 
-        void SetTitle(const std::string& title) override;
-        void SetIcon(int iconId) override;
-        void SetSize(int w, int h) override;
-        void SetBox(unsigned int boxType) override;
+        Gui::Window* SetTitle(const std::string& title) override;
+        Gui::Window* SetIcon(int iconId) override;
+        Gui::Window* SetSize(int w, int h) override;
+        Gui::Window* SetBox(unsigned int boxType) override;
 
         void Draw(NVG::NVGcontext* context) const override;
 
