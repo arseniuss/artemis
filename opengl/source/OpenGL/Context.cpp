@@ -23,10 +23,12 @@
 
 #include <Blendish/Blendish.hpp>
 #include <NanoVG/NanoVG.hpp>
+#include <OpenGL/Buffer.hpp>
 #include <OpenGL/Context.hpp>
 #include <OpenGL/Debug.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Widget.hpp>
+#include <OpenGL/Shader.hpp>
 #include <glad.h>
 #include <oui.h>
 
@@ -43,6 +45,16 @@ void ui_handler(int item, UIevent event) {
     if (w) {
         w->HandleEvent(event);
     }
+}
+
+Graphics::Shader* Context::create(Type<Graphics::Shader> type,
+        const std::string& name) {
+    return new Shader(name);
+}
+
+Graphics::Buffer* Context::create(Type<Graphics::Buffer> type,
+        Graphics::BufferType bt, const float* data, size_t size) {
+    return new Buffer(bt, data, size);
 }
 
 Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW_OPENGL) {
@@ -113,11 +125,11 @@ void Context::Render() {
 
     SDL_GetWindowSize(_window, &w, &h);
 
-    glClearColor(0.2, 0.4, 0.1, 1.0);
+    //glClearColor(0.2, 0.4, 0.1, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
 
     for (Graphics::DrawFunc func : _drawables) {
         func(*this);
@@ -125,7 +137,7 @@ void Context::Render() {
     }
 
     if (uiGetItemCount() > 0) {
-        NVG::nvgBeginFrame(_nvgContext, w, h, (float)w / (float)h);
+        NVG::nvgBeginFrame(_nvgContext, w, h, (float) w / (float) h);
 
         DrawLayout(0, Blendish::BND_CORNER_NONE);
 

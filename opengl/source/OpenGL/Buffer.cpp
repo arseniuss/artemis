@@ -16,21 +16,34 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <OpenGL/Buffer.hpp>
 #include <stdexcept>
-#include <iostream>
 
-#include <Client/MenuState.hpp>
+using namespace OpenGL;
 
-using namespace std;
-using namespace Client;
-
-int main(int argc, char** argv) {
-    Application app;
-
-    app.PushState<MenuState>(&app);
-
-    app.Run();
-
-    return 0;
+Buffer::Buffer(Graphics::BufferType type, const float* data, size_t size) :
+Graphics::Buffer(type, data, size) {
+    create(type, data, size);
 }
+
+void Buffer::create(Graphics::BufferType type, const float* data, size_t size) {
+    switch (type) {
+        case Graphics::BufferType::Array:
+            bufferType = GL_ARRAY_BUFFER;
+            break;
+        default:
+            throw std::runtime_error("Unrecognised buffer type");
+            break;
+    }
+
+    glGenBuffers(1, &_id);
+    glBindBuffer(bufferType, _id);
+    glBufferData(bufferType, size, data, GL_STATIC_DRAW);
+}
+
+void Buffer::Use() const {
+    glBindBuffer(bufferType, _id);
+}
+
+
 

@@ -19,8 +19,9 @@
 #ifndef OPENGL_CONTEXT_HPP
 #define OPENGL_CONTEXT_HPP
 
-#include <NanoVG/NanoVG.hpp>
+#include <Graphics/Buffer.hpp>
 #include <Graphics/Context.hpp>
+#include <NanoVG/NanoVG.hpp>
 
 namespace OpenGL {
 
@@ -29,12 +30,19 @@ namespace OpenGL {
         SDL_GLContext _context;
 
         NVG::NVGcontext* _nvgContext;
+
+        Graphics::Shader* create(Type<Graphics::Shader> type,
+                const std::string& name) override;
+        Graphics::Buffer* create(Type<Graphics::Buffer> type,
+                Graphics::BufferType bt, const float* data,
+                size_t size) override;
+
     public:
         Context(const std::string& title);
         ~Context();
-        
+
         void HandleInput() override;
-        
+
         void Update(float deltaTime) override;
 
         void Render() override;

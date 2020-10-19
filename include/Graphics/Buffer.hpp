@@ -16,21 +16,25 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdexcept>
-#include <iostream>
+#ifndef GRAPHICS_BUFFER_HPP
+#define GRAPHICS_BUFFER_HPP
 
-#include <Client/MenuState.hpp>
+#include <cstddef>
 
-using namespace std;
-using namespace Client;
+namespace Graphics {
 
-int main(int argc, char** argv) {
-    Application app;
+    enum BufferType {
+        Array = 0
+    };
 
-    app.PushState<MenuState>(&app);
+    class Buffer {
+    public:
 
-    app.Run();
+        Buffer(enum BufferType type, const float *data, size_t size) {
+        }
 
-    return 0;
+        virtual void Use() const = 0;
+    };
 }
 
+#endif /* !GRAPHICS_BUFFER_HPP */

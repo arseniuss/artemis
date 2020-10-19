@@ -16,38 +16,34 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_TESTSTATE_HPP
-#define CLIENT_TESTSTATE_HPP
+#ifndef OPENGL_SHADER_HPP
+#define OPENGL_SHADER_HPP
 
-#include <Client/Application.hpp>
-#include <Client/State.hpp>
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Camera.hpp>
+#include <string>
+
 #include <Graphics/Shader.hpp>
 
-namespace Client {
-    class TestState : public State {
-        Graphics::Camera* _camera;
-        
-        Graphics::Shader* shader;
-        Graphics::Buffer *vertex;
-        Graphics::Buffer *colors;
-        
-        size_t drawFuncIdx;
+#include <glad.h>
+
+namespace OpenGL {
+
+    class Shader : public Graphics::Shader {
+    private:
+        GLuint create(const std::string& filename, GLenum shaderType);
+    protected:
+        GLuint _id = (GLuint) - 1;
     public:
-        TestState(Application* app);
-        virtual ~TestState() = default;
+        Shader(const std::string& name);
 
-        void HandleEvent(const SDL_Event& event) override;
+        void Use() override;
 
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-        
-        void OnPush() override;
-        
-        void OnPop() override;
+        void Draw() override;
 
-        void OnDraw(Graphics::Context& context);
+        void SetUniform(const std::string& name, const glm::mat4 value,
+                bool transpose) override;
+        void SetBuffer(const std::string& name,
+                const Graphics::Buffer* buffer) override;
     };
 }
 
-#endif /* !CLIENT_TESTSTATE_HPP */
+#endif /* !OPENGL_SHADER_HPP */

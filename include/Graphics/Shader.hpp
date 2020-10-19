@@ -16,38 +16,29 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_TESTSTATE_HPP
-#define CLIENT_TESTSTATE_HPP
+#ifndef GRAPHICS_SHADER_HPP
+#define GRAPHICS_SHADER_HPP
 
-#include <Client/Application.hpp>
-#include <Client/State.hpp>
+#include <string>
+
+#include <glm/glm.hpp>
+
 #include <Graphics/Buffer.hpp>
-#include <Graphics/Camera.hpp>
-#include <Graphics/Shader.hpp>
 
-namespace Client {
-    class TestState : public State {
-        Graphics::Camera* _camera;
-        
-        Graphics::Shader* shader;
-        Graphics::Buffer *vertex;
-        Graphics::Buffer *colors;
-        
-        size_t drawFuncIdx;
+namespace Graphics {
+
+    class Shader {
     public:
-        TestState(Application* app);
-        virtual ~TestState() = default;
+        virtual void Use() = 0;
 
-        void HandleEvent(const SDL_Event& event) override;
+        virtual void Draw() = 0;
 
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-        
-        void OnPush() override;
-        
-        void OnPop() override;
+        virtual void SetUniform(const std::string& name,
+                const glm::mat4 value, bool transpose = false) = 0;
 
-        void OnDraw(Graphics::Context& context);
+        virtual void SetBuffer(const std::string& name,
+                const Buffer* buffer) = 0;
     };
 }
 
-#endif /* !CLIENT_TESTSTATE_HPP */
+#endif /* !GRAPHICS_SHADER_HPP */

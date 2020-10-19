@@ -12,8 +12,10 @@ SOURCES = \
     source/OpenGL/Gui/Panel.cpp \
     source/OpenGL/Gui/Widget.cpp \
     source/OpenGL/Gui/Window.cpp \
+    source/OpenGL/Buffer.cpp \
     source/OpenGL/Context.cpp \
     source/OpenGL/Gui.cpp \
+    source/OpenGL/Shader.cpp \
     source/Plugin.cpp \
     source/glad.c \
     source/oui.cpp
