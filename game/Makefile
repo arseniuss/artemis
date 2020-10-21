@@ -8,12 +8,14 @@ PLUGINDIR = $(BUILDDIR)/plugins
 
 SOURCES = \
     source/Client/Application.cpp \
+    source/Client/ConnectState.cpp \
     source/Client/GameState.cpp \
     source/Client/MenuState.cpp \
     source/Client/SettingState.cpp \
     source/Client/State.cpp \
     source/Client/TestState.cpp \
     source/Graphics/Context.cpp \
+    source/Server/Engine.cpp \
     source/World/BlockManager.cpp \
     source/main.cpp
 
@@ -26,7 +28,7 @@ CFLAGS = -Iinclude -I../include -I../gui/include
 CXXFLAGS = -Iinclude -I../include -I../gui/include -std=c++2a
 LDFLAGS = -rdynamic -lstdc++ -lstdc++fs -ldl -pthread
 
-LIBS = sdl2 SDL2_image glm
+LIBS = sdl2 SDL2_image glm libenet
 STATIC_LIBS = \
     ../common/libartemis_common.a
     

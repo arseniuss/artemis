@@ -16,24 +16,54 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#include <iostream>
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <Server/Engine.hpp>
+#include <thread>
 
-namespace Client {
+using namespace std::chrono_literals;
 
-    class MenuState : public State {
-    public:
-        MenuState(Application* app);
-        virtual ~MenuState() = default;
+using namespace Server;
 
-        void BuildUI(Gui::LayoutBuilder& builder) override;
+Engine& Engine::Get() {
+    static Engine *instance = nullptr;
 
-        void HandleEvent(const SDL_Event& event) override;
-    };
+    if (!instance) instance = new Engine();
+
+    return *instance;
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
+Engine::Engine() {
+
+}
+
+bool Engine::Start() {
+    if (_started) {
+        return false;
+    }
+
+    _started = true;
+    _serverThread = std::thread(&Engine::main, this);
+
+    return true;
+}
+
+bool Engine::Stop() {
+    _started = false;
+
+    _serverThread.join();
+
+    return true;
+}
+
+void Engine::main() {
+    std::cout << "Starting server ..." << std::endl;
+
+    while (_started) {
+
+    }
+
+    std::cout << "Quitting server ..." << std::endl;
+}
+
 

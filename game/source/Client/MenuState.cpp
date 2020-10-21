@@ -16,17 +16,36 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Client/GameState.hpp>
+#include <Client/ConnectState.hpp>
 #include <Client/MenuState.hpp>
 #include <Client/SettingState.hpp>
 #include <Client/TestState.hpp>
 #include <Gui/Button.hpp>
 #include <Gui/Panel.hpp>
+#include <Server/Engine.hpp>
 
 using namespace Client;
 
 MenuState::MenuState(Application* app) : State(app, "Menu state") {
 
+}
+
+void MenuState::onStartServer() {
+    if (Server::Engine::Get().Start()) {
+        auto f = std::bind(&MenuState::onStopServer, this);
+
+        startServerBtn->SetLabel("Stop server");
+        startServerBtn->OnClick(f);
+    }
+}
+
+void MenuState::onStopServer() {
+    if (Server::Engine::Get().Stop()) {
+        auto f = std::bind(&MenuState::onStartServer, this);
+
+        startServerBtn->SetLabel("Start server");
+        startServerBtn->OnClick(f);
+    }
 }
 
 void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
@@ -39,16 +58,35 @@ void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
 
     builder.Insert(panel);
 
-    auto startGameButton = builder.Create<Gui::Button>();
+    auto connectButton = builder.Create<Gui::Button>();
 
-    startGameButton->SetLabel("BEGIN");
-    startGameButton->OnClick([this]() {
-        _app.PushState<GameState>(&_app);
+    connectButton->SetLabel("Connect");
+    connectButton->OnClick([this]() {
+        _app.PushState<ConnectState>(&_app);
     });
-    startGameButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
-    startGameButton->SetMargins(0, 1, 0, 0);
+    connectButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
+    connectButton->SetMargins(0, 1, 0, 0);
 
-    panel->Insert(startGameButton);
+    panel->Insert(connectButton);
+
+    startServerBtn = builder.Create<Gui::Button>();
+
+    if (!Server::Engine::Get().Started()) {
+        auto f = std::bind(&MenuState::onStartServer, this);
+
+        startServerBtn->SetLabel("Start server");
+        startServerBtn->OnClick(f);
+    } else {
+        auto f = std::bind(&MenuState::onStartServer, this);
+
+        startServerBtn->SetLabel("Stop server");
+        startServerBtn->OnClick(f);
+    }
+
+    startServerBtn->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
+    startServerBtn->SetMargins(0, 1, 0, 0);
+
+    panel->Insert(startServerBtn);
 
     auto testButton = builder.Create<Gui::Button>();
 

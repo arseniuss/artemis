@@ -16,12 +16,29 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
+#ifndef CLIENT_MENUSTATE_HPP
+#define CLIENT_MENUSTATE_HPP
 
-using namespace std;
+#include <Client/State.hpp>
+#include <Client/Application.hpp>
 
-int main(int argc, char** argv) {
+namespace Client {
 
-    return 0;
+    class MenuState : public State {
+        
+        Gui::Button *startServerBtn = nullptr;
+    public:
+        MenuState(Application* app);
+        virtual ~MenuState() = default;
+
+        void BuildUI(Gui::LayoutBuilder& builder) override;
+
+        void HandleEvent(const SDL_Event& event) override;
+        
+        void onStartServer();
+        void onStopServer();
+    };
 }
+
+#endif /* !CLIENT_MENUSTATE_HPP */
 

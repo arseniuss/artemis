@@ -2,8 +2,7 @@ TARGETS = \
     common \
     opengl \
     plugins/default \
-    server \
-    client
+    game
 
 all:
 	@ for i in $(TARGETS); do \
