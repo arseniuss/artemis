@@ -10,13 +10,17 @@ SOURCES = \
     source/Graphics/Camera.cpp \
     source/Graphics/Utils.cpp \
     source/Graphics/ViewFrustum.cpp \
+    source/Network/Context.cpp \
+    source/Network/Event.cpp \
+    source/Network/Payload.cpp \
+    source/Network/Peer.cpp \
     source/World/Block.cpp \
     source/World/Chunk.cpp \
     source/World/ChunkManager.cpp \
     source/World/Coordinates.cpp
 
-CFLAGS = -Iinclude -I../include -fPIC
-CXXFLAGS = -Iinclude -I../include -fPIC -std=c++2a
+CFLAGS = -Iinclude -I../include -fPIC -frtti
+CXXFLAGS = -Iinclude -I../include -fPIC -std=c++2a -frtti
 LDFLAGS = 
 
 all: $(TARGET)

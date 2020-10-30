@@ -16,44 +16,25 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_ENGINE_HPP
-#define SERVER_ENGINE_HPP
+#ifndef NETWORK_CLIENT_HPP
+#define NETWORK_CLIENT_HPP
 
-#include <atomic>
-#include <thread>
+#include <cstdint>
 
-#include <Network/Context.hpp>
-#include <Network/Host.hpp>
-
-namespace Server {
-
-    class Engine {
-    private:
-        std::atomic<bool> _isRunning = false;
-
-        std::thread _serverThread;
-
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
-
-        Engine();
-
-        void main();
-
-#define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
-#include <Network/ServerCommands.inc.hpp>
-
+namespace Network {
+    enum ConnectionStatus {
+        Failed = -1,
+        Connecting = 0,
+        Connected = 1
+    };
+    
+    class Client {
     public:
-        static Engine& Get();
-
-        bool Start();
-        bool Stop();
-
-        bool Started() const {
-            return _isRunning;
-        }
+        Client() = default;
+        
+        virtual void Connect(const std::string& address, uint16_t port) = 0;
+        virtual ConnectionStatus GetConnectionStatus() = 0;
     };
 }
 
-#endif /* !SERVER_ENGINE_HPP */
+#endif /* !NETWORK_CLIENT_HPP */

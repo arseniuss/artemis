@@ -16,44 +16,39 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_ENGINE_HPP
-#define SERVER_ENGINE_HPP
+#include <ENet/Event.hpp>
+#include <ENet/Peer.hpp>
+#include <Network/Event.hpp>
 
-#include <atomic>
-#include <thread>
+using namespace ENet;
 
-#include <Network/Context.hpp>
-#include <Network/Host.hpp>
-
-namespace Server {
-
-    class Engine {
-    private:
-        std::atomic<bool> _isRunning = false;
-
-        std::thread _serverThread;
-
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
-
-        Engine();
-
-        void main();
-
-#define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
-#include <Network/ServerCommands.inc.hpp>
-
-    public:
-        static Engine& Get();
-
-        bool Start();
-        bool Stop();
-
-        bool Started() const {
-            return _isRunning;
-        }
-    };
+Event::Event(ENetEvent& e) : _e(e) {
+    switch (_e.type) {
+        case ENET_EVENT_TYPE_NONE:
+            break;
+        case ENET_EVENT_TYPE_CONNECT:
+            _type = Network::Connect;
+            break;
+        case ENET_EVENT_TYPE_DISCONNECT:
+            _type = Network::Disconnect;
+            break;
+        case ENET_EVENT_TYPE_RECEIVE:
+            _type = Network::Data;
+            break;
+    }
 }
 
-#endif /* !SERVER_ENGINE_HPP */
+Event::~Event() {
+
+}
+
+Network::Peer Event::GetPeer() const {
+    return ENet::Peer(_e.peer);
+}
+
+Network::Payload Event::GetPayload() const {
+    return Network::Payload((char *) _e.packet->data, _e.packet->dataLength);
+}
+
+
+

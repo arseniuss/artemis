@@ -17,9 +17,15 @@
  */
 
 #include <iostream>
-
-#include <Server/Engine.hpp>
 #include <thread>
+
+#include <Common/Debug.hpp>
+#include <Network/Context.hpp>
+#include <Network/Event.hpp>
+#include <Network/Host.hpp>
+#include <Network/Payload.hpp>
+#include <Network/Peer.hpp>
+#include <Server/Engine.hpp>
 
 using namespace std::chrono_literals;
 
@@ -38,18 +44,18 @@ Engine::Engine() {
 }
 
 bool Engine::Start() {
-    if (_started) {
+    if (_isRunning) {
         return false;
     }
 
-    _started = true;
+    _isRunning = true;
     _serverThread = std::thread(&Engine::main, this);
 
     return true;
 }
 
 bool Engine::Stop() {
-    _started = false;
+    _isRunning = false;
 
     _serverThread.join();
 
@@ -57,13 +63,51 @@ bool Engine::Stop() {
 }
 
 void Engine::main() {
+    Network::Event* event = nullptr;
+
     std::cout << "Starting server ..." << std::endl;
 
-    while (_started) {
+    _net = Network::Context::Create("enet");
+    _host = _net->Create<Network::Host>(10);
+
+    while (_isRunning) {
+        while (_host->PullEvent(&event)) {
+            Network::Peer peer = event->GetPeer();
+
+            switch (event->GetType()) {
+                case Network::Connect:
+                    Common::Debug() << "Server: connect" << std::endl;
+                    break;
+                case Network::Disconnect:
+                case Network::Timeout:
+                    break;
+                case Network::Data:
+                {
+                    Network::Payload payload = event->GetPayload();
+                    Network::ToServerCommand cmd = payload.GetServerCommand();
+
+                    switch (cmd) {
+#define C(_enum)    case Network::_enum: \
+                        handle_##_enum(Network::ServerPayload<Network::_enum>(payload)); \
+                        break;
+#include <Network/ServerCommands.inc.hpp>
+                    }
+
+                    break;
+                }
+            }
+
+            if (event)
+                delete event;
+        }
+
 
     }
 
     std::cout << "Quitting server ..." << std::endl;
 }
 
+void Engine::handle_HandshakeRequest(Network::ServerPayload<Network::HandshakeRequest> payload) {
+
+}
 

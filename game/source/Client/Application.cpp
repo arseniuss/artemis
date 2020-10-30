@@ -29,8 +29,7 @@ using namespace Client;
 
 Application::Application() : Common::Application() {
     _graphics = Graphics::Context::Create("opengl", "Artemis");
-
-    
+    _net = Network::Context::Create("enet");
 }
 
 Application::~Application() {
@@ -45,8 +44,6 @@ void Application::Run() {
     std::chrono::high_resolution_clock timer;
     bool running = true;
     auto start = timer.now();
-    //int mousex, mousey;
-    //uint32_t mouse, mod;
 
     while (running) {
         if (_states.empty())
@@ -54,7 +51,7 @@ void Application::Run() {
 
         State& current = *(State *) _states.back().get();
         SDL_Event event;
-        
+
         _graphics->HandleInput();
 
         current.HandleInput();
@@ -65,6 +62,15 @@ void Application::Run() {
 
         auto stop = timer.now();
         float deltaTime = chrono::duration<float, std::milli>(stop - start).count();
+
+        auto it = _loops.begin();
+        for (; it != _loops.end(); it++) {
+            LoopFunc func = *it;
+
+            if (func())
+                _loops.erase(it);
+        }
+
         start = stop;
 
         current.Update(deltaTime);
@@ -86,3 +92,6 @@ void Application::Run() {
     }
 }
 
+void Application::AddLoop(LoopFunc loopFunc) {
+    _loops.emplace_back(loopFunc);
+}

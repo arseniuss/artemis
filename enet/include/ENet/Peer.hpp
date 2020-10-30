@@ -16,44 +16,20 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_ENGINE_HPP
-#define SERVER_ENGINE_HPP
+#ifndef ENET_PEER_HPP
+#define ENET_PEER_HPP
 
-#include <atomic>
-#include <thread>
+#include <enet/enet.h>
 
-#include <Network/Context.hpp>
-#include <Network/Host.hpp>
+#include <Network/Peer.hpp>
 
-namespace Server {
+namespace ENet {
 
-    class Engine {
-    private:
-        std::atomic<bool> _isRunning = false;
-
-        std::thread _serverThread;
-
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
-
-        Engine();
-
-        void main();
-
-#define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
-#include <Network/ServerCommands.inc.hpp>
-
+    class Peer : public Network::Peer {
     public:
-        static Engine& Get();
-
-        bool Start();
-        bool Stop();
-
-        bool Started() const {
-            return _isRunning;
-        }
+        Peer(ENetPeer* p);
+        virtual ~Peer();
     };
 }
 
-#endif /* !SERVER_ENGINE_HPP */
+#endif /* !ENET_PEER_HPP */

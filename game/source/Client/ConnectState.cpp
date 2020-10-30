@@ -17,6 +17,9 @@
  */
 
 #include <Client/ConnectState.hpp>
+#include <Common/Debug.hpp>
+#include <Network/Client.hpp>
+#include <Network/Context.hpp>
 
 using namespace Client;
 
@@ -33,14 +36,36 @@ void ConnectState::BuildUI(Gui::LayoutBuilder& builder) {
     panel->SetSize(200, 200);
 
     builder.Insert(panel);
-    
+
     // TODO
-    
+
     auto connectButton = builder.Create<Gui::Button>();
-    
+
     connectButton->SetLabel("Connect");
     connectButton->SetLayout(LAYOUT_HFILL);
-    
+    connectButton->OnClick([this]() {
+        Network::Context& net = _app.GetNetwork();
+
+        Network::Client *client = net.Create<Network::Client>();
+
+        client->Connect("localhost", Network::Context::DefaultPort);
+
+        _app.AddLoop([this, client]() -> bool {
+            auto status = client->GetConnectionStatus();
+
+            switch (status) {
+                case Network::Failed:
+                    return false;
+                case Network::Connected:
+                    return false;
+                case Network::Connecting:
+                    return true;
+            }
+            
+            return true; /* Continue */
+        });
+    });
+
     panel->Insert(connectButton);
 }
 

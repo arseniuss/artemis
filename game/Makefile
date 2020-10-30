@@ -28,12 +28,13 @@ CFLAGS = -Iinclude -I../include -I../gui/include
 CXXFLAGS = -Iinclude -I../include -I../gui/include -std=c++2a
 LDFLAGS = -rdynamic -lstdc++ -lstdc++fs -ldl -pthread
 
-LIBS = sdl2 SDL2_image glm libenet
+LIBS = sdl2 SDL2_image glm
 STATIC_LIBS = \
     ../common/libartemis_common.a
     
 SHARED_LIBS = \
-    ../opengl/libartemis_opengl.so
+    ../opengl/libartemis_opengl.so \
+    ../enet/libartemis_enet.so
 
 .PHONY: all clean depends $(STATIC_LIBS) $(SHARED_LIBS) copy-shared-libs \
 	copy-data copy-plugins

@@ -16,44 +16,33 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_ENGINE_HPP
-#define SERVER_ENGINE_HPP
+#ifndef NETWORK_EVENT_HPP
+#define NETWORK_EVENT_HPP
 
-#include <atomic>
-#include <thread>
+#include <Network/Peer.hpp>
+#include <Network/Payload.hpp>
 
-#include <Network/Context.hpp>
-#include <Network/Host.hpp>
+namespace Network {
 
-namespace Server {
+    enum EventType {
+        Connect,
+        Disconnect,
+        Timeout,
+        Data
+    };
 
-    class Engine {
-    private:
-        std::atomic<bool> _isRunning = false;
-
-        std::thread _serverThread;
-
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
-
-        Engine();
-
-        void main();
-
-#define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
-#include <Network/ServerCommands.inc.hpp>
-
+    class Event {
+    protected:
+        EventType _type;
     public:
-        static Engine& Get();
-
-        bool Start();
-        bool Stop();
-
-        bool Started() const {
-            return _isRunning;
-        }
+        Event();
+        virtual ~Event() {};
+        
+        EventType GetType() const;
+        
+        virtual Peer GetPeer() const = 0;
+        virtual Payload GetPayload() const = 0;
     };
 }
 
-#endif /* !SERVER_ENGINE_HPP */
+#endif /* !NETWORK_EVENT_HPP */

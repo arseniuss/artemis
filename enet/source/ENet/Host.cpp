@@ -16,44 +16,50 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_ENGINE_HPP
-#define SERVER_ENGINE_HPP
+#include <enet/enet.h>
 
-#include <atomic>
-#include <thread>
+#include <ENet/Host.hpp>
+#include <ENet/Event.hpp>
 
 #include <Network/Context.hpp>
-#include <Network/Host.hpp>
 
-namespace Server {
+using namespace ENet;
 
-    class Engine {
-    private:
-        std::atomic<bool> _isRunning = false;
-
-        std::thread _serverThread;
-
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
-
-        Engine();
-
-        void main();
-
-#define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
-#include <Network/ServerCommands.inc.hpp>
-
-    public:
-        static Engine& Get();
-
-        bool Start();
-        bool Stop();
-
-        bool Started() const {
-            return _isRunning;
-        }
-    };
+Host::Host() {
+    create(1);
 }
 
-#endif /* !SERVER_ENGINE_HPP */
+Host::Host(int maxConnections) : Network::Host(maxConnections) {
+    create(maxConnections);
+}
+
+Host::~Host() {
+    if (_handle) {
+        enet_host_destroy(_handle);
+    }
+}
+
+void Host::create(int maxConnections) {
+    ENetAddress addr;
+
+    addr.host = ENET_HOST_ANY;
+    addr.port = Network::Context::DefaultPort;
+
+    _handle = enet_host_create(&addr, maxConnections, 2, 0, 0);
+}
+
+bool Host::PullEvent(Network::Event** event) {
+    ENetEvent e;
+
+    if (enet_host_service(_handle, &e, 0)) {
+        if (e.type == ENET_EVENT_TYPE_NONE)
+            return false;
+
+        *event = new Event(e);
+
+        return true;
+    }
+
+    return false;
+}
+

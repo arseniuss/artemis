@@ -16,44 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SERVER_ENGINE_HPP
-#define SERVER_ENGINE_HPP
+#include <string>
 
-#include <atomic>
-#include <thread>
+#include <ENet/Context.hpp>
 
-#include <Network/Context.hpp>
-#include <Network/Host.hpp>
+extern "C" {
 
-namespace Server {
+    void InitNetworking(void) {
 
-    class Engine {
-    private:
-        std::atomic<bool> _isRunning = false;
+    }
 
-        std::thread _serverThread;
-
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
-
-        Engine();
-
-        void main();
-
-#define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
-#include <Network/ServerCommands.inc.hpp>
-
-    public:
-        static Engine& Get();
-
-        bool Start();
-        bool Stop();
-
-        bool Started() const {
-            return _isRunning;
-        }
-    };
+    Network::Context* CreateContext(void) {
+        return new ENet::Context();
+    }
 }
-
-#endif /* !SERVER_ENGINE_HPP */

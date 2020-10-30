@@ -1,5 +1,6 @@
 TARGETS = \
     common \
+    enet \
     opengl \
     plugins/default \
     game
