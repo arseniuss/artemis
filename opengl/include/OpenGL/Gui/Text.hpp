@@ -16,29 +16,32 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#ifndef OPENGL_GUI_TEXT_HPP
+#define OPENGL_GUI_TEXT_HPP
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <Gui/Text.hpp>
+#include <OpenGL/Gui/Widget.hpp>
 
-namespace Client {
+namespace OpenGL {
 
-    class MenuState : public State {
-        
-        Gui::Button *startServerBtn = nullptr;
+    struct Text : OpenGLWidget, Gui::Text {
+        int _iconId = -1;
+        std::string _text;
+        int _cursorStart = 0;
+        int _cursorEnd = 0;
     public:
-        MenuState(Application* app);
-        virtual ~MenuState() = default;
 
-        void BuildUI(Gui::LayoutBuilder& builder) override;
+        Text(int i);
 
-        bool HandleEvent(const SDL_Event& event) override;
-        
-        void onStartServer();
-        void onStopServer();
+        Gui::Text* SetText(const std::string& text) override;
+        const std::string& GetText() const override;
+        Gui::Text* SetLayout(unsigned int layout) override;
+        Gui::Text* SetMargins(int a, int b, int c, int d) override;
+
+        void Draw(NVG::NVGcontext* context) const override;
+
+        void HandleEvent(UIevent event) override;
     };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
-
+#endif /* !OPENGL_GUI_TEXT_HPP */

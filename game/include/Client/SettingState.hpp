@@ -30,7 +30,7 @@ namespace Client {
         
         void BuildUI(Gui::LayoutBuilder& builder) override;
 
-        void HandleEvent(const SDL_Event& event) override;
+        bool HandleEvent(const SDL_Event& event) override;
 
     };
 }

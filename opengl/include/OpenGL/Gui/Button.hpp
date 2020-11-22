@@ -25,9 +25,9 @@
 namespace OpenGL {
 
     struct Button : OpenGLWidget, Gui::Button {
-        std::string label;
-        int iconId;
-        std::function<void()> onClick;
+        std::string _label;
+        int _iconId;
+        std::function<void()> _onClick;
         
         Button(int i);
 

@@ -110,6 +110,20 @@ void Context::HandleInput() {
     uiSetButton(2, mod, mouse & SDL_BUTTON_RMASK ? 1 : 0);
 }
 
+bool Context::HandleEvent(SDL_Event& event) {
+    uint32_t mod = SDL_GetModState();
+
+    switch (event.type) {
+        case SDL_KEYUP:
+        case SDL_KEYDOWN:
+            uiSetKey(event.key.keysym.sym, mod,
+                    event.key.type == SDL_KEYUP);
+            return true;
+    }
+    
+    return false;
+}
+
 void Context::Update(float deltaTime) {
     int w, h;
 

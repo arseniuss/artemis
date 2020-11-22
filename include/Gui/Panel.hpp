@@ -19,8 +19,9 @@
 #ifndef GUI_PANEL_HPP
 #define GUI_PANEL_HPP
 
-#include <Gui/Widget.hpp>
 #include <Gui/Button.hpp>
+#include <Gui/Text.hpp>
+#include <Gui/Widget.hpp>
 
 namespace Gui {
     struct Panel {        
@@ -29,7 +30,8 @@ namespace Gui {
         virtual Panel* SetMargins(int a, int b, int c, int d) = 0;
         virtual Panel* SetSize(int w, int h) = 0;
         
-        virtual Panel* Insert(Gui::Button* btn) = 0;
+        virtual Panel* Insert(Button* btn) = 0;
+        virtual Panel* Insert(Text *txt) = 0;
     };
 }
 

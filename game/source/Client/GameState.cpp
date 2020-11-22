@@ -30,12 +30,14 @@ GameState::GameState(Application *app) : State(app, "Game state") {
     _camera = new Graphics::Camera(size.x, size.y);
 }
 
-void GameState::HandleEvent(const SDL_Event& event) {
+bool GameState::HandleEvent(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 _app.PopState();
-                break;
+                return true;
         }
     }
+    
+    return State::HandleEvent(event);
 }

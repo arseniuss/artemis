@@ -38,7 +38,7 @@ namespace Client {
         TestState(Application* app);
         virtual ~TestState() = default;
 
-        void HandleEvent(const SDL_Event& event) override;
+        bool HandleEvent(const SDL_Event& event) override;
 
         void BuildUI(Gui::LayoutBuilder& builder) override;
         

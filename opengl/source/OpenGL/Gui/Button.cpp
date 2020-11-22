@@ -26,21 +26,21 @@ using namespace OpenGL;
 using namespace Blendish;
 
 Button::Button(int i) : OpenGLWidget(i) {
-    iconId = -1;
-    onClick = nullptr;
+    _iconId = -1;
+    _onClick = nullptr;
 
     uiSetSize(i, 0, BND_WIDGET_HEIGHT);
     uiSetEvents(i, UI_BUTTON0_HOT_UP);
 }
 
 Gui::Button* Button::SetLabel(const std::string& label) {
-    this->label = label;
+    this->_label = label;
     
     return this;
 }
 
 Gui::Button* Button::OnClick(std::function<void() > onClickFunction) {
-    this->onClick = onClickFunction;
+    this->_onClick = onClickFunction;
     
     return this;
 }
@@ -64,14 +64,14 @@ void Button::Draw(NVG::NVGcontext* context) const {
     BNDwidgetState state = (BNDwidgetState) uiGetState(this->item);
 
     bndToolButton(context, rect.x, rect.y, rect.w, rect.h, -1, state,
-            iconId,
-            this->label.c_str());
+            _iconId,
+            this->_label.c_str());
 }
 
 void Button::HandleEvent(UIevent event) {
     if(event == UI_BUTTON0_HOT_UP) {
-        if(this->onClick)
-            this->onClick();
+        if(this->_onClick)
+            this->_onClick();
     }
 }
 

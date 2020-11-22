@@ -57,7 +57,9 @@ void Application::Run() {
         current.HandleInput();
 
         while (SDL_PollEvent(&event)) {
-            current.HandleEvent(event);
+            if(!current.HandleEvent(event)) {
+                _graphics->HandleEvent(event);
+            }
         }
 
         auto stop = timer.now();

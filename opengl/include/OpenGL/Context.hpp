@@ -42,6 +42,7 @@ namespace OpenGL {
         ~Context();
 
         void HandleInput() override;
+        bool HandleEvent(SDL_Event& event) override;
 
         void Update(float deltaTime) override;
 

@@ -16,9 +16,10 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <OpenGL/Gui/Panel.hpp>
 #include <Blendish/Blendish.hpp>
 #include <OpenGL/Gui/Button.hpp>
+#include <OpenGL/Gui/Panel.hpp>
+#include <OpenGL/Gui/Text.hpp>
 
 #include "oui.h"
 
@@ -45,6 +46,14 @@ Gui::Panel* Panel::SetSize(int w, int h) {
 
 Gui::Panel* Panel::Insert(Gui::Button* btn) {
     OpenGL::Button* w = static_cast<OpenGL::Button*> (btn);
+
+    uiInsert(item, w->item);
+
+    return this;
+}
+
+Gui::Panel* Panel::Insert(Gui::Text* txt) {
+    OpenGL::Text* w = static_cast<OpenGL::Text*> (txt);
 
     uiInsert(item, w->item);
 

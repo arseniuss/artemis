@@ -25,6 +25,7 @@
 #include <OpenGL/Gui/Panel.hpp>
 #include <OpenGL/Gui/Button.hpp>
 #include <OpenGL/Gui/Window.hpp>
+#include <OpenGL/Gui/Text.hpp>
 
 #include "oui.h"
 
@@ -63,6 +64,10 @@ Gui::Button* LayoutBuilder::create(Gui::Type<Gui::Button> type) {
 
 Gui::Window* LayoutBuilder::create(Gui::Type<Gui::Window> type) {
     return static_cast<Gui::Window*> (createUi<OpenGL::Window>());
+}
+
+Gui::Text* LayoutBuilder::create(Gui::Type<Gui::Text> type) {
+    return static_cast<Gui::Text*> (createUi<OpenGL::Text>());
 }
 
 void LayoutBuilder::insert(Gui::Widget* w) {

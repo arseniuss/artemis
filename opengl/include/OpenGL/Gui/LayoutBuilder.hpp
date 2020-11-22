@@ -36,6 +36,7 @@ namespace OpenGL {
         Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
         Gui::Button* create(Gui::Type<Gui::Button> type) override;
         Gui::Window* create(Gui::Type<Gui::Window> type) override;
+        Gui::Text* create(Gui::Type<Gui::Text> type) override;
 
         template<typename T>
         T* createUi() {

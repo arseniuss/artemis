@@ -122,10 +122,12 @@ void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
     panel->Insert(exitButton);
 }
 
-void MenuState::HandleEvent(const SDL_Event& event) {
+bool MenuState::HandleEvent(const SDL_Event& event) {
     switch (event.type) {
         case SDL_QUIT:
             _app.PopState();
-            break;
+            return true;
     }
+    
+    return State::HandleEvent(event);
 }

@@ -26,6 +26,7 @@
 
 #include <glm/vec2.hpp>
 
+#include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
 #include <Gui/LayoutBuilder.hpp>
@@ -64,6 +65,7 @@ namespace Graphics {
         SDL_Window *GetWindow();
 
         virtual void HandleInput() = 0;
+        virtual bool HandleEvent(SDL_Event& event) = 0;
 
         virtual void Update(float deltaTime) = 0;
 

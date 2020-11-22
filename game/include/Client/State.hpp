@@ -35,7 +35,7 @@ namespace Client {
         
         virtual void BuildUI(Gui::LayoutBuilder& builder);
         
-        virtual void HandleEvent(const SDL_Event& event);
+        virtual bool HandleEvent(const SDL_Event& event);
     };
 }
 

@@ -30,7 +30,7 @@ namespace Client {
         GameState(Application *app);
         virtual ~GameState() = default;
         
-        void HandleEvent(const SDL_Event& event) override;
+        bool HandleEvent(const SDL_Event& event) override;
 
     };
 }

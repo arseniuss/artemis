@@ -34,12 +34,14 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
     builder.Insert(panel);
 }
 
-void SettingState::HandleEvent(const SDL_Event& event) {
+bool SettingState::HandleEvent(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 _app.PopState();
-                break;
+                return true;
         }
     }
+    
+    return State::HandleEvent(event);
 }

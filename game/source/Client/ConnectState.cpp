@@ -37,7 +37,12 @@ void ConnectState::BuildUI(Gui::LayoutBuilder& builder) {
 
     builder.Insert(panel);
 
-    // TODO
+    _textInput = builder.Create<Gui::Text>();
+    
+    _textInput->SetText("127.0.0.1");
+    _textInput->SetLayout(LAYOUT_HFILL);
+    
+    panel->Insert(_textInput);
 
     auto connectButton = builder.Create<Gui::Button>();
 
@@ -69,14 +74,16 @@ void ConnectState::BuildUI(Gui::LayoutBuilder& builder) {
     panel->Insert(connectButton);
 }
 
-void ConnectState::HandleEvent(const SDL_Event& event) {
+bool ConnectState::HandleEvent(const SDL_Event& event) {
     if (event.type == SDL_KEYDOWN) {
         switch (event.key.keysym.sym) {
             case SDLK_ESCAPE:
                 _app.PopState();
-                break;
+                return true;
         }
     }
+    
+    return State::HandleEvent(event);
 }
 
 

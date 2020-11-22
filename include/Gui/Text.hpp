@@ -16,29 +16,19 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_MENUSTATE_HPP
-#define CLIENT_MENUSTATE_HPP
+#ifndef GUI_TEXT_HPP
+#define GUI_TEXT_HPP
 
-#include <Client/State.hpp>
-#include <Client/Application.hpp>
+#include <string>
 
-namespace Client {
-
-    class MenuState : public State {
-        
-        Gui::Button *startServerBtn = nullptr;
+namespace Gui {
+    struct Text {
     public:
-        MenuState(Application* app);
-        virtual ~MenuState() = default;
-
-        void BuildUI(Gui::LayoutBuilder& builder) override;
-
-        bool HandleEvent(const SDL_Event& event) override;
-        
-        void onStartServer();
-        void onStopServer();
+        virtual Text* SetText(const std::string& text) = 0;
+        virtual const std::string& GetText() const = 0;
+        virtual Text* SetLayout(unsigned int layout) = 0;
+        virtual Text* SetMargins(int a, int b, int c, int d) = 0;
     };
 }
 
-#endif /* !CLIENT_MENUSTATE_HPP */
-
+#endif /* !GUI_TEXT_HPP */

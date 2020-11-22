@@ -20,16 +20,18 @@
 #define CLIENT_CONNECTSTATE_HPP
 
 #include <Client/State.hpp>
+#include <Gui/Text.hpp>
 
 namespace Client {
     class ConnectState : public State {
+        Gui::Text *_textInput = nullptr;
     public:
         ConnectState(Application *app);
         virtual ~ConnectState() = default;
         
         void BuildUI(Gui::LayoutBuilder& builder) override;
 
-        void HandleEvent(const SDL_Event& event) override;
+        bool HandleEvent(const SDL_Event& event) override;
 
     };
 }

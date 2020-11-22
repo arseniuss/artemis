@@ -37,8 +37,8 @@ void State::BuildUI(Gui::LayoutBuilder& builder) {
     
 }
 
-void State::HandleEvent(const SDL_Event& event) {
-    
+bool State::HandleEvent(const SDL_Event& event) {
+    return false;
 }
 
 
