@@ -25,7 +25,9 @@ namespace Network {
     enum ConnectionStatus {
         Failed = -1,
         Connecting = 0,
-        Connected = 1
+        Connected = 1,
+        Disconnected = 2,
+        Received = 3
     };
     
     class Client {

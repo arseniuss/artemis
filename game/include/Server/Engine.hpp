@@ -21,6 +21,7 @@
 
 #include <atomic>
 #include <thread>
+#include <vector>
 
 #include <Network/Context.hpp>
 #include <Network/Host.hpp>
@@ -29,22 +30,28 @@ namespace Server {
 
     class Engine {
     private:
+        std::shared_ptr<Network::Context> _net;
+        std::thread _serverThread;
+        
         std::atomic<bool> _isRunning = false;
 
-        std::thread _serverThread;
+        std::vector<std::shared_ptr<Network::Peer>> _pendingConnections;
 
-        std::shared_ptr<Network::Context> _net;
-        Network::Host *_host;
+        
 
         Engine();
 
         void main();
+        void addPending(std::shared_ptr<Network::Peer> peer);
 
 #define C(_enum) \
-        void handle_##_enum(Network::ServerPayload<Network::_enum> payload);
+        void handle_##_enum(std::shared_ptr<Network::Peer> peer, \
+            Network::ServerPayload<Network::_enum> payload);
 #include <Network/ServerCommands.inc.hpp>
 
     public:
+        static int maxConnections;
+        
         static Engine& Get();
 
         bool Start();

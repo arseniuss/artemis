@@ -29,6 +29,8 @@ namespace ENet {
 
     class Client : public Network::Client {
         ENetHost *_handle = nullptr;
+        
+        uint32_t _connectTimeout = 10;
     public:
         Client();
 

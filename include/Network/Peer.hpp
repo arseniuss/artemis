@@ -21,12 +21,26 @@
 
 #include <cstdint>
 
+#include <Network/Payload.hpp>
+
 namespace Network {
     class Peer {
+    protected:
         uint32_t _addr = 0;
+        int32_t _id = -1;
     public:
         Peer() = default;
         virtual ~Peer() = default;
+        
+        uint32_t GetAddr() const {
+            return _addr;
+        }
+        
+        int32_t GetId() const {
+            return _id;
+        }
+        
+        virtual void Send(Payload& payload) = 0;
     };
 }
 

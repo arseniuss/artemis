@@ -31,6 +31,8 @@ using namespace std::chrono_literals;
 
 using namespace Server;
 
+int Engine::maxConnections = 10;
+
 Engine& Engine::Get() {
     static Engine *instance = nullptr;
 
@@ -48,7 +50,6 @@ bool Engine::Start() {
         return false;
     }
 
-    _isRunning = true;
     _serverThread = std::thread(&Engine::main, this);
 
     return true;
@@ -56,7 +57,7 @@ bool Engine::Start() {
 
 bool Engine::Stop() {
     _isRunning = false;
-
+    
     _serverThread.join();
 
     return true;
@@ -68,15 +69,18 @@ void Engine::main() {
     std::cout << "Starting server ..." << std::endl;
 
     _net = Network::Context::Create("enet");
-    _host = _net->Create<Network::Host>(10);
+    auto host = _net->Create<Network::Host>(maxConnections);
+    
+    _isRunning = true;
 
     while (_isRunning) {
-        while (_host->PullEvent(&event)) {
-            Network::Peer peer = event->GetPeer();
+        while (host->PullEvent(&event)) {
+            auto peer = event->GetPeer();
 
             switch (event->GetType()) {
                 case Network::Connect:
                     Common::Debug() << "Server: connect" << std::endl;
+                    addPending(peer);
                     break;
                 case Network::Disconnect:
                 case Network::Timeout:
@@ -88,9 +92,10 @@ void Engine::main() {
 
                     switch (cmd) {
 #define C(_enum)    case Network::_enum: \
-                        handle_##_enum(Network::ServerPayload<Network::_enum>(payload)); \
+                        handle_##_enum(peer, Network::ServerPayload<Network::_enum>(payload)); \
                         break;
 #include <Network/ServerCommands.inc.hpp>
+#include <vector>
                     }
 
                     break;
@@ -100,14 +105,25 @@ void Engine::main() {
             if (event)
                 delete event;
         }
-
-
     }
 
     std::cout << "Quitting server ..." << std::endl;
+    delete host;
 }
 
-void Engine::handle_HandshakeRequest(Network::ServerPayload<Network::HandshakeRequest> payload) {
+void Engine::addPending(std::shared_ptr<Network::Peer> peer) {
+    _pendingConnections.push_back(peer);
+}
 
+
+void Engine::handle_HandshakeRequest(std::shared_ptr<Network::Peer> peer, 
+        Network::ServerPayload<Network::HandshakeRequest> payload) {
+    for(auto& pendingConnection : _pendingConnections) {
+        if(pendingConnection->GetId() == peer->GetId()) {
+            Network::ClientPayload<Network::ToClientCommand::HandshakeResponse> rsp;
+            
+            peer->Send(rsp);
+        }
+    }
 }
 

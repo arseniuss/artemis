@@ -24,6 +24,7 @@
 
 #include <Common/Config.hpp>
 #include <Common/Debug.hpp>
+#include <Common/Event.hpp>
 #include <Common/State.hpp>
 
 namespace Common {
@@ -35,32 +36,33 @@ namespace Common {
 
         template<typename T, typename... Args>
         void PushState(Args&&... args) {
-            if(_states.size()) {
+            if (_states.size()) {
                 auto& c = _states.back();
-                
+
                 c->OnDisable();
             }
-            
+
             _states.push_back(std::make_unique<T>(std::forward<Args>(args)...));
             auto& s = _states.back();
 
             Debug() << "Pushing state " << s->GetName() << std::endl;
-            
+
             s->OnPush();
         }
 
-        void PopState() {
-            auto& s = _states.back();
-            Debug() << "Poping state " << s->GetName() << std::endl;
-            
-            _isPoping = true;
-        }
+        void PopState();
 
         virtual void Run() = 0;
 
+        void AddLoop(EventCallbackBase<bool>* loop);
+        void RemoveLoop(EventCallbackBase<bool>* loop);
+
     protected:
+        typedef std::vector<EventCallbackBase<bool>*> LoopVectorT;
+
         std::vector<std::unique_ptr<State>> _states;
         bool _isPoping = false;
+        LoopVectorT _loops;
     };
 }
 

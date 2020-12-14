@@ -26,9 +26,13 @@
 namespace ENet {
 
     class Peer : public Network::Peer {
+    private:
+        ENetPeer *_p;
     public:
         Peer(ENetPeer* p);
         virtual ~Peer();
+        
+        void Send(Network::Payload& payload) override;
     };
 }
 

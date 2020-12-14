@@ -32,6 +32,10 @@ constexpr T htonT(T value) noexcept {
     return value;
 }
 
+Payload::Payload() {
+
+}
+
 Payload::Payload(char* data, size_t sz) {
     _begin = data;
     _sz = sz;
@@ -47,6 +51,14 @@ bool Payload::checkSize(size_t size) {
     _isValid = _isValid && (_readPos + size <= _sz);
 
     return _isValid;
+}
+
+const void *Payload::GetData() const {
+    return _begin;
+}
+
+size_t Payload::GetDataSize() {
+    return _sz;
 }
 
 Payload::operator BoolType() const {
@@ -164,3 +176,8 @@ Payload& Payload::operator>>(std::string& data) {
 
     return *this;
 }
+
+ClientPayload<Network::HandshakeResponse>::ClientPayload() : Payload() {
+    
+}
+

@@ -35,13 +35,17 @@ namespace Network {
         size_t _readPos = 0;
     public:
         typedef bool (Payload::*BoolType)(std::size_t);
-        
+
+        Payload();
         Payload(char *data, size_t sz);
 
         ToServerCommand GetServerCommand();
-        
+
         bool checkSize(size_t size);
         
+        const void *GetData() const;
+        size_t GetDataSize();
+
         operator BoolType() const;
 
         Payload& operator>>(bool& data);
@@ -84,6 +88,18 @@ namespace Network {
 
         ServerPayload(Payload payload) {
         }
+    };
+    
+    template<ToClientCommand cmd>
+    class ClientPayload {
+    public:
+        ClientPayload();
+    };
+    
+    template<>
+    class ClientPayload<Network::HandshakeResponse> : public Payload {
+    public:
+        ClientPayload();
     };
 }
 

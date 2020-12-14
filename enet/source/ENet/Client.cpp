@@ -45,19 +45,27 @@ void Client::Connect(const std::string& address, uint16_t port) {
 
 Network::ConnectionStatus Client::GetConnectionStatus() {
     ENetEvent event;
-    int ret = enet_host_service(_handle, &event, 1);
+    int ret = enet_host_service(_handle, &event, _connectTimeout);
 
-    if (ret > 0) {
-        if (event.type == ENET_EVENT_TYPE_RECEIVE) {
-            enet_packet_destroy(event.packet);
-        } else if (event.type == ENET_EVENT_TYPE_CONNECT) {
-            return Network::Connected;
-        }
-
-        return Network::Connecting;
+    if (ret < 0) {
+        return Network::Failed;
     }
 
-    return Network::Failed;
+    if (ret > 0) {
+        switch (event.type) {
+            case ENET_EVENT_TYPE_CONNECT:
+                return Network::Connected;
+            case ENET_EVENT_TYPE_DISCONNECT:
+                return Network::Disconnected;
+            case ENET_EVENT_TYPE_RECEIVE:
+                enet_packet_destroy(event.packet);
+                return Network::Received;
+        }
+
+        return Network::Failed;
+    }
+
+    return Network::Connecting;
 }
 
 

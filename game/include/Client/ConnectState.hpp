@@ -25,6 +25,9 @@
 namespace Client {
     class ConnectState : public State {
         Gui::Text *_textInput = nullptr;
+        Gui::Label *_statusLabel = nullptr;
+        
+        std::unique_ptr<Network::Client> _client;
     public:
         ConnectState(Application *app);
         virtual ~ConnectState() = default;
@@ -32,7 +35,10 @@ namespace Client {
         void BuildUI(Gui::LayoutBuilder& builder) override;
 
         bool HandleEvent(const SDL_Event& event) override;
-
+        
+        void OnClickConnectButton();
+        
+        bool ConnectionLoop();
     };
 }
 

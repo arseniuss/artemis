@@ -16,22 +16,35 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <ENet/Peer.hpp>
+#ifndef COMMON_EVENT_HPP
+#define COMMON_EVENT_HPP
 
-using namespace ENet;
+template<typename R>
+class EventCallbackBase {
+public:
+    virtual R operator()() = 0;
+    virtual bool is(void *) = 0;
+};
 
-Peer::Peer(ENetPeer* p) : Network::Peer(), _p(p) {
-    _addr = p->address.host;
-    _id = p->incomingPeerID;
-}
+template<typename T, typename R>
+class EventCallback : public EventCallbackBase<R> {
+private:
+    T* _instance;
+    R(T::*_function)();
+public:
 
-Peer::~Peer() {
+    EventCallback(T* instance, R(T::*function)()) :
+    _instance(instance), _function(function) {
 
-}
+    }
 
-void Peer::Send(Network::Payload& payload) {
-    ENetPacket *packet = enet_packet_create(payload.GetData(),
-            payload.GetDataSize(), ENET_PACKET_FLAG_RELIABLE);
+    virtual R operator()() override {
+        return (_instance->*_function)();
+    }
     
-    enet_peer_send(_p, 0, packet);
-}
+    virtual bool is(void *ptr) override {
+        return ptr == _instance;
+    }
+};
+
+#endif /* !COMMON_EVENT_HPP */

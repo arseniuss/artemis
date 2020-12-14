@@ -22,10 +22,9 @@
 #include <Common/Application.hpp>
 #include <Graphics/Context.hpp>
 #include <Network/Context.hpp>
+#include <Common/State.hpp>
 
 namespace Client {
-
-    using LoopFunc = std::function<bool()>;
 
     class Application : public Common::Application {
     public:
@@ -46,11 +45,9 @@ namespace Client {
             return *_net;
         }
 
-        void AddLoop(LoopFunc loopFunc);
     private:
         std::shared_ptr<Graphics::Context> _graphics;
         std::shared_ptr<Network::Context> _net;
-        std::vector<LoopFunc> _loops;
     };
 }
 

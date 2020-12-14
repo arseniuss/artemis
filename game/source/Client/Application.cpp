@@ -49,15 +49,15 @@ void Application::Run() {
         if (_states.empty())
             break;
 
-        State& current = *(State *) _states.back().get();
+        State* current = (State *) _states.back().get();
         SDL_Event event;
 
         _graphics->HandleInput();
 
-        current.HandleInput();
+        current->HandleInput();
 
         while (SDL_PollEvent(&event)) {
-            if(!current.HandleEvent(event)) {
+            if (!current->HandleEvent(event)) {
                 _graphics->HandleEvent(event);
             }
         }
@@ -65,23 +65,35 @@ void Application::Run() {
         auto stop = timer.now();
         float deltaTime = chrono::duration<float, std::milli>(stop - start).count();
 
-        auto it = _loops.begin();
-        for (; it != _loops.end(); it++) {
-            LoopFunc func = *it;
-
-            if (func())
-                _loops.erase(it);
-        }
+        _loops.erase(
+                std::remove_if(
+                _loops.begin(),
+                _loops.end(),
+                [](auto* e) {
+                    return (*e)();
+                }
+        ),
+        _loops.end());
 
         start = stop;
 
-        current.Update(deltaTime);
+        current->Update(deltaTime);
         _graphics->Update(deltaTime);
 
         _graphics->Render();
 
         if (_isPoping) {
-            current.OnPop();
+
+            current->OnPop();
+            _loops.erase(
+                    std::remove_if(
+                    _loops.begin(),
+                    _loops.end(),
+                    [current](auto* e) {
+                        return e->is(current);
+                    }
+            ),
+            _loops.end());
 
             _states.pop_back();
             if (_states.size()) {
@@ -94,6 +106,3 @@ void Application::Run() {
     }
 }
 
-void Application::AddLoop(LoopFunc loopFunc) {
-    _loops.emplace_back(loopFunc);
-}

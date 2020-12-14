@@ -19,6 +19,8 @@
 #ifndef NETWORK_EVENT_HPP
 #define NETWORK_EVENT_HPP
 
+#include <memory>
+
 #include <Network/Peer.hpp>
 #include <Network/Payload.hpp>
 
@@ -40,7 +42,7 @@ namespace Network {
         
         EventType GetType() const;
         
-        virtual Peer GetPeer() const = 0;
+        virtual std::shared_ptr<Peer> GetPeer() const = 0;
         virtual Payload GetPayload() const = 0;
     };
 }

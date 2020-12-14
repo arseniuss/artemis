@@ -16,8 +16,6 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-
 #include <SDL2/SDL.h>
 
 #include <Common/Application.hpp>
@@ -30,5 +28,32 @@ Application::Application() {
 }
 
 Application::~Application() {
-    
+
 }
+
+void Application::PopState() {
+    auto& s = _states.back();
+    Debug() << "Poping state " << s->GetName() << std::endl;
+
+    _isPoping = true;
+}
+
+void Application::AddLoop(EventCallbackBase<bool>* loop) {
+    LoopVectorT::iterator it = std::find(_loops.begin(), _loops.end(), loop);
+
+    if (it != _loops.end()) {
+        Debug() << "Loop exists";
+        return;
+    }
+    
+    _loops.emplace_back(loop);
+}
+
+void Application::RemoveLoop(EventCallbackBase<bool>* loop) {
+    LoopVectorT::iterator it = std::find(_loops.begin(), _loops.end(), loop);
+    
+    if(it != _loops.end()) {
+        _loops.erase(it);
+    }
+}
+

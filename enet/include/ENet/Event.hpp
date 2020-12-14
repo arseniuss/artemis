@@ -31,7 +31,7 @@ namespace ENet {
         Event(ENetEvent& e);
         virtual ~Event();
 
-        Network::Peer GetPeer() const override;
+        std::shared_ptr<Network::Peer> GetPeer() const override;
         Network::Payload GetPayload() const override;
     };
 }

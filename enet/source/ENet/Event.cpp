@@ -42,8 +42,8 @@ Event::~Event() {
 
 }
 
-Network::Peer Event::GetPeer() const {
-    return ENet::Peer(_e.peer);
+std::shared_ptr<Network::Peer> Event::GetPeer() const {
+    return std::shared_ptr<Network::Peer>(new ENet::Peer(_e.peer));
 }
 
 Network::Payload Event::GetPayload() const {

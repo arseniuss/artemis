@@ -38,40 +38,57 @@ void ConnectState::BuildUI(Gui::LayoutBuilder& builder) {
     builder.Insert(panel);
 
     _textInput = builder.Create<Gui::Text>();
-    
+
     _textInput->SetText("127.0.0.1");
     _textInput->SetLayout(LAYOUT_HFILL);
-    
+
     panel->Insert(_textInput);
 
     auto connectButton = builder.Create<Gui::Button>();
 
     connectButton->SetLabel("Connect");
     connectButton->SetLayout(LAYOUT_HFILL);
-    connectButton->OnClick([this]() {
-        Network::Context& net = _app.GetNetwork();
-
-        Network::Client *client = net.Create<Network::Client>();
-
-        client->Connect("localhost", Network::Context::DefaultPort);
-
-        _app.AddLoop([this, client]() -> bool {
-            auto status = client->GetConnectionStatus();
-
-            switch (status) {
-                case Network::Failed:
-                    return false;
-                case Network::Connected:
-                    return false;
-                case Network::Connecting:
-                    return true;
-            }
-            
-            return true; /* Continue */
-        });
-    });
+    connectButton->OnClick(std::bind(&ConnectState::OnClickConnectButton, this));
 
     panel->Insert(connectButton);
+
+    _statusLabel = builder.Create<Gui::Label>();
+
+    _statusLabel->SetLayout(LAYOUT_HFILL);
+    _statusLabel->SetLabel("[]");
+
+    panel->Insert(_statusLabel);
+}
+
+void ConnectState::OnClickConnectButton() {
+    Network::Context& net = _app.GetNetwork();
+    _client.reset(net.Create<Network::Client>());
+
+    _client->Connect("localhost", Network::Context::DefaultPort);
+
+    auto loop = new EventCallback(this, &ConnectState::ConnectionLoop);
+    
+    _app.AddLoop(loop);
+}
+
+bool ConnectState::ConnectionLoop() {
+    auto status = _client->GetConnectionStatus();
+
+    switch (status) {
+        case Network::Failed:
+            _statusLabel->SetLabel("Connection failed");
+            return true;
+        case Network::Connected:
+            _statusLabel->SetLabel("Connected!");
+            return true;
+        case Network::Connecting:
+            _statusLabel->SetLabel("Connecting...");
+            break;
+        default:
+            break;
+    }
+
+    return false; /* Continue */
 }
 
 bool ConnectState::HandleEvent(const SDL_Event& event) {
@@ -82,9 +99,6 @@ bool ConnectState::HandleEvent(const SDL_Event& event) {
                 return true;
         }
     }
-    
+
     return State::HandleEvent(event);
 }
-
-
-
