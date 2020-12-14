@@ -28,7 +28,7 @@ CFLAGS = -Iinclude -I../include -I../gui/include
 CXXFLAGS = -Iinclude -I../include -I../gui/include -std=c++2a
 LDFLAGS = -rdynamic -lstdc++ -lstdc++fs -ldl -pthread
 
-LIBS = sdl2 SDL2_image glm
+LIBS = sdl2 SDL2_image glm yaml-cpp
 STATIC_LIBS = \
     ../common/libartemis_common.a
     

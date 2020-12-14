@@ -19,9 +19,13 @@
 #ifndef COMMON_CONFIG_HPP
 #define COMMON_CONFIG_HPP
 
+#include <yaml-cpp/yaml.h>
+
 namespace Common {
 
     class Config {
+    public:
+         
     };
 }
 
