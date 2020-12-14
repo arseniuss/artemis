@@ -20,7 +20,7 @@
 #define GUI_WIDGET_HPP
 
 namespace Gui {
-    
+
 #define LAYOUT_LEFT     0x020
 #define LAYOUT_TOP      0x040
 #define LAYOUT_RIGHT    0x080
@@ -32,7 +32,7 @@ namespace Gui {
 #define LAYOUT_CENTER   0x000
 #define LAYOUT_FILL     0x1e0
 #define LAYOUT_BREAK    0x200
-    
+
 #define BOX_ROW         0x002
 #define BOX_COLUMN      0x003
 #define BOX_LAYOUT      0x000
@@ -42,7 +42,15 @@ namespace Gui {
 #define BOX_START       
 
     struct Widget {
+        int _id;
 
+        Widget(int i) : _id(i) {
+
+        }
+
+        int GetId() const {
+            return _id;
+        }
     };
 }
 

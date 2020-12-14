@@ -31,6 +31,16 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
             ->SetMargins(0, 0, 0, 0)
             ->SetSize(700, 500);
 
+    auto graphButton = builder.Create<Gui::Radio>()
+            ->Connect(&_selectedMenu)
+            ->SetLabel("Graphics")
+            ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
+            ->SetMargins(1, 1, 1, 1);
+    
+    _selectedMenu = graphButton->GetId();
+
+    panel->Insert(graphButton);
+
     builder.Insert(panel);
 }
 
@@ -42,6 +52,6 @@ bool SettingState::HandleEvent(const SDL_Event& event) {
                 return true;
         }
     }
-    
+
     return State::HandleEvent(event);
 }

@@ -25,7 +25,7 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Button::Button(int i) : OpenGLWidget(i) {
+Button::Button(int i) : Gui::Button(i) {
     _iconId = -1;
     _onClick = nullptr;
 
@@ -35,33 +35,33 @@ Button::Button(int i) : OpenGLWidget(i) {
 
 Gui::Button* Button::SetLabel(const std::string& label) {
     this->_label = label;
-    
+
     return this;
 }
 
 Gui::Button* Button::OnClick(std::function<void() > onClickFunction) {
     this->_onClick = onClickFunction;
-    
+
     return this;
 }
 
 Gui::Button* Button::SetLayout(unsigned int layout) {
-    uiSetLayout(this->item, layout);
-    
+    uiSetLayout(this->_id, layout);
+
     return this;
 }
 
 Gui::Button* Button::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(this->item, a, b, c, d);
-    
+    uiSetMargins(this->_id, a, b, c, d);
+
     return this;
 }
 
 void Button::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 
-    UIrect rect = uiGetRect(this->item);
-    BNDwidgetState state = (BNDwidgetState) uiGetState(this->item);
+    UIrect rect = uiGetRect(this->_id);
+    BNDwidgetState state = (BNDwidgetState) uiGetState(this->_id);
 
     bndToolButton(context, rect.x, rect.y, rect.w, rect.h, -1, state,
             _iconId,
@@ -69,8 +69,8 @@ void Button::Draw(NVG::NVGcontext* context) const {
 }
 
 void Button::HandleEvent(UIevent event) {
-    if(event == UI_BUTTON0_HOT_UP) {
-        if(this->_onClick)
+    if (event == UI_BUTTON0_HOT_UP) {
+        if (this->_onClick)
             this->_onClick();
     }
 }

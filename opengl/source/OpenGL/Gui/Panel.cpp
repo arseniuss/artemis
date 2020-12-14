@@ -20,6 +20,7 @@
 #include <OpenGL/Gui/Button.hpp>
 #include <OpenGL/Gui/Label.hpp>
 #include <OpenGL/Gui/Panel.hpp>
+#include <OpenGL/Gui/Radio.hpp>
 #include <OpenGL/Gui/Text.hpp>
 
 #include "oui.h"
@@ -28,49 +29,31 @@ using namespace OpenGL;
 using namespace Blendish;
 
 Gui::Panel* Panel::SetLayout(unsigned int layoutType) {
-    uiSetLayout(item, layoutType);
+    uiSetLayout(_id, layoutType);
 
     return this;
 }
 
 Gui::Panel* Panel::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(item, a, b, c, d);
+    uiSetMargins(_id, a, b, c, d);
 
     return this;
 }
 
 Gui::Panel* Panel::SetSize(int w, int h) {
-    uiSetSize(item, w, h);
+    uiSetSize(_id, w, h);
 
     return this;
 }
 
-Gui::Panel* Panel::Insert(Gui::Button* btn) {
-    OpenGL::Button* w = static_cast<OpenGL::Button*> (btn);
-
-    uiInsert(item, w->item);
-
-    return this;
-}
-
-Gui::Panel* Panel::Insert(Gui::Text* txt) {
-    OpenGL::Text* w = static_cast<OpenGL::Text*> (txt);
-
-    uiInsert(item, w->item);
-
-    return this;
-}
-
-Gui::Panel* Panel::Insert(Gui::Label* lbl) {
-    OpenGL::Label* w = static_cast<OpenGL::Label*> (lbl);
-
-    uiInsert(item, w->item);
+Gui::Panel* Panel::Insert(Gui::Widget* wdg) {
+    uiInsert(_id, wdg->GetId());
 
     return this;
 }
 
 Gui::Panel* Panel::SetBox(unsigned int boxType) {
-    uiSetBox(item, boxType);
+    uiSetBox(_id, boxType);
 
     return this;
 }
@@ -78,7 +61,7 @@ Gui::Panel* Panel::SetBox(unsigned int boxType) {
 void Panel::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 
-    UIrect rect = uiGetRect(item);
+    UIrect rect = uiGetRect(_id);
 
     bndBackground(context, rect.x, rect.y, rect.w, rect.h);
     bndBevelInset(context, rect.x, rect.y, rect.w, rect.h, 4, 4);

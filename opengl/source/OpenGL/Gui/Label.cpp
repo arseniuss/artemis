@@ -22,7 +22,7 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Label::Label(int i) : OpenGLWidget(i) {
+Label::Label(int i) : Gui::Label(i) {
     iconId = -1;
     label = "";
 }
@@ -34,25 +34,25 @@ Gui::Label* Label::SetLabel(const std::string& text) {
 }
 
 Gui::Label* Label::SetLayout(unsigned int layoutType) {
-    uiSetLayout(item, layoutType);
+    uiSetLayout(_id, layoutType);
 
     return this;
 }
 
 Gui::Label* Label::SetBox(unsigned int boxType) {
-    uiSetBox(item, boxType);
+    uiSetBox(_id, boxType);
 
     return this;
 }
 
 Gui::Label* Label::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(item, a, b, c, d);
+    uiSetMargins(_id, a, b, c, d);
 
     return this;
 }
 
 Gui::Label* Label::SetSize(int w, int h) {
-    uiSetSize(item, w, h);
+    uiSetSize(_id, w, h);
 
     return this;
 }
@@ -60,7 +60,7 @@ Gui::Label* Label::SetSize(int w, int h) {
 void Label::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 
-    UIrect rect = uiGetRect(item);
+    UIrect rect = uiGetRect(_id);
 
     bndLabel(context, rect.x, rect.y, rect.w, rect.h, iconId, label.c_str());
 }

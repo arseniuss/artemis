@@ -27,10 +27,6 @@
 namespace OpenGL {
 
     struct OpenGLWidget {
-        int item;
-
-        OpenGLWidget(int i);
-
         virtual void Draw(NVG::NVGcontext* context) const;
         
         virtual void HandleEvent(UIevent event) {}
@@ -38,7 +34,7 @@ namespace OpenGL {
 
     struct Widget : OpenGLWidget, Gui::Widget {
 
-        Widget(int i) : OpenGLWidget(i) {
+        Widget(int i) : Gui::Widget(i) {
 
         }
     };

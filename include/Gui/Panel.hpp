@@ -21,19 +21,24 @@
 
 #include <Gui/Button.hpp>
 #include <Gui/Label.hpp>
+#include <Gui/Radio.hpp>
 #include <Gui/Text.hpp>
 #include <Gui/Widget.hpp>
 
 namespace Gui {
-    struct Panel {        
+
+    struct Panel : public Widget {
+
+        Panel(int i) : Widget(i) {
+
+        }
+
         virtual Panel* SetLayout(unsigned int layoutType) = 0;
         virtual Panel* SetBox(unsigned int boxType) = 0;
         virtual Panel* SetMargins(int a, int b, int c, int d) = 0;
         virtual Panel* SetSize(int w, int h) = 0;
-        
-        virtual Panel* Insert(Button* btn) = 0;
-        virtual Panel* Insert(Text *txt) = 0;
-        virtual Panel* Insert(Label *lbl) = 0;
+
+        virtual Panel* Insert(Widget* wdg) = 0;
     };
 }
 

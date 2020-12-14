@@ -25,7 +25,12 @@
 
 namespace Gui {
 
-    struct Label {
+    struct Label : public Widget {
+
+        Label(int i) : Widget(i) {
+
+        }
+
         virtual Label* SetLabel(const std::string& text) = 0;
 
         virtual Label* SetLayout(unsigned int layoutType) = 0;

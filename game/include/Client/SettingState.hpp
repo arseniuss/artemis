@@ -25,6 +25,7 @@
 namespace Client {
     
     class SettingState : public State {
+        int _selectedMenu = -1;
     public:
         SettingState(Application* app);
         

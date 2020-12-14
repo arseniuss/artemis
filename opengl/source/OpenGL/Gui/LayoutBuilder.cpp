@@ -24,6 +24,7 @@
 #include <OpenGL/Gui/Label.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Panel.hpp>
+#include <OpenGL/Gui/Radio.hpp>
 #include <OpenGL/Gui/Text.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 #include <OpenGL/Gui/Window.hpp>
@@ -75,26 +76,10 @@ Gui::Label* LayoutBuilder::create(Gui::Type<Gui::Label> type) {
     return static_cast<Gui::Label*> (createUi<OpenGL::Label>());
 }
 
+Gui::Radio* LayoutBuilder::create(Gui::Type<Gui::Radio> type) {
+    return static_cast<Gui::Radio*> (createUi<OpenGL::Radio>());
+}
+
 void LayoutBuilder::insert(Gui::Widget* w) {
-    OpenGLWidget* o = (OpenGLWidget *) w;
-
-    uiInsert(0, o->item);
-}
-
-void LayoutBuilder::insert(Gui::Panel* w) {
-    OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
-
-    uiInsert(0, o->item);
-}
-
-void LayoutBuilder::insert(Gui::Window* w) {
-    OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
-
-    uiInsert(0, o->item);
-}
-
-void LayoutBuilder::insert(Gui::Label* w) {
-    OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
-
-    uiInsert(0, o->item);
+    uiInsert(0, w->GetId());
 }

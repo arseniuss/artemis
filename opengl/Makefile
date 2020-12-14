@@ -14,6 +14,7 @@ SOURCES = \
     source/OpenGL/Gui/Label.cpp \
     source/OpenGL/Gui/LayoutBuilder.cpp \
     source/OpenGL/Gui/Panel.cpp \
+    source/OpenGL/Gui/Radio.cpp \
     source/OpenGL/Gui/Text.cpp \
     source/OpenGL/Gui/Widget.cpp \
     source/OpenGL/Gui/Window.cpp \

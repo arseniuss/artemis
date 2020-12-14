@@ -16,27 +16,32 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GUI_TEXT_HPP
-#define GUI_TEXT_HPP
+#ifndef GUI_RADIO_HPP
+#define GUI_RADIO_HPP
 
+#include <functional>
 #include <string>
 
 #include <Gui/Widget.hpp>
 
 namespace Gui {
 
-    struct Text : public Widget {
-    public:
-
-        Text(int i) : Widget(i) {
-
+    struct Radio : public Widget {
+        Radio(int i) : Widget(i) {
+            
         }
-
-        virtual Text* SetText(const std::string& text) = 0;
-        virtual const std::string& GetText() const = 0;
-        virtual Text* SetLayout(unsigned int layout) = 0;
-        virtual Text* SetMargins(int a, int b, int c, int d) = 0;
+        
+        virtual Radio* Connect(int* selectedId) = 0;
+        virtual Radio* SetIcon(int iconId) = 0;
+        virtual Radio* SetLabel(const std::string& label) = 0;
+        virtual Radio* SetLayout(unsigned int layoutType) = 0;
+        virtual Radio* SetBox(unsigned int boxType) = 0;
+        virtual Radio* SetMargins(int a, int b, int c, int d) = 0;
+        virtual Radio* SetSize(int w, int h) = 0;
+        
+        virtual Radio* OnSelected(std::function<void(Gui::Radio*) > onClickFunction) = 0;
     };
 }
 
-#endif /* !GUI_TEXT_HPP */
+
+#endif /* !GUI_RADIO_HPP */

@@ -21,9 +21,15 @@
 
 #include <string>
 
+#include <Gui/Widget.hpp>
+
 namespace Gui {
 
-    struct Window {
+    struct Window : public Widget {
+        Window(int i) : Widget(i) {
+            
+        }
+        
         virtual Window* SetTitle(const std::string& title) = 0;
         virtual Window* SetIcon(int iconId) = 0;
         virtual Window* SetSize(int w, int h) = 0;

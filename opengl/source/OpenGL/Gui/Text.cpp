@@ -30,7 +30,7 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Text::Text(int i) : OpenGLWidget(i) {
+Text::Text(int i) : Gui::Text(i) {
     uiSetSize(i, 0, BND_WIDGET_HEIGHT);
     uiSetEvents(i, UI_BUTTON0_DOWN | UI_KEY_DOWN | UI_CHAR);
 }
@@ -46,13 +46,13 @@ const std::string& Text::GetText() const {
 }
 
 Gui::Text* Text::SetLayout(unsigned int layout) {
-    uiSetLayout(this->item, layout);
+    uiSetLayout(this->_id, layout);
 
     return this;
 }
 
 Gui::Text* Text::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(this->item, a, b, c, d);
+    uiSetMargins(this->_id, a, b, c, d);
 
     return this;
 }
@@ -60,8 +60,8 @@ Gui::Text* Text::SetMargins(int a, int b, int c, int d) {
 void Text::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 
-    UIrect rect = uiGetRect(this->item);
-    BNDwidgetState state = (BNDwidgetState) uiGetState(this->item);
+    UIrect rect = uiGetRect(this->_id);
+    BNDwidgetState state = (BNDwidgetState) uiGetState(this->_id);
 
     bndTextField(context, rect.x, rect.y, rect.w, rect.h, -1, state,
             -1, _text.c_str(), _cursorStart, _cursorEnd);
@@ -71,7 +71,7 @@ void Text::HandleEvent(UIevent event) {
     switch (event) {
         case UI_BUTTON0_DOWN:
         {
-            UIrect rect = uiGetRect(this->item);
+            UIrect rect = uiGetRect(this->_id);
             UIvec2 cursor = uiGetCursor();
 
             Common::Debug() << "RECT " << rect.x << ", " << rect.y <<
@@ -84,7 +84,7 @@ void Text::HandleEvent(UIevent event) {
 
             }
 
-            uiFocus(this->item);
+            uiFocus(this->_id);
             break;
         }
         case UI_KEY_DOWN:

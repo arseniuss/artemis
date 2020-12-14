@@ -22,10 +22,6 @@
 #include "oui.h"
 
 using namespace OpenGL;
-
-OpenGLWidget::OpenGLWidget(int i) : item(i) {
-    
-}
     
 void OpenGLWidget::Draw(NVG::NVGcontext* context) const {
     

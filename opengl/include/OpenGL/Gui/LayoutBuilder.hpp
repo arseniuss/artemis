@@ -32,12 +32,13 @@ namespace OpenGL {
     protected:
         static std::map<size_t, std::function<void*(void) >> _registredWidgets;
 
-        Gui::Widget* create(Gui::Type<Gui::Widget> type) override;
-        Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
         Gui::Button* create(Gui::Type<Gui::Button> type) override;
-        Gui::Window* create(Gui::Type<Gui::Window> type) override;
-        Gui::Text* create(Gui::Type<Gui::Text> type) override;
         Gui::Label* create(Gui::Type<Gui::Label> type) override;
+        Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
+        Gui::Radio* create(Gui::Type<Gui::Radio> type) override;
+        Gui::Text* create(Gui::Type<Gui::Text> type) override;
+        Gui::Widget* create(Gui::Type<Gui::Widget> type) override;
+        Gui::Window* create(Gui::Type<Gui::Window> type) override;
 
         template<typename T>
         T* createUi() {
@@ -50,9 +51,6 @@ namespace OpenGL {
         }
         
         void insert(Gui::Widget*) override;
-        void insert(Gui::Panel*) override;
-        void insert(Gui::Window*) override;
-        void insert(Gui::Label*) override;
     public:
         LayoutBuilder(SDL_Window* window);
         ~LayoutBuilder();
@@ -63,7 +61,7 @@ namespace OpenGL {
                 int item = uiItem();
                 U* data = (U *) uiAllocHandle(item, sizeof (U));
 
-                data->item = item;
+                data->_id = item;
 
                 return data;
             };

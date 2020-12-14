@@ -22,9 +22,9 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Window::Window(int i) : OpenGLWidget(i) {
+Window::Window(int i) : Gui::Window(i) {
     iconId = -1;
-    uiSetEvents(item, UI_BUTTON0_DOWN | UI_BUTTON0_CAPTURE |
+    uiSetEvents(_id, UI_BUTTON0_DOWN | UI_BUTTON0_CAPTURE |
             UI_BUTTON0_HOT_UP);
 }
 
@@ -35,7 +35,7 @@ Gui::Window* Window::SetTitle(const std::string& title) {
 }
 
 Gui::Window* Window::SetBox(unsigned int boxType) {
-    uiSetBox(item, boxType);
+    uiSetBox(_id, boxType);
 
     return this;
 }
@@ -47,14 +47,14 @@ Gui::Window* Window::SetIcon(int iconId) {
 }
 
 Gui::Window* Window::SetSize(int w, int h) {
-    uiSetSize(item, w, h);
+    uiSetSize(_id, w, h);
 
     return this;
 }
 
 void Window::Draw(NVG::NVGcontext* context) const {
-    BNDwidgetState state = (BNDwidgetState) uiGetState(item);
-    UIrect rect = uiGetRect(this->item);
+    BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
+    UIrect rect = uiGetRect(this->_id);
 
     bndNodeBackground(context, rect.x, rect.y, rect.w, rect.h,
             state, iconId, title.c_str(),
@@ -73,8 +73,8 @@ void Window::HandleEvent(UIevent event) {
 
     switch (event) {
         case UI_BUTTON0_DOWN:
-            if (isHeader(item))
-                startPos = uiGetRect(item);
+            if (isHeader(_id))
+                startPos = uiGetRect(_id);
             break;
         case UI_BUTTON0_CAPTURE:
         {
@@ -82,7 +82,7 @@ void Window::HandleEvent(UIevent event) {
             int x = startPos.x + start.x;
             int y = startPos.y + start.y;
 
-            uiSetMargins(item, x, y, 0, 0);
+            uiSetMargins(_id, x, y, 0, 0);
         }
             break;
         case UI_BUTTON0_HOT_UP:

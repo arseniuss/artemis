@@ -21,9 +21,16 @@
 
 #include <functional>
 
+#include <Gui/Widget.hpp>
+
 namespace Gui {
 
-    struct Button {
+    struct Button : public Widget {
+
+        Button(int i) : Widget(i) {
+
+        }
+
         virtual Button* SetLabel(const std::string& label) = 0;
         virtual Button* OnClick(std::function<void() > onClickFunction) = 0;
         virtual Button* SetLayout(unsigned int layout) = 0;
