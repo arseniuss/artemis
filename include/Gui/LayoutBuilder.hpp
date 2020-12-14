@@ -24,6 +24,7 @@
 #include <utility>
 
 #include <Gui/Button.hpp>
+#include <Gui/Label.hpp>
 #include <Gui/Panel.hpp>
 #include <Gui/Text.hpp>
 #include <Gui/Widget.hpp>
@@ -43,10 +44,12 @@ namespace Gui {
         virtual Gui::Button* create(Type<Gui::Button> type) = 0;
         virtual Gui::Window* create(Type<Gui::Window> type) = 0;
         virtual Gui::Text* create(Type<Gui::Text> type) = 0;
+        virtual Gui::Label* create(Type<Gui::Label> type) = 0;
 
         virtual void insert(Gui::Widget*) = 0;
         virtual void insert(Gui::Panel*) = 0;
         virtual void insert(Gui::Window*) = 0;
+        virtual void insert(Gui::Label*) = 0;
     public:
 
         LayoutBuilder() {

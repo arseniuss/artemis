@@ -18,6 +18,7 @@
 
 #include <Blendish/Blendish.hpp>
 #include <OpenGL/Gui/Button.hpp>
+#include <OpenGL/Gui/Label.hpp>
 #include <OpenGL/Gui/Panel.hpp>
 #include <OpenGL/Gui/Text.hpp>
 
@@ -54,6 +55,14 @@ Gui::Panel* Panel::Insert(Gui::Button* btn) {
 
 Gui::Panel* Panel::Insert(Gui::Text* txt) {
     OpenGL::Text* w = static_cast<OpenGL::Text*> (txt);
+
+    uiInsert(item, w->item);
+
+    return this;
+}
+
+Gui::Panel* Panel::Insert(Gui::Label* lbl) {
+    OpenGL::Label* w = static_cast<OpenGL::Label*> (lbl);
 
     uiInsert(item, w->item);
 

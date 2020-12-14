@@ -16,25 +16,29 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GUI_PANEL_HPP
-#define GUI_PANEL_HPP
+#ifndef OPENGL_GUI_LABEL_HPP
+#define OPENGL_GUI_LABEL_HPP
 
-#include <Gui/Button.hpp>
 #include <Gui/Label.hpp>
-#include <Gui/Text.hpp>
-#include <Gui/Widget.hpp>
+#include <OpenGL/Gui/Widget.hpp>
 
-namespace Gui {
-    struct Panel {        
-        virtual Panel* SetLayout(unsigned int layoutType) = 0;
-        virtual Panel* SetBox(unsigned int boxType) = 0;
-        virtual Panel* SetMargins(int a, int b, int c, int d) = 0;
-        virtual Panel* SetSize(int w, int h) = 0;
+namespace OpenGL {
+
+    struct Label : OpenGLWidget, Gui::Label {
+        std::string label;
+        int iconId;
         
-        virtual Panel* Insert(Button* btn) = 0;
-        virtual Panel* Insert(Text *txt) = 0;
-        virtual Panel* Insert(Label *lbl) = 0;
+        Label(int i);
+        
+        Gui::Label* SetLabel(const std::string& text);
+
+        Gui::Label* SetLayout(unsigned int layoutType) override;
+        Gui::Label* SetBox(unsigned int boxType) override;
+        Gui::Label* SetMargins(int a, int b, int c, int d) override;
+        Gui::Label* SetSize(int w, int h) override;
+        
+        void Draw(NVG::NVGcontext* context) const override;
     };
 }
 
-#endif /* !GUI_PANEL_HPP */
+#endif /* !OPENGL_GUI_LABEL_HPP */

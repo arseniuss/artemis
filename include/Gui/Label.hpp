@@ -16,25 +16,23 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GUI_PANEL_HPP
-#define GUI_PANEL_HPP
+#ifndef GUI_LABEL_HPP
+#define GUI_LABEL_HPP
 
-#include <Gui/Button.hpp>
-#include <Gui/Label.hpp>
-#include <Gui/Text.hpp>
+#include <string>
+
 #include <Gui/Widget.hpp>
 
 namespace Gui {
-    struct Panel {        
-        virtual Panel* SetLayout(unsigned int layoutType) = 0;
-        virtual Panel* SetBox(unsigned int boxType) = 0;
-        virtual Panel* SetMargins(int a, int b, int c, int d) = 0;
-        virtual Panel* SetSize(int w, int h) = 0;
-        
-        virtual Panel* Insert(Button* btn) = 0;
-        virtual Panel* Insert(Text *txt) = 0;
-        virtual Panel* Insert(Label *lbl) = 0;
+
+    struct Label {
+        virtual Label* SetLabel(const std::string& text) = 0;
+
+        virtual Label* SetLayout(unsigned int layoutType) = 0;
+        virtual Label* SetBox(unsigned int boxType) = 0;
+        virtual Label* SetMargins(int a, int b, int c, int d) = 0;
+        virtual Label* SetSize(int w, int h) = 0;
     };
 }
 
-#endif /* !GUI_PANEL_HPP */
+#endif /* !GUI_LABEL_HPP */

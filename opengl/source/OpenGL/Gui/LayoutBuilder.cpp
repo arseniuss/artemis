@@ -20,12 +20,13 @@
 
 #include <SDL2/SDL_video.h>
 
-#include <OpenGL/Gui/LayoutBuilder.hpp>
-#include <OpenGL/Gui/Widget.hpp>
-#include <OpenGL/Gui/Panel.hpp>
 #include <OpenGL/Gui/Button.hpp>
-#include <OpenGL/Gui/Window.hpp>
+#include <OpenGL/Gui/Label.hpp>
+#include <OpenGL/Gui/LayoutBuilder.hpp>
+#include <OpenGL/Gui/Panel.hpp>
 #include <OpenGL/Gui/Text.hpp>
+#include <OpenGL/Gui/Widget.hpp>
+#include <OpenGL/Gui/Window.hpp>
 
 #include "oui.h"
 
@@ -70,6 +71,10 @@ Gui::Text* LayoutBuilder::create(Gui::Type<Gui::Text> type) {
     return static_cast<Gui::Text*> (createUi<OpenGL::Text>());
 }
 
+Gui::Label* LayoutBuilder::create(Gui::Type<Gui::Label> type) {
+    return static_cast<Gui::Label*> (createUi<OpenGL::Label>());
+}
+
 void LayoutBuilder::insert(Gui::Widget* w) {
     OpenGLWidget* o = (OpenGLWidget *) w;
 
@@ -83,6 +88,12 @@ void LayoutBuilder::insert(Gui::Panel* w) {
 }
 
 void LayoutBuilder::insert(Gui::Window* w) {
+    OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
+
+    uiInsert(0, o->item);
+}
+
+void LayoutBuilder::insert(Gui::Label* w) {
     OpenGLWidget* o = dynamic_cast<OpenGLWidget*> (w);
 
     uiInsert(0, o->item);

@@ -35,6 +35,7 @@ namespace OpenGL {
         Gui::Panel* SetSize(int w, int h) override;
         Gui::Panel* Insert(Gui::Button* btn) override;
         Gui::Panel* Insert(Gui::Text* txt) override;
+        Gui::Panel* Insert(Gui::Label *lbl) override;
 
         void Draw(NVG::NVGcontext* context) const;
 

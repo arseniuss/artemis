@@ -37,6 +37,7 @@ namespace OpenGL {
         Gui::Button* create(Gui::Type<Gui::Button> type) override;
         Gui::Window* create(Gui::Type<Gui::Window> type) override;
         Gui::Text* create(Gui::Type<Gui::Text> type) override;
+        Gui::Label* create(Gui::Type<Gui::Label> type) override;
 
         template<typename T>
         T* createUi() {
@@ -51,6 +52,7 @@ namespace OpenGL {
         void insert(Gui::Widget*) override;
         void insert(Gui::Panel*) override;
         void insert(Gui::Window*) override;
+        void insert(Gui::Label*) override;
     public:
         LayoutBuilder(SDL_Window* window);
         ~LayoutBuilder();
@@ -68,9 +70,6 @@ namespace OpenGL {
 
             _registredWidgets.emplace(typeid (T).hash_code(), f);
         }
-
-      
-
     };
 }
 
