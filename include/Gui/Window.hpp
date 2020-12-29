@@ -25,11 +25,7 @@
 
 namespace Gui {
 
-    struct Window : public Widget {
-        Window(int i) : Widget(i) {
-            
-        }
-        
+    struct Window : virtual Widget {
         virtual Window* SetTitle(const std::string& title) = 0;
         virtual Window* SetIcon(int iconId) = 0;
         virtual Window* SetSize(int w, int h) = 0;

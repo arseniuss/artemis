@@ -25,12 +25,7 @@
 
 namespace Gui {
 
-    struct Button : public Widget {
-
-        Button(int i) : Widget(i) {
-
-        }
-
+    struct Button : virtual Widget {
         virtual Button* SetLabel(const std::string& label) = 0;
         virtual Button* OnClick(std::function<void() > onClickFunction) = 0;
         virtual Button* SetLayout(unsigned int layout) = 0;

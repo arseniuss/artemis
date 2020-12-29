@@ -24,7 +24,7 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Radio::Radio(int i) : Gui::Radio(i) {
+Radio::Radio(int i) : OpenGLWidget(i) {
     _selectedId = nullptr;
     _label = "";
     _iconId = -1;
@@ -79,8 +79,9 @@ Gui::Radio* Radio::SetSize(int w, int h) {
     return this;
 }
 
-Gui::Radio* Radio::OnSelected(std::function<void(Gui::Radio*) > onClickFunction) {
-
+Gui::Radio* Radio::OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) {
+    _onSelected = onSelectedFunction;
+    
     return this;
 }
 
@@ -91,6 +92,8 @@ void Radio::HandleEvent(UIevent event) {
         if (_onSelected)
             _onSelected(this);
     }
+    
+    
 }
 
 void Radio::Draw(NVG::NVGcontext* context) const {
@@ -101,6 +104,6 @@ void Radio::Draw(NVG::NVGcontext* context) const {
 
     if (_selectedId != nullptr && *_selectedId == _id)
         state = BND_ACTIVE;
-    bndRadioButton(context, rect.x, rect.y, rect.w, rect.h, -1, state, _iconId,
-            _label.c_str());
+    bndRadioButton(context, rect.x, rect.y, rect.w, rect.h, BND_CORNER_ALL,
+            state, _iconId, _label.c_str());
 }

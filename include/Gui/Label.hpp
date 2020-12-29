@@ -25,11 +25,7 @@
 
 namespace Gui {
 
-    struct Label : public Widget {
-
-        Label(int i) : Widget(i) {
-
-        }
+    struct Label : virtual Widget {
 
         virtual Label* SetLabel(const std::string& text) = 0;
 

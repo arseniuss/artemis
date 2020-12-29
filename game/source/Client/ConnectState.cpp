@@ -37,7 +37,7 @@ void ConnectState::BuildUI(Gui::LayoutBuilder& builder) {
 
     builder.Insert(panel);
 
-    _textInput = builder.Create<Gui::Text>();
+    _textInput = builder.Create<Gui::TextInput>();
 
     _textInput->SetText("127.0.0.1");
     _textInput->SetLayout(LAYOUT_HFILL);

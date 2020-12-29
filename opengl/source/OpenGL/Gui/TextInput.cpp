@@ -30,34 +30,34 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Text::Text(int i) : Gui::Text(i) {
+TextInput::TextInput(int i) : OpenGLWidget(i) {
     uiSetSize(i, 0, BND_WIDGET_HEIGHT);
     uiSetEvents(i, UI_BUTTON0_DOWN | UI_KEY_DOWN | UI_CHAR);
 }
 
-Gui::Text* Text::SetText(const std::string& text) {
+Gui::TextInput* TextInput::SetText(const std::string& text) {
     _text = text;
 
     return this;
 }
 
-const std::string& Text::GetText() const {
+const std::string& TextInput::GetText() const {
     return _text;
 }
 
-Gui::Text* Text::SetLayout(unsigned int layout) {
+Gui::TextInput* TextInput::SetLayout(unsigned int layout) {
     uiSetLayout(this->_id, layout);
 
     return this;
 }
 
-Gui::Text* Text::SetMargins(int a, int b, int c, int d) {
+Gui::TextInput* TextInput::SetMargins(int a, int b, int c, int d) {
     uiSetMargins(this->_id, a, b, c, d);
 
     return this;
 }
 
-void Text::Draw(NVG::NVGcontext* context) const {
+void TextInput::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 
     UIrect rect = uiGetRect(this->_id);
@@ -67,7 +67,7 @@ void Text::Draw(NVG::NVGcontext* context) const {
             -1, _text.c_str(), _cursorStart, _cursorEnd);
 }
 
-void Text::HandleEvent(UIevent event) {
+void TextInput::HandleEvent(UIevent event) {
     switch (event) {
         case UI_BUTTON0_DOWN:
         {

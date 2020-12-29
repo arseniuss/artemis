@@ -25,9 +25,10 @@
 
 #include <Gui/Button.hpp>
 #include <Gui/Label.hpp>
+#include <Gui/NumberField.hpp>
 #include <Gui/Panel.hpp>
 #include <Gui/Radio.hpp>
-#include <Gui/Text.hpp>
+#include <Gui/TextInput.hpp>
 #include <Gui/Widget.hpp>
 #include <Gui/Window.hpp>
 
@@ -42,9 +43,10 @@ namespace Gui {
     protected:
         virtual Gui::Button* create(Type<Gui::Button> type) = 0;
         virtual Gui::Label* create(Type<Gui::Label> type) = 0;
+        virtual Gui::NumberField* create(Type<Gui::NumberField> type) = 0;
         virtual Gui::Panel* create(Type<Gui::Panel> type) = 0;
         virtual Gui::Radio* create(Type<Gui::Radio> type) = 0;
-        virtual Gui::Text* create(Type<Gui::Text> type) = 0;
+        virtual Gui::TextInput* create(Type<Gui::TextInput> type) = 0;
         virtual Gui::Widget* create(Type<Gui::Widget> type) = 0;
         virtual Gui::Window* create(Type<Gui::Window> type) = 0;
 

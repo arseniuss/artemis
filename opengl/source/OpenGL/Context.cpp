@@ -120,7 +120,7 @@ bool Context::HandleEvent(SDL_Event& event) {
                     event.key.type == SDL_KEYUP);
             return true;
     }
-    
+
     return false;
 }
 
@@ -161,10 +161,14 @@ void Context::Render() {
     SDL_GL_SwapWindow(_window);
 }
 
-void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build) {
-    OpenGL::LayoutBuilder builder(_window);
+void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build, bool dynamic) {
+    OpenGL::LayoutBuilder builder(_window, dynamic);
 
     build(builder);
+}
+
+Gui::LayoutBuilder* Context::CreateLayoutBuilder() {
+    return new OpenGL::LayoutBuilder(_window, true);
 }
 
 void Context::DrawLayout(int item, int corners) {

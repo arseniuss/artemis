@@ -74,7 +74,13 @@ namespace Graphics {
         virtual size_t AddDrawFunction(DrawFunc func);
         virtual void RemoveDrawFunction(size_t idx);
 
-        virtual void BuildLayout(std::function<void(Gui::LayoutBuilder& b)>) = 0;
+        virtual void BuildLayout(std::function<void(Gui::LayoutBuilder& b)>, bool dynamic = false) = 0;
+        
+        /**
+         * Creates layout builder for dynamic UI updates
+         * @return pointer to LayoutBuilder
+         */
+        virtual Gui::LayoutBuilder* CreateLayoutBuilder() = 0;
 
         template<typename T, typename... Args>
         T* Create(Args&&... args) {

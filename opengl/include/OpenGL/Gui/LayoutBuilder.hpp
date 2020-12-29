@@ -31,12 +31,15 @@ namespace OpenGL {
     class LayoutBuilder : public Gui::LayoutBuilder {
     protected:
         static std::map<size_t, std::function<void*(void) >> _registredWidgets;
+        
+        bool _dynamic = false;
 
         Gui::Button* create(Gui::Type<Gui::Button> type) override;
         Gui::Label* create(Gui::Type<Gui::Label> type) override;
+        Gui::NumberField* create(Gui::Type<Gui::NumberField> type) override;
         Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
         Gui::Radio* create(Gui::Type<Gui::Radio> type) override;
-        Gui::Text* create(Gui::Type<Gui::Text> type) override;
+        Gui::TextInput* create(Gui::Type<Gui::TextInput> type) override;
         Gui::Widget* create(Gui::Type<Gui::Widget> type) override;
         Gui::Window* create(Gui::Type<Gui::Window> type) override;
 
@@ -52,7 +55,7 @@ namespace OpenGL {
         
         void insert(Gui::Widget*) override;
     public:
-        LayoutBuilder(SDL_Window* window);
+        LayoutBuilder(SDL_Window* window, bool dynamic);
         ~LayoutBuilder();
 
         template<typename T, typename U>

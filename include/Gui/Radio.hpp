@@ -26,10 +26,8 @@
 
 namespace Gui {
 
-    struct Radio : public Widget {
-        Radio(int i) : Widget(i) {
-            
-        }
+    struct Radio : virtual Widget {
+
         
         virtual Radio* Connect(int* selectedId) = 0;
         virtual Radio* SetIcon(int iconId) = 0;

@@ -42,15 +42,13 @@ namespace Gui {
 #define BOX_START       
 
     struct Widget {
-        int _id;
+    protected:
 
-        Widget(int i) : _id(i) {
-
+        virtual void setSize(int w, int h) {
         }
+    public:
 
-        int GetId() const {
-            return _id;
-        }
+        virtual int GetId() const = 0;
     };
 }
 

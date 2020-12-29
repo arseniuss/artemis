@@ -23,6 +23,7 @@
 #include <OpenGL/Gui/Button.hpp>
 #include <OpenGL/Gui/Label.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
+#include <OpenGL/Gui/NumberField.hpp>
 #include <OpenGL/Gui/Panel.hpp>
 #include <OpenGL/Gui/Radio.hpp>
 #include <OpenGL/Gui/Text.hpp>
@@ -35,21 +36,25 @@ using namespace OpenGL;
 
 std::map<size_t, std::function<void*(void) >> LayoutBuilder::_registredWidgets;
 
-LayoutBuilder::LayoutBuilder(SDL_Window* window) {
-    int w, h;
+LayoutBuilder::LayoutBuilder(SDL_Window* window, bool dynamic) : _dynamic(dynamic) {
+    if (!_dynamic) {
+        int w, h;
 
-    SDL_GetWindowSize(window, &w, &h);
+        SDL_GetWindowSize(window, &w, &h);
 
-    uiBeginLayout();
+        uiBeginLayout();
 
-    int root = uiItem();
+        int root = uiItem();
 
-    uiSetSize(root, w, h);
-    uiSetBox(root, UI_COLUMN);
+        uiSetSize(root, w, h);
+        uiSetBox(root, UI_COLUMN);
+    }
 }
 
 LayoutBuilder::~LayoutBuilder() {
-    uiEndLayout();
+    if (!_dynamic) {
+        uiEndLayout();
+    }
 }
 
 Gui::Widget* LayoutBuilder::create(Gui::Type<Gui::Widget> type) {
@@ -64,12 +69,16 @@ Gui::Button* LayoutBuilder::create(Gui::Type<Gui::Button> type) {
     return static_cast<Gui::Button*> (createUi<OpenGL::Button>());
 }
 
+Gui::NumberField* LayoutBuilder::create(Gui::Type<Gui::NumberField> type) {
+    return static_cast<Gui::NumberField*> (createUi<OpenGL::NumberField>());
+}
+
 Gui::Window* LayoutBuilder::create(Gui::Type<Gui::Window> type) {
     return static_cast<Gui::Window*> (createUi<OpenGL::Window>());
 }
 
-Gui::Text* LayoutBuilder::create(Gui::Type<Gui::Text> type) {
-    return static_cast<Gui::Text*> (createUi<OpenGL::Text>());
+Gui::TextInput* LayoutBuilder::create(Gui::Type<Gui::TextInput> type) {
+    return static_cast<Gui::TextInput*> (createUi<OpenGL::TextInput>());
 }
 
 Gui::Label* LayoutBuilder::create(Gui::Type<Gui::Label> type) {

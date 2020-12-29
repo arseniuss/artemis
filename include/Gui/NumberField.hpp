@@ -16,31 +16,22 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_WINDOW_HPP
-#define OPENGL_GUI_WINDOW_HPP
+#ifndef GUI_NUMBERFIELD_HPP
+#define GUI_NUMBERFIELD_HPP
 
-#include <Gui/Window.hpp>
-#include <OpenGL/Gui/Widget.hpp>
+#include <Gui/Widget.hpp>
 
-namespace OpenGL {
+namespace Gui {
 
-    struct Window : public OpenGLWidget, virtual Gui::Window {
-        std::string title;
-        int iconId;
+    struct NumberField : virtual Widget {
+
+        virtual NumberField* SetLayout(unsigned int layout) = 0;
+        virtual NumberField* SetMargins(int a, int b, int c, int d) = 0;
+        virtual NumberField* SetSize(int w, int h) = 0;
         
-        Window(int i);
-
-        Gui::Window* SetTitle(const std::string& title) override;
-        Gui::Window* SetIcon(int iconId) override;
-        Gui::Window* SetSize(int w, int h) override;
-        Gui::Window* SetBox(unsigned int boxType) override;
-
-        void Draw(NVG::NVGcontext* context) const override;
-
-        void HandleEvent(UIevent event) override;
-
+        virtual NumberField* SetLabel(const std::string& label) = 0;
+        virtual NumberField* SetValue(const std::string& value) = 0;
     };
 }
 
-#endif /* !OPENGL_GUI_WINDOW_HPP */
-
+#endif /* !GUI_NUMBERFIELD_HPP */

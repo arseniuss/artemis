@@ -25,7 +25,7 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Button::Button(int i) : Gui::Button(i) {
+Button::Button(int i) : OpenGLWidget(i) {
     _iconId = -1;
     _onClick = nullptr;
 
@@ -46,7 +46,7 @@ Gui::Button* Button::OnClick(std::function<void() > onClickFunction) {
 }
 
 Gui::Button* Button::SetLayout(unsigned int layout) {
-    uiSetLayout(this->_id, layout);
+    uiSetLayout(_id, layout);
 
     return this;
 }

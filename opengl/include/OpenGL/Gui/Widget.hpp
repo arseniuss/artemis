@@ -26,17 +26,24 @@
 
 namespace OpenGL {
 
-    struct OpenGLWidget {
+    struct OpenGLWidget : virtual Gui::Widget {
+    protected:
+        virtual void setSize(int w, int h) override;
+    public:
+        int _id;
+
+        OpenGLWidget(int i);
+
+        int GetId() const override;
+
+
         virtual void Draw(NVG::NVGcontext* context) const;
-        
-        virtual void HandleEvent(UIevent event) {}
+
+        virtual void HandleEvent(UIevent event);
     };
 
-    struct Widget : OpenGLWidget, Gui::Widget {
-
-        Widget(int i) : Gui::Widget(i) {
-
-        }
+    struct Widget : public OpenGLWidget {
+        Widget(int i);
     };
 }
 

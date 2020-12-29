@@ -26,12 +26,15 @@ namespace Client {
     
     class SettingState : public State {
         int _selectedMenu = -1;
+        std::vector<SDL_DisplayMode> _displayModes;
     public:
         SettingState(Application* app);
         
         void BuildUI(Gui::LayoutBuilder& builder) override;
 
         bool HandleEvent(const SDL_Event& event) override;
+        
+        void BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel* content);
 
     };
 }

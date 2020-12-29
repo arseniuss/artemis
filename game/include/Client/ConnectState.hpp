@@ -20,11 +20,11 @@
 #define CLIENT_CONNECTSTATE_HPP
 
 #include <Client/State.hpp>
-#include <Gui/Text.hpp>
+#include <Gui/TextInput.hpp>
 
 namespace Client {
     class ConnectState : public State {
-        Gui::Text *_textInput = nullptr;
+        Gui::TextInput *_textInput = nullptr;
         Gui::Label *_statusLabel = nullptr;
         
         std::unique_ptr<Network::Client> _client;

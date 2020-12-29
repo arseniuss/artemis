@@ -24,9 +24,9 @@
 
 namespace OpenGL {
 
-    struct Panel : OpenGLWidget, Gui::Panel {
+    struct Panel : public OpenGLWidget, virtual Gui::Panel {
 
-        Panel(int i) : Gui::Panel(i) {
+        Panel(int i) : OpenGLWidget(i) {
 
         }
 

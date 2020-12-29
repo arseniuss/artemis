@@ -16,51 +16,61 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <NanoVG/NanoVG.hpp>
 #include <Blendish/Blendish.hpp>
-#include <OpenGL/Gui/Label.hpp>
+#include <OpenGL/Gui/NumberField.hpp>
+
+#include "oui.h"
 
 using namespace OpenGL;
 using namespace Blendish;
 
-Label::Label(int i) : OpenGLWidget(i) {
-    iconId = -1;
-    label = "";
+NumberField::NumberField(int i) : OpenGLWidget(i) {
+    _label = "";
+
+    uiSetSize(i, BND_TOOL_WIDTH, BND_WIDGET_HEIGHT);
 }
 
-Gui::Label* Label::SetLabel(const std::string& text) {
-    label = text;
-    
-    return this;
-}
-
-Gui::Label* Label::SetLayout(unsigned int layoutType) {
+Gui::NumberField* NumberField::SetLayout(unsigned int layoutType) {
     uiSetLayout(_id, layoutType);
 
     return this;
 }
 
-Gui::Label* Label::SetBox(unsigned int boxType) {
-    uiSetBox(_id, boxType);
-
-    return this;
-}
-
-Gui::Label* Label::SetMargins(int a, int b, int c, int d) {
+Gui::NumberField* NumberField::SetMargins(int a, int b, int c, int d) {
     uiSetMargins(_id, a, b, c, d);
 
     return this;
 }
 
-Gui::Label* Label::SetSize(int w, int h) {
+Gui::NumberField* NumberField::SetSize(int w, int h) {
+    if (w < 0) w = BND_TOOL_WIDTH;
+    if (h < 0) h = BND_WIDGET_HEIGHT;
+
     uiSetSize(_id, w, h);
+    
+    return this;
+}
+
+Gui::NumberField* NumberField::SetLabel(const std::string& label) {
+    _label = label;
 
     return this;
 }
 
-void Label::Draw(NVG::NVGcontext* context) const {
+Gui::NumberField* NumberField::SetValue(const std::string& value) {
+    _value = value;
+
+    return this;
+}
+
+void NumberField::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 
     UIrect rect = uiGetRect(_id);
+    BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
-    bndLabel(context, rect.x, rect.y, rect.w, rect.h, iconId, label.c_str());
+    bndNumberField(context, rect.x, rect.y, rect.w, rect.h, BND_CORNER_NONE,
+            state, _label.c_str(), _value.c_str());
 }
+

@@ -13,9 +13,10 @@ SOURCES = \
     source/OpenGL/Gui/Button.cpp \
     source/OpenGL/Gui/Label.cpp \
     source/OpenGL/Gui/LayoutBuilder.cpp \
+    source/OpenGL/Gui/NumberField.cpp \
     source/OpenGL/Gui/Panel.cpp \
     source/OpenGL/Gui/Radio.cpp \
-    source/OpenGL/Gui/Text.cpp \
+    source/OpenGL/Gui/TextInput.cpp \
     source/OpenGL/Gui/Widget.cpp \
     source/OpenGL/Gui/Window.cpp \
     source/OpenGL/Shader.cpp \

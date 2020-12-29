@@ -24,7 +24,7 @@
 
 namespace OpenGL {
 
-    struct Radio : OpenGLWidget, Gui::Radio {
+    struct Radio : public OpenGLWidget, virtual Gui::Radio {
     private:
         int *_selectedId;
         std::string _label;
@@ -43,7 +43,7 @@ namespace OpenGL {
         Gui::Radio* SetMargins(int a, int b, int c, int d) override;
         Gui::Radio* SetSize(int w, int h) override;
         
-        Gui::Radio* OnSelected(std::function<void(Gui::Radio*) > onClickFunction) override;
+        Gui::Radio* OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) override;
 
         void HandleEvent(UIevent event) override;
         

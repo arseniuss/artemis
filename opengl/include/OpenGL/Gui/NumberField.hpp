@@ -16,31 +16,34 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_WINDOW_HPP
-#define OPENGL_GUI_WINDOW_HPP
+#ifndef OPENGL_GUI_NUMBERFIELD_HPP
+#define OPENGL_GUI_NUMBERFIELD_HPP
 
-#include <Gui/Window.hpp>
+#include <string>
+
+#include <Gui/NumberField.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 
 namespace OpenGL {
 
-    struct Window : public OpenGLWidget, virtual Gui::Window {
-        std::string title;
-        int iconId;
+    struct NumberField : public OpenGLWidget, virtual Gui::NumberField {
+    private:
+        std::string _label;
+        std::string _value;
+    public:
+
+        NumberField(int i);
         
-        Window(int i);
+        Gui::NumberField* SetLayout(unsigned int layoutType) override;
+        Gui::NumberField* SetMargins(int a, int b, int c, int d) override;
+        Gui::NumberField* SetSize(int w, int h) override;
 
-        Gui::Window* SetTitle(const std::string& title) override;
-        Gui::Window* SetIcon(int iconId) override;
-        Gui::Window* SetSize(int w, int h) override;
-        Gui::Window* SetBox(unsigned int boxType) override;
-
-        void Draw(NVG::NVGcontext* context) const override;
-
-        void HandleEvent(UIevent event) override;
-
+        
+        Gui::NumberField* SetLabel(const std::string& label) override;
+        Gui::NumberField* SetValue(const std::string& value) override;
+        
+        void Draw(NVG::NVGcontext* context) const;
     };
 }
 
-#endif /* !OPENGL_GUI_WINDOW_HPP */
-
+#endif /* !OPENGL_GUI_NUMBERFIELD_HPP */

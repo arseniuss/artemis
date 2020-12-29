@@ -22,8 +22,28 @@
 #include "oui.h"
 
 using namespace OpenGL;
-    
-void OpenGLWidget::Draw(NVG::NVGcontext* context) const {
-    
+
+OpenGLWidget::OpenGLWidget(int i) : _id(i) {
 }
+
+void OpenGLWidget::setSize(int w, int h) {
+    uiSetSize(_id, w, h);
+}
+
+
+int OpenGLWidget::GetId() const {
+    return _id;
+}
+
+void OpenGLWidget::Draw(NVG::NVGcontext* context) const {
+
+}
+
+void OpenGLWidget::HandleEvent(UIevent event) {
+}
+
+Widget::Widget(int i) : OpenGLWidget(i) {
+}
+
+
 

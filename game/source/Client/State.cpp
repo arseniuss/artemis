@@ -28,13 +28,23 @@ Common::State(app, name), _app(*app) {
 }
 
 void State::OnEnable() {
-    _app.GetContext().BuildLayout([this](Gui::LayoutBuilder& b) {
+    _app.GetContext().BuildLayout([this](Gui::LayoutBuilder & b) {
         this->BuildUI(b);
     });
 }
 
 void State::BuildUI(Gui::LayoutBuilder& builder) {
-    
+
+}
+
+void State::RebuildUI() {
+    _app.GetContext().BuildLayout([this](Gui::LayoutBuilder & b) {
+        this->BuildUI(b);
+    });
+}
+
+Gui::LayoutBuilder* State::GetLayoutBuilder() {
+    return _app.GetContext().CreateLayoutBuilder();
 }
 
 bool State::HandleEvent(const SDL_Event& event) {

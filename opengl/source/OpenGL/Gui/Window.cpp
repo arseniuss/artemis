@@ -22,7 +22,7 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Window::Window(int i) : Gui::Window(i) {
+Window::Window(int i) : OpenGLWidget(i) {
     iconId = -1;
     uiSetEvents(_id, UI_BUTTON0_DOWN | UI_BUTTON0_CAPTURE |
             UI_BUTTON0_HOT_UP);

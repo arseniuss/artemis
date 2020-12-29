@@ -22,16 +22,13 @@
 #include <Gui/Button.hpp>
 #include <Gui/Label.hpp>
 #include <Gui/Radio.hpp>
-#include <Gui/Text.hpp>
+#include <Gui/TextInput.hpp>
 #include <Gui/Widget.hpp>
 
 namespace Gui {
 
-    struct Panel : public Widget {
+    struct Panel : virtual Widget {
 
-        Panel(int i) : Widget(i) {
-
-        }
 
         virtual Panel* SetLayout(unsigned int layoutType) = 0;
         virtual Panel* SetBox(unsigned int boxType) = 0;

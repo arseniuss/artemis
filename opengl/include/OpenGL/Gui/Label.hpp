@@ -24,7 +24,7 @@
 
 namespace OpenGL {
 
-    struct Label : OpenGLWidget, Gui::Label {
+    struct Label : public OpenGLWidget, virtual Gui::Label {
         std::string label;
         int iconId;
         
