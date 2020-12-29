@@ -21,7 +21,27 @@
 using namespace Client;
 
 SettingState::SettingState(Application* app) : State(app, "Setting state") {
+    SDL_DisplayMode current;
 
+    SDL_GetCurrentDisplayMode(0, &current);
+
+    for (int i = 0; i < SDL_GetNumDisplayModes(0); i++) {
+        SDL_DisplayMode mode;
+
+        if (SDL_GetDisplayMode(0, i, &mode) == 0) {
+            Common::Debug() << "Display mode #" << (i + 1) << " " <<
+                    mode.w << "x" << mode.h << "@" << mode.refresh_rate <<
+                    std::endl;
+
+            size_t idx = _displayModes.size();
+
+            _displayModes.push_back(mode);
+            if (mode.w == current.w && mode.h == current.h &&
+                    mode.refresh_rate == current.refresh_rate) {
+                _currentDisplayMode = idx;
+            }
+        }
+    }
 }
 
 void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
@@ -43,18 +63,27 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
 
     panel->Insert(content);
 
-    auto buttons = builder.Create<Gui::Panel>()
+    auto buttonPanel = builder.Create<Gui::Panel>()
             ->SetSize(200, -1)
             ->SetLayout(LAYOUT_RIGHT)
             ->SetBox(BOX_ROW);
 
+    auto applyBtn = builder.Create<Gui::Button>()
+            ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
+            ->SetLabel("Apply");
+
     auto exitBtn = builder.Create<Gui::Button>()
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
-            ->SetLabel("Exit");
+            ->SetLabel("Exit")
+            ->OnClick([this]() {
+                //TODO: confirm 
+                _app.PopState();
+            });
 
-    buttons->Insert(exitBtn);
+    buttonPanel->Insert(applyBtn);
+    buttonPanel->Insert(exitBtn);
 
-    panel->Insert(buttons);
+    panel->Insert(buttonPanel);
 
     auto graphButton = builder.Create<Gui::Radio>()
             ->Connect(&_selectedMenu)
@@ -110,7 +139,6 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
         _selectedMenu = graphButton->GetId();
     }
 
-
     if (_selectedMenu == graphButton->GetId()) {
         BuildGraphicsContent(builder, content);
     }
@@ -134,34 +162,35 @@ void SettingState::BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel*
             ->SetLayout(LAYOUT_LEFT | LAYOUT_TOP)
             ->SetBox(BOX_ROW);
 
+    auto resLbl = builder.Create<Gui::Label>()
+            ->SetSize(250, -1)
+            ->SetLabel("Resolution:");
     auto resNi = builder.Create<Gui::NumberField>()
-            ->SetLabel("Resolution")
-            ->SetSize(200, -1)
+            ->SetSize(250, -1)
             ->SetLayout(LAYOUT_HFILL);
 
+    if (_currentDisplayMode < _displayModes.size()) {
+        auto& mode = _displayModes[_currentDisplayMode];
+
+        resNi->SetValue(std::to_string(mode.w) + "x" + std::to_string(mode.h) +
+                " " + std::to_string(mode.refresh_rate) + " Hz");
+    }
+
+    resNi->onIncClick([this]() {
+        _currentDisplayMode++;
+        _currentDisplayMode = _currentDisplayMode % _displayModes.size();
+        RebuildUI();
+    });
+
+    resNi->OnDecrClick([this]() {
+        _currentDisplayMode--;
+        _currentDisplayMode = _currentDisplayMode % _displayModes.size();
+        RebuildUI();
+    });
+
+    row1->Insert(resLbl);
     row1->Insert(resNi);
 
     content->Insert(row1);
-
-    SDL_DisplayMode current;
-
-    SDL_GetCurrentDisplayMode(0, &current);
-
-    for (int i = 0; i < SDL_GetNumDisplayModes(0); i++) {
-        SDL_DisplayMode mode;
-
-        if (SDL_GetDisplayMode(0, i, &mode) == 0) {
-            Common::Debug() << "Display #0 mode #" << (i + 1) << " " <<
-                    mode.w << "x" << mode.h << std::endl;
-
-            _displayModes.push_back(mode);
-            if (mode.w == current.w && mode.h == current.h &&
-                    mode.refresh_rate == current.refresh_rate) {
-                resNi->SetValue(std::to_string(mode.w) + "x" + std::to_string(mode.h));
-            }
-        }
-    }
-
-
 }
 
