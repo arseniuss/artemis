@@ -30,14 +30,18 @@ namespace OpenGL {
     private:
         std::string _label;
         std::string _value;
+        std::function<void()> _onDescClick;
+        std::function<void()> _onIncClick;
     public:
-
         NumberField(int i);
 
-        
         Gui::NumberField* SetLabel(const std::string& label) override;
         Gui::NumberField* SetValue(const std::string& value) override;
-        
+        Gui::NumberField* OnDecrClick(std::function<void() > onDecrClick) override;
+        Gui::NumberField* onIncClick(std::function<void() > onIncClick) override;
+ 
+        void HandleEvent(UIevent event) override;
+
         void Draw(NVG::NVGcontext* context) const;
     };
 }

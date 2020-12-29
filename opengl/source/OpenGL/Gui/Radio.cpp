@@ -56,7 +56,7 @@ Gui::Radio* Radio::SetLabel(const std::string& label) {
 
 Gui::Radio* Radio::OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) {
     _onSelected = onSelectedFunction;
-    
+
     return this;
 }
 
@@ -67,8 +67,6 @@ void Radio::HandleEvent(UIevent event) {
         if (_onSelected)
             _onSelected(this);
     }
-    
-    
 }
 
 void Radio::Draw(NVG::NVGcontext* context) const {

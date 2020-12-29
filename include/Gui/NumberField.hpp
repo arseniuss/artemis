@@ -19,6 +19,8 @@
 #ifndef GUI_NUMBERFIELD_HPP
 #define GUI_NUMBERFIELD_HPP
 
+#include <functional>
+
 #include <Gui/Widget.hpp>
 
 namespace Gui {
@@ -27,6 +29,9 @@ namespace Gui {
         
         virtual NumberField* SetLabel(const std::string& label) = 0;
         virtual NumberField* SetValue(const std::string& value) = 0;
+        
+        virtual NumberField* OnDecrClick(std::function<void()> onDecrClick) = 0;
+        virtual NumberField* onIncClick(std::function<void()> onIncClick) = 0;
     };
 }
 
