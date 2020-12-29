@@ -28,34 +28,8 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Gui::Panel* Panel::SetLayout(unsigned int layoutType) {
-    uiSetLayout(_id, layoutType);
-
-    return this;
-}
-
-Gui::Panel* Panel::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(_id, a, b, c, d);
-
-    return this;
-}
-
-Gui::Panel* Panel::SetSize(int w, int h) {
-    if (w < 0) w = BND_TOOL_WIDTH;
-    if (h < 0)h = BND_WIDGET_HEIGHT;
-    uiSetSize(_id, w, h);
-
-    return this;
-}
-
 Gui::Panel* Panel::Insert(Gui::Widget* wdg) {
     uiInsert(_id, wdg->GetId());
-
-    return this;
-}
-
-Gui::Panel* Panel::SetBox(unsigned int boxType) {
-    uiSetBox(_id, boxType);
 
     return this;
 }

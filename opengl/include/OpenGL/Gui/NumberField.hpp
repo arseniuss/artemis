@@ -33,10 +33,6 @@ namespace OpenGL {
     public:
 
         NumberField(int i);
-        
-        Gui::NumberField* SetLayout(unsigned int layoutType) override;
-        Gui::NumberField* SetMargins(int a, int b, int c, int d) override;
-        Gui::NumberField* SetSize(int w, int h) override;
 
         
         Gui::NumberField* SetLabel(const std::string& label) override;

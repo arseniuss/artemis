@@ -23,11 +23,7 @@
 
 namespace Gui {
 
-    struct NumberField : virtual Widget {
-
-        virtual NumberField* SetLayout(unsigned int layout) = 0;
-        virtual NumberField* SetMargins(int a, int b, int c, int d) = 0;
-        virtual NumberField* SetSize(int w, int h) = 0;
+    struct NumberField : public TWidget<NumberField> {
         
         virtual NumberField* SetLabel(const std::string& label) = 0;
         virtual NumberField* SetValue(const std::string& value) = 0;

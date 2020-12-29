@@ -45,18 +45,6 @@ Gui::Button* Button::OnClick(std::function<void() > onClickFunction) {
     return this;
 }
 
-Gui::Button* Button::SetLayout(unsigned int layout) {
-    uiSetLayout(_id, layout);
-
-    return this;
-}
-
-Gui::Button* Button::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(this->_id, a, b, c, d);
-
-    return this;
-}
-
 void Button::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 

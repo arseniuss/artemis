@@ -30,10 +30,6 @@ namespace OpenGL {
 
         }
 
-        Gui::Panel* SetLayout(unsigned int layoutType) override;
-        Gui::Panel* SetBox(unsigned int boxType) override;
-        Gui::Panel* SetMargins(int a, int b, int c, int d) override;
-        Gui::Panel* SetSize(int w, int h) override;
         Gui::Panel* Insert(Gui::Widget* wdg) override;
 
         void Draw(NVG::NVGcontext* context) const;

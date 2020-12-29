@@ -25,13 +25,11 @@
 
 namespace Gui {
 
-    struct TextInput : virtual Widget {
+    struct TextInput : public TWidget<TextInput> {
 
 
         virtual TextInput* SetText(const std::string& text) = 0;
         virtual const std::string& GetText() const = 0;
-        virtual TextInput* SetLayout(unsigned int layout) = 0;
-        virtual TextInput* SetMargins(int a, int b, int c, int d) = 0;
     };
 }
 

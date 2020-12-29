@@ -35,8 +35,6 @@ namespace OpenGL {
 
         Gui::TextInput* SetText(const std::string& text) override;
         const std::string& GetText() const override;
-        Gui::TextInput* SetLayout(unsigned int layout) override;
-        Gui::TextInput* SetMargins(int a, int b, int c, int d) override;
 
         void Draw(NVG::NVGcontext* context) const override;
 

@@ -38,10 +38,6 @@ namespace OpenGL {
         Gui::Radio* Connect(int* selectedId) override;
         Gui::Radio* SetIcon(int iconId) override;
         Gui::Radio* SetLabel(const std::string& label) override;
-        Gui::Radio* SetLayout(unsigned int layoutType) override;
-        Gui::Radio* SetBox(unsigned int boxType) override;
-        Gui::Radio* SetMargins(int a, int b, int c, int d) override;
-        Gui::Radio* SetSize(int w, int h) override;
         
         Gui::Radio* OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) override;
 

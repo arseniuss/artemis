@@ -30,11 +30,11 @@ namespace OpenGL {
         std::function<void()> _onClick;
         
         Button(int i);
+                
+        // Gui::Button
 
         Gui::Button* SetLabel(const std::string& label) override;
         Gui::Button* OnClick(std::function<void() > onClickFunction) override;
-        Gui::Button* SetLayout(unsigned int layout) override;
-        Gui::Button* SetMargins(int a, int b, int c, int d) override;
 
         void Draw(NVG::NVGcontext* context) const override;
 

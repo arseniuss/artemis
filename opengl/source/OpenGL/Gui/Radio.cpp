@@ -54,31 +54,6 @@ Gui::Radio* Radio::SetLabel(const std::string& label) {
     return this;
 }
 
-Gui::Radio* Radio::SetLayout(unsigned int layoutType) {
-    uiSetLayout(_id, layoutType);
-
-    return this;
-}
-
-Gui::Radio* Radio::SetBox(unsigned int boxType) {
-    uiSetBox(_id, boxType);
-
-    return this;
-}
-
-Gui::Radio* Radio::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(_id, a, b, c, d);
-
-    return this;
-}
-
-Gui::Radio* Radio::SetSize(int w, int h) {
-    _width = w;
-    uiSetSize(_id, w, h);
-
-    return this;
-}
-
 Gui::Radio* Radio::OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) {
     _onSelected = onSelectedFunction;
     

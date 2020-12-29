@@ -31,27 +31,6 @@ NumberField::NumberField(int i) : OpenGLWidget(i) {
     uiSetSize(i, BND_TOOL_WIDTH, BND_WIDGET_HEIGHT);
 }
 
-Gui::NumberField* NumberField::SetLayout(unsigned int layoutType) {
-    uiSetLayout(_id, layoutType);
-
-    return this;
-}
-
-Gui::NumberField* NumberField::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(_id, a, b, c, d);
-
-    return this;
-}
-
-Gui::NumberField* NumberField::SetSize(int w, int h) {
-    if (w < 0) w = BND_TOOL_WIDTH;
-    if (h < 0) h = BND_WIDGET_HEIGHT;
-
-    uiSetSize(_id, w, h);
-    
-    return this;
-}
-
 Gui::NumberField* NumberField::SetLabel(const std::string& label) {
     _label = label;
 

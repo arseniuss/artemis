@@ -34,20 +34,8 @@ Gui::Window* Window::SetTitle(const std::string& title) {
     return this;
 }
 
-Gui::Window* Window::SetBox(unsigned int boxType) {
-    uiSetBox(_id, boxType);
-
-    return this;
-}
-
 Gui::Window* Window::SetIcon(int iconId) {
     this->iconId = iconId;
-
-    return this;
-}
-
-Gui::Window* Window::SetSize(int w, int h) {
-    uiSetSize(_id, w, h);
 
     return this;
 }

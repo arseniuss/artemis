@@ -25,14 +25,9 @@
 
 namespace Gui {
 
-    struct Label : virtual Widget {
+    struct Label : public TWidget<Label> {
 
         virtual Label* SetLabel(const std::string& text) = 0;
-
-        virtual Label* SetLayout(unsigned int layoutType) = 0;
-        virtual Label* SetBox(unsigned int boxType) = 0;
-        virtual Label* SetMargins(int a, int b, int c, int d) = 0;
-        virtual Label* SetSize(int w, int h) = 0;
     };
 }
 

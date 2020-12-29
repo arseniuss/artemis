@@ -26,16 +26,13 @@
 
 namespace Gui {
 
-    struct Radio : virtual Widget {
+    struct Radio : public TWidget<Radio> {
 
         
         virtual Radio* Connect(int* selectedId) = 0;
         virtual Radio* SetIcon(int iconId) = 0;
         virtual Radio* SetLabel(const std::string& label) = 0;
-        virtual Radio* SetLayout(unsigned int layoutType) = 0;
-        virtual Radio* SetBox(unsigned int boxType) = 0;
-        virtual Radio* SetMargins(int a, int b, int c, int d) = 0;
-        virtual Radio* SetSize(int w, int h) = 0;
+       
         
         virtual Radio* OnSelected(std::function<void(Gui::Radio*) > onClickFunction) = 0;
     };

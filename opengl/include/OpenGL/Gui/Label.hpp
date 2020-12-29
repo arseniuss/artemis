@@ -31,11 +31,6 @@ namespace OpenGL {
         Label(int i);
         
         Gui::Label* SetLabel(const std::string& text);
-
-        Gui::Label* SetLayout(unsigned int layoutType) override;
-        Gui::Label* SetBox(unsigned int boxType) override;
-        Gui::Label* SetMargins(int a, int b, int c, int d) override;
-        Gui::Label* SetSize(int w, int h) override;
         
         void Draw(NVG::NVGcontext* context) const override;
     };

@@ -21,15 +21,30 @@
 
 #include "oui.h"
 
+using namespace Blendish;
 using namespace OpenGL;
 
 OpenGLWidget::OpenGLWidget(int i) : _id(i) {
 }
 
-void OpenGLWidget::setSize(int w, int h) {
-    uiSetSize(_id, w, h);
+void OpenGLWidget::setBox(unsigned int box) {
+    uiSetBox(_id, box);
 }
 
+void OpenGLWidget::setLayout(unsigned int layout) {
+    uiSetLayout(_id, layout);
+}
+
+void OpenGLWidget::setMargins(int a, int b, int c, int d) {
+    uiSetMargins(_id, a, b, c, d);
+}
+
+void OpenGLWidget::setSize(int w, int h) {
+    if (w < 0) w = BND_TOOL_WIDTH;
+    if (h < 0) h = BND_WIDGET_HEIGHT;
+    
+    uiSetSize(_id, w, h);
+}
 
 int OpenGLWidget::GetId() const {
     return _id;

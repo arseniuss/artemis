@@ -33,30 +33,6 @@ Gui::Label* Label::SetLabel(const std::string& text) {
     return this;
 }
 
-Gui::Label* Label::SetLayout(unsigned int layoutType) {
-    uiSetLayout(_id, layoutType);
-
-    return this;
-}
-
-Gui::Label* Label::SetBox(unsigned int boxType) {
-    uiSetBox(_id, boxType);
-
-    return this;
-}
-
-Gui::Label* Label::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(_id, a, b, c, d);
-
-    return this;
-}
-
-Gui::Label* Label::SetSize(int w, int h) {
-    uiSetSize(_id, w, h);
-
-    return this;
-}
-
 void Label::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 

@@ -45,18 +45,6 @@ const std::string& TextInput::GetText() const {
     return _text;
 }
 
-Gui::TextInput* TextInput::SetLayout(unsigned int layout) {
-    uiSetLayout(this->_id, layout);
-
-    return this;
-}
-
-Gui::TextInput* TextInput::SetMargins(int a, int b, int c, int d) {
-    uiSetMargins(this->_id, a, b, c, d);
-
-    return this;
-}
-
 void TextInput::Draw(NVG::NVGcontext* context) const {
     OpenGLWidget::Draw(context);
 

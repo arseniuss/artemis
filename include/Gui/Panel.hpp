@@ -27,13 +27,7 @@
 
 namespace Gui {
 
-    struct Panel : virtual Widget {
-
-
-        virtual Panel* SetLayout(unsigned int layoutType) = 0;
-        virtual Panel* SetBox(unsigned int boxType) = 0;
-        virtual Panel* SetMargins(int a, int b, int c, int d) = 0;
-        virtual Panel* SetSize(int w, int h) = 0;
+    struct Panel : public TWidget<Panel> {
 
         virtual Panel* Insert(Widget* wdg) = 0;
     };
