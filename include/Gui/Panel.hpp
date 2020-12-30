@@ -28,8 +28,7 @@
 namespace Gui {
 
     struct Panel : public TWidget<Panel> {
-
-        virtual Panel* Insert(Widget* wdg) = 0;
+        virtual Panel* Insert(WidgetBase* wdg) = 0;
     };
 }
 

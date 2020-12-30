@@ -18,9 +18,14 @@
 
 #include <cxxabi.h>
 
+#include <memory>
+
 #include <SDL2/SDL_video.h>
 
+#include <Graphics/Context.hpp>
+#include <OpenGL/Context.hpp>
 #include <OpenGL/Gui/Button.hpp>
+#include <OpenGL/Gui/CheckBox.hpp>
 #include <OpenGL/Gui/Label.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/NumberField.hpp>
@@ -34,27 +39,24 @@
 
 using namespace OpenGL;
 
-std::map<size_t, std::function<void*(void) >> LayoutBuilder::_registredWidgets;
+LayoutBuilder::LayoutBuilder(std::shared_ptr<Context> context) :
+_context(context) {
+    int w, h;
 
-LayoutBuilder::LayoutBuilder(SDL_Window* window, bool dynamic) : _dynamic(dynamic) {
-    if (!_dynamic) {
-        int w, h;
+    auto window = context->GetWindow();
 
-        SDL_GetWindowSize(window, &w, &h);
+    SDL_GetWindowSize(window, &w, &h);
 
-        uiBeginLayout();
+    uiBeginLayout();
 
-        int root = uiItem();
+    int root = uiItem();
 
-        uiSetSize(root, w, h);
-        uiSetBox(root, UI_COLUMN);
-    }
+    uiSetSize(root, w, h);
+    uiSetBox(root, UI_COLUMN);
 }
 
 LayoutBuilder::~LayoutBuilder() {
-    if (!_dynamic) {
-        uiEndLayout();
-    }
+    uiEndLayout();
 }
 
 Gui::Widget* LayoutBuilder::create(Gui::Type<Gui::Widget> type) {
@@ -67,6 +69,10 @@ Gui::Panel* LayoutBuilder::create(Gui::Type<Gui::Panel> type) {
 
 Gui::Button* LayoutBuilder::create(Gui::Type<Gui::Button> type) {
     return static_cast<Gui::Button*> (createUi<OpenGL::Button>());
+}
+
+Gui::CheckBox* LayoutBuilder::create(Gui::Type<Gui::CheckBox> type) {
+    return static_cast<Gui::CheckBox*> (createUi<OpenGL::CheckBox>());
 }
 
 Gui::NumberField* LayoutBuilder::create(Gui::Type<Gui::NumberField> type) {
@@ -89,6 +95,6 @@ Gui::Radio* LayoutBuilder::create(Gui::Type<Gui::Radio> type) {
     return static_cast<Gui::Radio*> (createUi<OpenGL::Radio>());
 }
 
-void LayoutBuilder::insert(Gui::Widget* w) {
+void LayoutBuilder::insert(Gui::WidgetBase* w) {
     uiInsert(0, w->GetId());
 }

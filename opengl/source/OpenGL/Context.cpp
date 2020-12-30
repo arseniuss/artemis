@@ -17,6 +17,7 @@
  */
 
 #include <experimental/filesystem>
+#include <memory>
 
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_keyboard.h>
@@ -57,9 +58,16 @@ Graphics::Buffer* Context::create(Type<Graphics::Buffer> type,
     return new Buffer(bt, data, size);
 }
 
-Context::Context(const std::string& title) : Graphics::Context(title, SDL_WINDOW_OPENGL) {
+bool Context::Debug = false;
+std::shared_ptr<Context> Context::Instance;
+
+Context::Context(const std::string& title,
+        std::shared_ptr<const Common::Config> config) :
+Graphics::Context(title, config, SDL_WINDOW_OPENGL) {
     int w, h;
     GLuint VertexArrayID;
+
+    Debug = config->Get<bool>("Graphics", "Debug", false);
 
     _context = SDL_GL_CreateContext(_window);
     if (_context == nullptr) {
@@ -161,14 +169,10 @@ void Context::Render() {
     SDL_GL_SwapWindow(_window);
 }
 
-void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build, bool dynamic) {
-    OpenGL::LayoutBuilder builder(_window, dynamic);
+void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build) {
+    OpenGL::LayoutBuilder builder(Instance);
 
     build(builder);
-}
-
-Gui::LayoutBuilder* Context::CreateLayoutBuilder() {
-    return new OpenGL::LayoutBuilder(_window, true);
 }
 
 void Context::DrawLayout(int item, int corners) {

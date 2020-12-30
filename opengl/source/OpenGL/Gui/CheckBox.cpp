@@ -16,67 +16,58 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <NanoVG/NanoVG.hpp>
 #include <Blendish/Blendish.hpp>
-#include <OpenGL/Gui/Radio.hpp>
+#include <OpenGL/Gui/CheckBox.hpp>
 
 #include "oui.h"
 
 using namespace OpenGL;
 using namespace Blendish;
 
-Radio::Radio(int i) : OpenGLWidget(i) {
-    _selectedId = nullptr;
+CheckBox::CheckBox(int i) : OpenGLWidget(i) {
+    _value = false;
     _label = "";
-    _iconId = -1;
-    _width = BND_TOOL_WIDTH;
+    _onChange = nullptr;
 
     uiSetSize(i, BND_TOOL_WIDTH, BND_WIDGET_HEIGHT);
     uiSetEvents(i, UI_BUTTON0_DOWN);
 }
 
-Gui::Radio* Radio::Connect(int* selectedId) {
-    if (selectedId != nullptr) {
-        _selectedId = selectedId;
-    }
-
-    return this;
-}
-
-Gui::Radio* Radio::SetIcon(int iconId) {
-    _iconId = iconId;
-
-    return this;
-}
-
-Gui::Radio* Radio::SetLabel(const std::string& label) {
+CheckBox* CheckBox::SetLabel(const std::string& label) {
     _label = label;
 
     return this;
 }
 
-Gui::Radio* Radio::OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) {
-    _onSelected = onSelectedFunction;
+CheckBox* CheckBox::SetValue(bool value) {
+    _value = value;
+
+    if (_onChange) _onChange(value);
 
     return this;
 }
 
-void Radio::HandleEvent(UIevent event) {
-    if (event == UI_BUTTON0_DOWN) {
-        if (_selectedId)
-            *_selectedId = _id;
-        if (_onSelected)
-            _onSelected(this);
-    }
+CheckBox* CheckBox::OnChanged(std::function<void(bool) > onChanged) {
+    _onChange = onChanged;
+
+    return this;
 }
 
-void Radio::Draw(NVG::NVGcontext* context) const {
+void CheckBox::Draw(NVG::NVGcontext* context) const {
     UIrect rect = uiGetRect(_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
-    if (_selectedId != nullptr && *_selectedId == _id)
+    if (_value)
         state = BND_ACTIVE;
-    bndRadioButton(context, rect.x, rect.y, rect.w, rect.h, BND_CORNER_ALL,
-            state, _iconId, _label.c_str());
 
+    bndOptionButton(context, rect.x, rect.y, rect.w, rect.h, state,
+            _label.c_str());
     OpenGLWidget::Draw(context);
+}
+
+void CheckBox::HandleEvent(UIevent event) {
+    if (event == UI_BUTTON0_DOWN) {
+        _value = !_value;
+    }
 }

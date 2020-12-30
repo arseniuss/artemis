@@ -25,12 +25,9 @@
 namespace OpenGL {
 
     struct Panel : public OpenGLWidget, virtual Gui::Panel {
+        Panel(int i);
 
-        Panel(int i) : OpenGLWidget(i) {
-
-        }
-
-        Gui::Panel* Insert(Gui::Widget* wdg) override;
+        Gui::Panel* Insert(Gui::WidgetBase* wdg) override;
 
         void Draw(NVG::NVGcontext* context) const;
 

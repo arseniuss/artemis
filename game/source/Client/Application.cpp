@@ -28,8 +28,9 @@ using namespace std;
 using namespace Client;
 
 Application::Application() : Common::Application() {
-    _graphics = Graphics::Context::Create("opengl", "Artemis");
-    _net = Network::Context::Create("enet");
+    _config = std::make_shared<Common::Config>("config.yaml");
+    _graphics = Graphics::Context::Create(_config);
+    _net = Network::Context::Create(_config);
 }
 
 Application::~Application() {

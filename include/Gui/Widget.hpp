@@ -41,7 +41,7 @@ namespace Gui {
 #define BOX_WRAP        0x004
 #define BOX_START       
 
-    struct Widget {
+    struct WidgetBase {
     protected:
         virtual void setBox(unsigned int box) = 0;
         virtual void setLayout(unsigned int layout) = 0;
@@ -52,7 +52,7 @@ namespace Gui {
     };
 
     template<typename T>
-    struct TWidget : virtual Widget {
+    struct TWidget : virtual WidgetBase {
 
         T* SetBox(unsigned int box) {
             setBox(box);
@@ -75,6 +75,10 @@ namespace Gui {
             setSize(w, h);
             return (T*)this;
         }
+    };
+    
+    struct Widget : public TWidget<Widget> {
+        
     };
 }
 

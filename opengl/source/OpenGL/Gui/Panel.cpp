@@ -28,18 +28,22 @@
 using namespace OpenGL;
 using namespace Blendish;
 
-Gui::Panel* Panel::Insert(Gui::Widget* wdg) {
+Panel::Panel(int i) : OpenGLWidget(i) {
+
+}
+
+Gui::Panel* Panel::Insert(Gui::WidgetBase* wdg) {
     uiInsert(_id, wdg->GetId());
 
     return this;
 }
 
 void Panel::Draw(NVG::NVGcontext* context) const {
-    OpenGLWidget::Draw(context);
-
     UIrect rect = uiGetRect(_id);
 
     bndBackground(context, rect.x, rect.y, rect.w, rect.h);
     bndBevelInset(context, rect.x, rect.y, rect.w, rect.h, 4, 4);
+
+    OpenGLWidget::Draw(context);
 }
 

@@ -28,13 +28,14 @@
 
 namespace OpenGL {
 
+    class Context;
+
     class LayoutBuilder : public Gui::LayoutBuilder {
     protected:
-        static std::map<size_t, std::function<void*(void) >> _registredWidgets;
-        
-        bool _dynamic = false;
+        std::shared_ptr<Context> _context;
 
         Gui::Button* create(Gui::Type<Gui::Button> type) override;
+        Gui::CheckBox* create(Gui::Type<Gui::CheckBox> type) override;
         Gui::Label* create(Gui::Type<Gui::Label> type) override;
         Gui::NumberField* create(Gui::Type<Gui::NumberField> type) override;
         Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
@@ -47,30 +48,16 @@ namespace OpenGL {
         T* createUi() {
             int item = uiItem();
             void *data = uiAllocHandle(item, sizeof (T));
-        
+
             T* t = new(data) T(item);
-            
+
             return t;
         }
-        
-        void insert(Gui::Widget*) override;
+
+        void insert(Gui::WidgetBase*) override;
     public:
-        LayoutBuilder(SDL_Window* window, bool dynamic);
+        LayoutBuilder(std::shared_ptr<Context> context);
         ~LayoutBuilder();
-
-        template<typename T, typename U>
-        static void Add() {
-            auto f = []() -> void* {
-                int item = uiItem();
-                U* data = (U *) uiAllocHandle(item, sizeof (U));
-
-                data->_id = item;
-
-                return data;
-            };
-
-            _registredWidgets.emplace(typeid (T).hash_code(), f);
-        }
     };
 }
 

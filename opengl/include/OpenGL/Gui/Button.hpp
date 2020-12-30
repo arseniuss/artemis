@@ -27,10 +27,10 @@ namespace OpenGL {
     struct Button : public OpenGLWidget, virtual Gui::Button {
         std::string _label;
         int _iconId;
-        std::function<void()> _onClick;
-        
+        std::function<void() > _onClick;
+
         Button(int i);
-                
+
         // Gui::Button
 
         Gui::Button* SetLabel(const std::string& label) override;

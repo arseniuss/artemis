@@ -49,13 +49,13 @@ Gui::NumberField* NumberField::SetValue(const std::string& value) {
 
 Gui::NumberField* NumberField::OnDecrClick(std::function<void() > onDecrClick) {
     _onDescClick = onDecrClick;
-    
+
     return this;
 }
 
 Gui::NumberField* NumberField::onIncClick(std::function<void() > onIncClick) {
     _onIncClick = onIncClick;
-    
+
     return this;
 }
 
@@ -68,22 +68,22 @@ void NumberField::HandleEvent(UIevent event) {
                 cursor.y >= rect.y && cursor.y <= rect.y + rect.h) {
             int hw = rect.w / 2;
             int dx = cursor.x - rect.x;
-            
-            if(dx < hw) {
-                if(_onDescClick) _onDescClick();
+
+            if (dx < hw) {
+                if (_onDescClick) _onDescClick();
             } else {
-                if(_onIncClick) _onIncClick();
+                if (_onIncClick) _onIncClick();
             }
         }
     }
 }
 
 void NumberField::Draw(NVG::NVGcontext* context) const {
-    OpenGLWidget::Draw(context);
-
     UIrect rect = uiGetRect(_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
     bndNumberField(context, rect.x, rect.y, rect.w, rect.h, BND_CORNER_NONE,
             state, _label.c_str(), _value.c_str());
+
+    OpenGLWidget::Draw(context);
 }

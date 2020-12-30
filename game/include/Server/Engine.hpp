@@ -30,6 +30,7 @@ namespace Server {
 
     class Engine {
     private:
+        std::shared_ptr<Common::Config> _config;
         std::shared_ptr<Network::Context> _net;
         std::thread _serverThread;
         

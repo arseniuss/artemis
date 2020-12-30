@@ -42,7 +42,7 @@ void OpenGLWidget::setMargins(int a, int b, int c, int d) {
 void OpenGLWidget::setSize(int w, int h) {
     if (w < 0) w = BND_TOOL_WIDTH;
     if (h < 0) h = BND_WIDGET_HEIGHT;
-    
+
     uiSetSize(_id, w, h);
 }
 
@@ -51,7 +51,25 @@ int OpenGLWidget::GetId() const {
 }
 
 void OpenGLWidget::Draw(NVG::NVGcontext* context) const {
+    if (Context::Debug) {
+        UIrect rect = uiGetRect(_id);
 
+        int v = 5;
+
+        rect.x += v;
+        rect.y += v;
+        rect.w -= v * 2;
+        rect.h -= v * 2;
+
+        nvgBeginPath(context);
+        nvgMoveTo(context, rect.x, rect.y);
+        nvgLineTo(context, rect.x + rect.w, rect.y);
+        nvgLineTo(context, rect.x + rect.w, rect.y + rect.h);
+        nvgLineTo(context, rect.x, rect.y + rect.h);
+        nvgLineTo(context, rect.x, rect.y);
+        nvgStrokeColor(context, nvgRGB(255, 0, 0));
+        nvgStroke(context);
+    }
 }
 
 void OpenGLWidget::HandleEvent(UIevent event) {

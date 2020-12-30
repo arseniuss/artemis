@@ -30,7 +30,6 @@ namespace OpenGL {
         int _cursorStart = 0;
         int _cursorEnd = 0;
     public:
-
         TextInput(int i);
 
         Gui::TextInput* SetText(const std::string& text) override;

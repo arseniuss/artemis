@@ -11,6 +11,7 @@ SOURCES = \
     source/OpenGL/Context.cpp \
     source/OpenGL/Gui.cpp \
     source/OpenGL/Gui/Button.cpp \
+    source/OpenGL/Gui/CheckBox.cpp \
     source/OpenGL/Gui/Label.cpp \
     source/OpenGL/Gui/LayoutBuilder.cpp \
     source/OpenGL/Gui/NumberField.cpp \

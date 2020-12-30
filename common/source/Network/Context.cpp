@@ -25,7 +25,9 @@ using namespace Network;
 typedef void (*InitNetworkingFunc)(void);
 typedef Context* (*CreateContextFunc)(void);
 
-std::shared_ptr<Context> Context::Create(const std::string& name) {
+std::shared_ptr<Context> Context::Create(std::shared_ptr<const Common::Config> config) {
+    std::string name = config->Get<std::string>("Networking", "Library", "enet");
+    
     std::string target = "lib/libartemis_" + name + ".so";
     void *handle = dlopen(target.c_str(), RTLD_NOW | RTLD_GLOBAL);
 

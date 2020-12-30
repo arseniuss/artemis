@@ -30,19 +30,19 @@ namespace OpenGL {
         std::string _label;
         int _iconId;
         int _width;
-        
-        std::function<void(Gui::Radio*)> _onSelected;
+
+        std::function<void(Gui::Radio*) > _onSelected;
     public:
         Radio(int i);
 
         Gui::Radio* Connect(int* selectedId) override;
         Gui::Radio* SetIcon(int iconId) override;
         Gui::Radio* SetLabel(const std::string& label) override;
-        
+
         Gui::Radio* OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) override;
 
         void HandleEvent(UIevent event) override;
-        
+
         void Draw(NVG::NVGcontext* context) const;
     };
 }

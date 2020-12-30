@@ -34,32 +34,31 @@ Button::Button(int i) : OpenGLWidget(i) {
 }
 
 Gui::Button* Button::SetLabel(const std::string& label) {
-    this->_label = label;
+    _label = label;
 
     return this;
 }
 
 Gui::Button* Button::OnClick(std::function<void() > onClickFunction) {
-    this->_onClick = onClickFunction;
+    _onClick = onClickFunction;
 
     return this;
 }
 
 void Button::Draw(NVG::NVGcontext* context) const {
-    OpenGLWidget::Draw(context);
-
-    UIrect rect = uiGetRect(this->_id);
-    BNDwidgetState state = (BNDwidgetState) uiGetState(this->_id);
+    UIrect rect = uiGetRect(_id);
+    BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
     bndToolButton(context, rect.x, rect.y, rect.w, rect.h, -1, state,
             _iconId,
-            this->_label.c_str());
+            _label.c_str());
+    OpenGLWidget::Draw(context);
 }
 
 void Button::HandleEvent(UIevent event) {
     if (event == UI_BUTTON0_HOT_UP) {
-        if (this->_onClick)
-            this->_onClick();
+        if (_onClick)
+            _onClick();
     }
 }
 

@@ -157,6 +157,11 @@ bool SettingState::HandleEvent(const SDL_Event& event) {
 }
 
 void SettingState::BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel* content) {
+    auto container = builder.Create<Gui::Panel>()
+            ->SetLayout(LAYOUT_TOP | LAYOUT_LEFT)
+            ->SetBox(BOX_COLUMN);
+
+    content->Insert(container);
 
     auto row1 = builder.Create<Gui::Panel>()
             ->SetLayout(LAYOUT_LEFT | LAYOUT_TOP)
@@ -191,6 +196,19 @@ void SettingState::BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel*
     row1->Insert(resLbl);
     row1->Insert(resNi);
 
-    content->Insert(row1);
+    container->Insert(row1);
+
+    auto row2 = builder.Create<Gui::Panel>()
+            ->SetLayout(LAYOUT_LEFT | LAYOUT_TOP)
+            ->SetBox(BOX_ROW);
+    auto fscrLbl = builder.Create<Gui::Label>()
+            ->SetSize(250, -1)
+            ->SetLabel("Fullscreen");
+    auto fscrChb = builder.Create<Gui::CheckBox>();
+
+    row2->Insert(fscrLbl);
+    row2->Insert(fscrChb);
+
+    container->Insert(row2);
 }
 

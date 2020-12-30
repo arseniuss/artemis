@@ -16,39 +16,32 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_CLIENTAPPLICATION_HPP
-#define CLIENT_CLIENTAPPLICATION_HPP
+#ifndef OPENGL_GUI_CHECKBOX_HPP
+#define OPENGL_GUI_CHECKBOX_HPP
 
-#include <Common/Application.hpp>
-#include <Graphics/Context.hpp>
-#include <Network/Context.hpp>
-#include <Common/State.hpp>
+#include <Gui/CheckBox.hpp>
+#include <OpenGL/Gui/Widget.hpp>
 
-namespace Client {
+namespace OpenGL {
 
-    class Application : public Common::Application {
+    struct CheckBox : public OpenGLWidget, virtual Gui::CheckBox {
     private:
-        std::shared_ptr<Graphics::Context> _graphics;
-        std::shared_ptr<Network::Context> _net;
-        std::shared_ptr<Common::Config> _config;
+        bool _value;
+        std::string _label;
+        std::function<void(bool) > _onChange;
     public:
-        Application();
-        ~Application();
+        CheckBox(int i);
 
-        Graphics::Context& GetContext();
+        CheckBox* SetLabel(const std::string& label) override;
+        CheckBox* SetValue(bool value) override;
+        CheckBox* OnChanged(std::function<void(bool) > onChanged) override;
 
-        void Run() override;
+        void Draw(NVG::NVGcontext* context) const override;
 
-        Graphics::Context& GetGraphics() {
-            return *_graphics;
-        }
+        void HandleEvent(UIevent event) override;
 
-        Network::Context& GetNetwork() {
-            return *_net;
-        }
     };
 }
 
 
-#endif /* !CLIENT_CLIENTAPPLICATION_HPP */
-
+#endif /* !OPENGL_GUI_CHECKBOX_HPP */

@@ -108,7 +108,7 @@ void Shader::Use() {
 }
 
 void Shader::Draw() {
-    glDrawArrays(GL_TRIANGLES, 0, 12*3); 
+    glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 }
 
 void Shader::SetUniform(const std::string& name, const glm::mat4 value,

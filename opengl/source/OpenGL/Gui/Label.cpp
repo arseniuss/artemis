@@ -29,14 +29,14 @@ Label::Label(int i) : OpenGLWidget(i) {
 
 Gui::Label* Label::SetLabel(const std::string& text) {
     label = text;
-    
+
     return this;
 }
 
 void Label::Draw(NVG::NVGcontext* context) const {
-    OpenGLWidget::Draw(context);
-
     UIrect rect = uiGetRect(_id);
 
     bndLabel(context, rect.x, rect.y, rect.w, rect.h, iconId, label.c_str());
+
+    OpenGLWidget::Draw(context);
 }

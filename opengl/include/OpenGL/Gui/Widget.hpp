@@ -19,8 +19,11 @@
 #ifndef OPENGL_GUI_WIDGET_HPP
 #define OPENGL_GUI_WIDGET_HPP
 
+#include <memory>
+
 #include <Gui/Widget.hpp>
 #include <NanoVG/NanoVG.hpp>
+#include <OpenGL/Context.hpp>
 
 #include "oui.h"
 
@@ -38,7 +41,6 @@ namespace OpenGL {
         OpenGLWidget(int i);
 
         int GetId() const override;
-
 
         virtual void Draw(NVG::NVGcontext* context) const;
 

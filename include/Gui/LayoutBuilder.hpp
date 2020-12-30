@@ -24,6 +24,7 @@
 #include <utility>
 
 #include <Gui/Button.hpp>
+#include <Gui/CheckBox.hpp>
 #include <Gui/Label.hpp>
 #include <Gui/NumberField.hpp>
 #include <Gui/Panel.hpp>
@@ -42,6 +43,7 @@ namespace Gui {
     class LayoutBuilder {
     protected:
         virtual Gui::Button* create(Type<Gui::Button> type) = 0;
+        virtual Gui::CheckBox* create(Type<Gui::CheckBox> type) = 0;
         virtual Gui::Label* create(Type<Gui::Label> type) = 0;
         virtual Gui::NumberField* create(Type<Gui::NumberField> type) = 0;
         virtual Gui::Panel* create(Type<Gui::Panel> type) = 0;
@@ -50,7 +52,7 @@ namespace Gui {
         virtual Gui::Widget* create(Type<Gui::Widget> type) = 0;
         virtual Gui::Window* create(Type<Gui::Window> type) = 0;
 
-        virtual void insert(Gui::Widget*) = 0;
+        virtual void insert(Gui::WidgetBase*) = 0;
     public:
 
         LayoutBuilder() {

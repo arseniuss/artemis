@@ -38,7 +38,10 @@ namespace OpenGL {
                 size_t size) override;
 
     public:
-        Context(const std::string& title);
+        static bool Debug;
+        static std::shared_ptr<Context> Instance;
+
+        Context(const std::string& title, std::shared_ptr<const Common::Config> config);
         ~Context();
 
         void HandleInput() override;
@@ -48,9 +51,7 @@ namespace OpenGL {
 
         void Render() override;
 
-        void BuildLayout(std::function<void(Gui::LayoutBuilder&)>, bool) override;
-        
-        Gui::LayoutBuilder* CreateLayoutBuilder() override;
+        void BuildLayout(std::function<void(Gui::LayoutBuilder&)>) override;
 
         void DrawLayout(int item, int corners);
     };

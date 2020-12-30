@@ -21,6 +21,7 @@
 
 #include <memory>
 
+#include <Common/Config.hpp>
 #include <Network/Client.hpp>
 #include <Network/Host.hpp>
 
@@ -42,7 +43,7 @@ namespace Network {
     public:
         static const uint16_t DefaultPort = 7654;
         
-        static std::shared_ptr<Context> Create(const std::string& name);
+        static std::shared_ptr<Context> Create(std::shared_ptr<const Common::Config> config);
 
         template<typename T, typename... Args>
         T* Create(Args&&... args) {

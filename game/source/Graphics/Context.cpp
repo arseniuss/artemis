@@ -24,41 +24,39 @@
 
 #include <Graphics/Context.hpp>
 
-using namespace std;
 using namespace Graphics;
 
-typedef void (*InitGraphicsFunc)(void);
-typedef Context* (*CreateContextFunc)(const string&);
-
-shared_ptr<Context> Context::Create(const string& name, const string& title) {
-    string target = "lib/libartemis_" + name + ".so";
+std::shared_ptr<Context> Context::Create(std::shared_ptr<const Common::Config> config) {
+    std::string name = config->Get<std::string>("Graphics", "Library", "opengl");
+    std::string target = "lib/libartemis_" + name + ".so";
     void *handle = dlopen(target.c_str(), RTLD_NOW | RTLD_GLOBAL);
 
     if (!handle) {
-        throw runtime_error(string("Cannot open " + target + ": " + dlerror()));
+        throw std::runtime_error(std::string("Cannot open " + target + ": " + dlerror()));
     }
 
-    InitGraphicsFunc init = (InitGraphicsFunc) dlsym(handle, "InitGraphics");
+    InitGraphicsFunc init = **(InitGraphicsFunc*) dlsym(handle, "initGraphics");
 
     if (init != nullptr) {
         init();
     }
 
-    CreateContextFunc func = (CreateContextFunc) dlsym(handle, "CreateContext");
+    CreateContextFunc func = **(CreateContextFunc*) dlsym(handle, "createContext");
 
     if (func == nullptr) {
-        throw runtime_error("Graphic's function \"CreateContext\" not found!");
+        throw std::runtime_error("Graphic's function \"CreateContext\" not found!");
     }
 
-    return shared_ptr<Context>(func(title));
+    return func("Artemis", config);
 }
 
-Context::Context(const std::string& title, SDL_WindowFlags flags) {
+Context::Context(const std::string& title,
+        std::shared_ptr<const Common::Config> config, SDL_WindowFlags flags) {
     SDL_DisplayMode current;
     int use_window = -1;
 
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
-        throw runtime_error(string("Cannot init SDL video: ") + SDL_GetError());
+        throw std::runtime_error(std::string("Cannot init SDL video: ") + SDL_GetError());
     }
 
     for (int i = 0; i < SDL_GetNumVideoDisplays(); ++i) {
@@ -76,16 +74,15 @@ Context::Context(const std::string& title, SDL_WindowFlags flags) {
     }
 
     if (use_window < 0) {
-        throw runtime_error(string("Cannot find display!"));
+        throw std::runtime_error(std::string("Cannot find display!"));
     }
 
     IMG_Init(IMG_INIT_PNG);
 
     _window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED, current.w, current.h,
-            flags | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED);
+            SDL_WINDOWPOS_CENTERED, current.w, current.h, flags);
     if (_window == nullptr) {
-        throw runtime_error("Cannot create window!");
+        throw std::runtime_error("Cannot create window!");
     }
 }
 
@@ -99,6 +96,10 @@ glm::ivec2 Context::GetSize() const {
     SDL_GetWindowSize(_window, &w, &h);
 
     return {w, h};
+}
+
+SDL_Window* Context::GetWindow() {
+    return _window;
 }
 
 size_t Context::AddDrawFunction(DrawFunc func) {

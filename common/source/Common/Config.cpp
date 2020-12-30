@@ -16,26 +16,15 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_LABEL_HPP
-#define OPENGL_GUI_LABEL_HPP
+#include <filesystem>
 
-#include <Gui/Label.hpp>
-#include <OpenGL/Gui/Widget.hpp>
+#include <Common/Config.hpp>
 
-namespace OpenGL {
+using namespace Common;
 
-    struct Label : public OpenGLWidget, virtual Gui::Label {
-    private:
-        std::string label;
-        int iconId;
-    public:
-
-        Label(int i);
-
-        Gui::Label* SetLabel(const std::string& text);
-
-        void Draw(NVG::NVGcontext* context) const override;
-    };
+Config::Config(const std::string& filename) {
+    if (std::filesystem::exists(filename))
+        _config = YAML::LoadFile(filename);
 }
 
-#endif /* !OPENGL_GUI_LABEL_HPP */
+

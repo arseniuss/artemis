@@ -43,10 +43,6 @@ void State::RebuildUI() {
     });
 }
 
-Gui::LayoutBuilder* State::GetLayoutBuilder() {
-    return _app.GetContext().CreateLayoutBuilder();
-}
-
 bool State::HandleEvent(const SDL_Event& event) {
     return false;
 }

@@ -27,7 +27,7 @@ namespace OpenGL {
     struct Window : public OpenGLWidget, virtual Gui::Window {
         std::string title;
         int iconId;
-        
+
         Window(int i);
 
         Gui::Window* SetTitle(const std::string& title) override;

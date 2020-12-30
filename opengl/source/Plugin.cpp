@@ -27,14 +27,22 @@
 extern "C" {
 
     void InitGraphics(void) {
-        OpenGL::LayoutBuilder::Add<Gui::Widget, OpenGL::Widget>();
-        OpenGL::LayoutBuilder::Add<Gui::Panel, OpenGL::Panel>();
+
     }
 
-    OpenGL::Context* CreateContext(const std::string& title) {
+    std::shared_ptr<Graphics::Context> CreateContext(const std::string& title,
+            std::shared_ptr<const Common::Config> config) {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-        return new OpenGL::Context(title);
+        if (!OpenGL::Context::Instance) {
+            OpenGL::Context::Instance =
+                    std::make_shared<OpenGL::Context>(title, config);
+        }
+
+        return OpenGL::Context::Instance;
     }
+
+    Graphics::InitGraphicsFunc initGraphics = &InitGraphics;
+    Graphics::CreateContextFunc createContext = &CreateContext;
 }

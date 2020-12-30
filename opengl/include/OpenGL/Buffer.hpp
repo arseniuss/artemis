@@ -33,7 +33,7 @@ namespace OpenGL {
         void create(enum Graphics::BufferType type, const float *data, size_t size);
     public:
         Buffer(enum Graphics::BufferType type, const float *data, size_t size);
-        
+
         void Use() const override;
 
     };

@@ -19,13 +19,34 @@
 #ifndef COMMON_CONFIG_HPP
 #define COMMON_CONFIG_HPP
 
+#include <string>
+
 #include <yaml-cpp/yaml.h>
+
+#include "Debug.hpp"
 
 namespace Common {
 
     class Config {
+    private:
+        YAML::Node _config;
     public:
-         
+        Config(const std::string& filename);
+
+        template<class T>
+        T Get(const std::string& section, const std::string& key,
+                T defaultValue) const {
+            if (_config.Type() == YAML::NodeType::Map && _config[section]) {
+                if (_config[section][key].IsScalar()) {
+                    return _config[section][key].as<T>();
+                }
+            }
+
+            Debug() << "Config " << section << "." << key << " do not exist!"
+                    << std::endl;
+
+            return defaultValue;
+        }
     };
 }
 

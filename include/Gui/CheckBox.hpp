@@ -16,26 +16,20 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_GUI_LABEL_HPP
-#define OPENGL_GUI_LABEL_HPP
+#ifndef GUI_CHECKBOX_HPP
+#define GUI_CHECKBOX_HPP
 
-#include <Gui/Label.hpp>
-#include <OpenGL/Gui/Widget.hpp>
+#include <functional>
+#include <string>
 
-namespace OpenGL {
+#include <Gui/Widget.hpp>
 
-    struct Label : public OpenGLWidget, virtual Gui::Label {
-    private:
-        std::string label;
-        int iconId;
-    public:
-
-        Label(int i);
-
-        Gui::Label* SetLabel(const std::string& text);
-
-        void Draw(NVG::NVGcontext* context) const override;
+namespace Gui {
+    struct CheckBox : public TWidget<CheckBox> {
+        virtual CheckBox* SetLabel(const std::string& label) = 0;
+        virtual CheckBox* SetValue(bool value) = 0;
+        virtual CheckBox* OnChanged(std::function<void(bool)> onChanged) = 0;
     };
 }
 
-#endif /* !OPENGL_GUI_LABEL_HPP */
+#endif /* !GUI_CHECKBOX_HPP */

@@ -29,16 +29,20 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_video.h>
 
-#include <Gui/LayoutBuilder.hpp>
-#include <Graphics/Shader.hpp>
-
+#include <Common/Config.hpp>
 #include <Graphics/Buffer.hpp>
+#include <Graphics/Shader.hpp>
+#include <Gui/LayoutBuilder.hpp>
 
 namespace Graphics {
 
     class Context;
 
     using DrawFunc = std::function<void(Context&)>;
+
+    typedef void (*InitGraphicsFunc)(void);
+    typedef std::shared_ptr<Context> (*CreateContextFunc)(const std::string&,
+            std::shared_ptr<const Common::Config> config);
 
     class Context {
     protected:
@@ -51,14 +55,15 @@ namespace Graphics {
         SDL_Window* _window;
 
         std::vector<DrawFunc> _drawables;
-        
+
         virtual Graphics::Shader* create(Type<Graphics::Shader> type, const std::string& name) = 0;
         virtual Graphics::Buffer* create(Type<Graphics::Buffer> type, enum BufferType bt, const float *data, size_t size) = 0;
     public:
-        static std::shared_ptr<Context> Create(const std::string& name,
-                const std::string& title);
+        static std::shared_ptr<Context> Create(std::shared_ptr<const Common::Config> config);
 
-        Context(const std::string& title, SDL_WindowFlags flags);
+        Context(const std::string& title,
+                std::shared_ptr<const Common::Config> config,
+                SDL_WindowFlags flags);
         ~Context();
 
         glm::ivec2 GetSize() const;
@@ -74,13 +79,7 @@ namespace Graphics {
         virtual size_t AddDrawFunction(DrawFunc func);
         virtual void RemoveDrawFunction(size_t idx);
 
-        virtual void BuildLayout(std::function<void(Gui::LayoutBuilder& b)>, bool dynamic = false) = 0;
-        
-        /**
-         * Creates layout builder for dynamic UI updates
-         * @return pointer to LayoutBuilder
-         */
-        virtual Gui::LayoutBuilder* CreateLayoutBuilder() = 0;
+        virtual void BuildLayout(std::function<void(Gui::LayoutBuilder& b)>) = 0;
 
         template<typename T, typename... Args>
         T* Create(Args&&... args) {

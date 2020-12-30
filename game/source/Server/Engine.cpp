@@ -67,8 +67,8 @@ void Engine::main() {
     Network::Event* event = nullptr;
 
     std::cout << "Starting server ..." << std::endl;
-
-    _net = Network::Context::Create("enet");
+    _config = std::make_shared<Common::Config>("server.yaml");
+    _net = Network::Context::Create(_config);
     auto host = _net->Create<Network::Host>(maxConnections);
     
     _isRunning = true;
