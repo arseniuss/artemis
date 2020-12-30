@@ -39,7 +39,7 @@ namespace OpenGL {
         Gui::Label* create(Gui::Type<Gui::Label> type) override;
         Gui::NumberField* create(Gui::Type<Gui::NumberField> type) override;
         Gui::Panel* create(Gui::Type<Gui::Panel> type) override;
-        Gui::Radio* create(Gui::Type<Gui::Radio> type) override;
+        Gui::RadioButton* create(Gui::Type<Gui::RadioButton> type) override;
         Gui::TextInput* create(Gui::Type<Gui::TextInput> type) override;
         Gui::Widget* create(Gui::Type<Gui::Widget> type) override;
         Gui::Window* create(Gui::Type<Gui::Window> type) override;

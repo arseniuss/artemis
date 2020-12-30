@@ -19,27 +19,27 @@
 #ifndef OPENGL_GUI_RADIO_HPP
 #define OPENGL_GUI_RADIO_HPP
 
-#include <Gui/Radio.hpp>
+#include <Gui/RadioButton.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 
 namespace OpenGL {
 
-    struct Radio : public OpenGLWidget, virtual Gui::Radio {
+    struct RadioButton : public OpenGLWidget, virtual Gui::RadioButton {
     private:
         int *_selectedId;
         std::string _label;
         int _iconId;
         int _width;
 
-        std::function<void(Gui::Radio*) > _onSelected;
+        std::function<void(Gui::RadioButton*) > _onSelected;
     public:
-        Radio(int i);
+        RadioButton(int i);
 
-        Gui::Radio* Connect(int* selectedId) override;
-        Gui::Radio* SetIcon(int iconId) override;
-        Gui::Radio* SetLabel(const std::string& label) override;
+        Gui::RadioButton* Connect(int* selectedId) override;
+        Gui::RadioButton* SetIcon(int iconId) override;
+        Gui::RadioButton* SetLabel(const std::string& label) override;
 
-        Gui::Radio* OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) override;
+        Gui::RadioButton* OnSelected(std::function<void(Gui::RadioButton*) > onSelectedFunction) override;
 
         void HandleEvent(UIevent event) override;
 

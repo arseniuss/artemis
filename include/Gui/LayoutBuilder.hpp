@@ -23,17 +23,17 @@
 #include <typeinfo>
 #include <utility>
 
-#include <Gui/Button.hpp>
-#include <Gui/CheckBox.hpp>
-#include <Gui/Label.hpp>
-#include <Gui/NumberField.hpp>
-#include <Gui/Panel.hpp>
-#include <Gui/Radio.hpp>
-#include <Gui/TextInput.hpp>
-#include <Gui/Widget.hpp>
-#include <Gui/Window.hpp>
-
 namespace Gui {
+    class Button;
+    class CheckBox;
+    class Label;
+    class NumberField;
+    class Panel;
+    class RadioButton;
+    class TextInput;
+    class Widget;
+    class WidgetBase;
+    class Window;
 
     template<typename T>
     struct Type {
@@ -47,7 +47,7 @@ namespace Gui {
         virtual Gui::Label* create(Type<Gui::Label> type) = 0;
         virtual Gui::NumberField* create(Type<Gui::NumberField> type) = 0;
         virtual Gui::Panel* create(Type<Gui::Panel> type) = 0;
-        virtual Gui::Radio* create(Type<Gui::Radio> type) = 0;
+        virtual Gui::RadioButton* create(Type<Gui::RadioButton> type) = 0;
         virtual Gui::TextInput* create(Type<Gui::TextInput> type) = 0;
         virtual Gui::Widget* create(Type<Gui::Widget> type) = 0;
         virtual Gui::Window* create(Type<Gui::Window> type) = 0;

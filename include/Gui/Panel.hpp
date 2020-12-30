@@ -21,7 +21,7 @@
 
 #include <Gui/Button.hpp>
 #include <Gui/Label.hpp>
-#include <Gui/Radio.hpp>
+#include <Gui/RadioButton.hpp>
 #include <Gui/TextInput.hpp>
 #include <Gui/Widget.hpp>
 

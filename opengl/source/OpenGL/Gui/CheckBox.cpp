@@ -34,14 +34,25 @@ CheckBox::CheckBox(int i) : OpenGLWidget(i) {
     uiSetEvents(i, UI_BUTTON0_DOWN);
 }
 
+CheckBox* CheckBox::Connect(bool* value) {
+    _valuePtr = value;
+    
+    return this;
+}
+
 CheckBox* CheckBox::SetLabel(const std::string& label) {
     _label = label;
 
     return this;
 }
 
+bool CheckBox::GetValue() {
+    return _valuePtr ? *_valuePtr : _value;
+}
+
 CheckBox* CheckBox::SetValue(bool value) {
-    _value = value;
+    if (_valuePtr) *_valuePtr = value;
+    else _value = value;
 
     if (_onChange) _onChange(value);
 
@@ -58,7 +69,9 @@ void CheckBox::Draw(NVG::NVGcontext* context) const {
     UIrect rect = uiGetRect(_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
-    if (_value)
+    bool value = _valuePtr ? *_valuePtr : _value;
+
+    if (value)
         state = BND_ACTIVE;
 
     bndOptionButton(context, rect.x, rect.y, rect.w, rect.h, state,
@@ -68,6 +81,10 @@ void CheckBox::Draw(NVG::NVGcontext* context) const {
 
 void CheckBox::HandleEvent(UIevent event) {
     if (event == UI_BUTTON0_DOWN) {
-        _value = !_value;
+        if (_valuePtr) *_valuePtr = !(*_valuePtr);
+        else _value = !_value;
+
+        if (_onChange) _onChange(GetValue());
+
     }
 }

@@ -26,8 +26,10 @@
 
 namespace Gui {
     struct CheckBox : public TWidget<CheckBox> {
+        virtual CheckBox* Connect(bool* value) = 0;
         virtual CheckBox* SetLabel(const std::string& label) = 0;
         virtual CheckBox* SetValue(bool value) = 0;
+        virtual bool GetValue() = 0;
         virtual CheckBox* OnChanged(std::function<void(bool)> onChanged) = 0;
     };
 }

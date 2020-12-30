@@ -30,7 +30,7 @@
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/NumberField.hpp>
 #include <OpenGL/Gui/Panel.hpp>
-#include <OpenGL/Gui/Radio.hpp>
+#include <OpenGL/Gui/RadioButton.hpp>
 #include <OpenGL/Gui/Text.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 #include <OpenGL/Gui/Window.hpp>
@@ -91,8 +91,8 @@ Gui::Label* LayoutBuilder::create(Gui::Type<Gui::Label> type) {
     return static_cast<Gui::Label*> (createUi<OpenGL::Label>());
 }
 
-Gui::Radio* LayoutBuilder::create(Gui::Type<Gui::Radio> type) {
-    return static_cast<Gui::Radio*> (createUi<OpenGL::Radio>());
+Gui::RadioButton* LayoutBuilder::create(Gui::Type<Gui::RadioButton> type) {
+    return static_cast<Gui::RadioButton*> (createUi<OpenGL::RadioButton>());
 }
 
 void LayoutBuilder::insert(Gui::WidgetBase* w) {

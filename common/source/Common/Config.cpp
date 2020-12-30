@@ -16,6 +16,7 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <fstream>
 #include <filesystem>
 
 #include <Common/Config.hpp>
@@ -23,8 +24,18 @@
 using namespace Common;
 
 Config::Config(const std::string& filename) {
+    _filename = filename;
+
     if (std::filesystem::exists(filename))
         _config = YAML::LoadFile(filename);
+}
+
+void Config::Save() {
+    std::ofstream fout(_filename);
+    
+    fout << _config;
+    
+    fout.close();
 }
 
 

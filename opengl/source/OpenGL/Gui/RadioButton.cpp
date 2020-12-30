@@ -17,14 +17,14 @@
  */
 
 #include <Blendish/Blendish.hpp>
-#include <OpenGL/Gui/Radio.hpp>
+#include <OpenGL/Gui/RadioButton.hpp>
 
 #include "oui.h"
 
 using namespace OpenGL;
 using namespace Blendish;
 
-Radio::Radio(int i) : OpenGLWidget(i) {
+RadioButton::RadioButton(int i) : OpenGLWidget(i) {
     _selectedId = nullptr;
     _label = "";
     _iconId = -1;
@@ -34,7 +34,7 @@ Radio::Radio(int i) : OpenGLWidget(i) {
     uiSetEvents(i, UI_BUTTON0_DOWN);
 }
 
-Gui::Radio* Radio::Connect(int* selectedId) {
+Gui::RadioButton* RadioButton::Connect(int* selectedId) {
     if (selectedId != nullptr) {
         _selectedId = selectedId;
     }
@@ -42,25 +42,25 @@ Gui::Radio* Radio::Connect(int* selectedId) {
     return this;
 }
 
-Gui::Radio* Radio::SetIcon(int iconId) {
+Gui::RadioButton* RadioButton::SetIcon(int iconId) {
     _iconId = iconId;
 
     return this;
 }
 
-Gui::Radio* Radio::SetLabel(const std::string& label) {
+Gui::RadioButton* RadioButton::SetLabel(const std::string& label) {
     _label = label;
 
     return this;
 }
 
-Gui::Radio* Radio::OnSelected(std::function<void(Gui::Radio*) > onSelectedFunction) {
+Gui::RadioButton* RadioButton::OnSelected(std::function<void(Gui::RadioButton*) > onSelectedFunction) {
     _onSelected = onSelectedFunction;
 
     return this;
 }
 
-void Radio::HandleEvent(UIevent event) {
+void RadioButton::HandleEvent(UIevent event) {
     if (event == UI_BUTTON0_DOWN) {
         if (_selectedId)
             *_selectedId = _id;
@@ -69,7 +69,7 @@ void Radio::HandleEvent(UIevent event) {
     }
 }
 
-void Radio::Draw(NVG::NVGcontext* context) const {
+void RadioButton::Draw(NVG::NVGcontext* context) const {
     UIrect rect = uiGetRect(_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 

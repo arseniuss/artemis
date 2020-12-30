@@ -16,27 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GUI_RADIO_HPP
-#define GUI_RADIO_HPP
+#ifndef GUI_COMMON_HPP
+#define GUI_COMMON_HPP
 
-#include <functional>
-#include <string>
-
+#include <Gui/Button.hpp>
+#include <Gui/CheckBox.hpp>
+#include <Gui/Label.hpp>
+#include <Gui/NumberField.hpp>
+#include <Gui/Panel.hpp>
+#include <Gui/RadioButton.hpp>
+#include <Gui/TextInput.hpp>
 #include <Gui/Widget.hpp>
+#include <Gui/Window.hpp>
 
-namespace Gui {
-
-    struct Radio : public TWidget<Radio> {
-
-        
-        virtual Radio* Connect(int* selectedId) = 0;
-        virtual Radio* SetIcon(int iconId) = 0;
-        virtual Radio* SetLabel(const std::string& label) = 0;
-       
-        
-        virtual Radio* OnSelected(std::function<void(Gui::Radio*) > onClickFunction) = 0;
-    };
-}
-
-
-#endif /* !GUI_RADIO_HPP */
+#endif /* !GUI_COMMON_HPP */

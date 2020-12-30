@@ -18,6 +18,7 @@
 
 #include <Client/ConnectState.hpp>
 #include <Common/Debug.hpp>
+#include <Gui/Common.hpp>
 #include <Network/Client.hpp>
 #include <Network/Context.hpp>
 

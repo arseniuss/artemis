@@ -29,6 +29,7 @@ namespace Common {
 
     class Config {
     private:
+        std::string _filename;
         YAML::Node _config;
     public:
         Config(const std::string& filename);
@@ -37,7 +38,7 @@ namespace Common {
         T Get(const std::string& section, const std::string& key,
                 T defaultValue) const {
             if (_config.Type() == YAML::NodeType::Map && _config[section]) {
-                if (_config[section][key].IsScalar()) {
+                if (_config[section][key] && _config[section][key].IsScalar()) {
                     return _config[section][key].as<T>();
                 }
             }
@@ -47,6 +48,15 @@ namespace Common {
 
             return defaultValue;
         }
+
+        template<typename T>
+        void Set(const std::string& section, const std::string& key, T value) {
+            Debug() << "Set config " << section << " " << key << " := " <<
+                    value << std::endl;
+            _config[section][key] = value;
+        }
+        
+        void Save();
     };
 }
 

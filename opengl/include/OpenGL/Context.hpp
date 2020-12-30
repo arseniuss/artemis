@@ -41,7 +41,8 @@ namespace OpenGL {
         static bool Debug;
         static std::shared_ptr<Context> Instance;
 
-        Context(const std::string& title, std::shared_ptr<const Common::Config> config);
+        Context(const std::string& title,
+                std::shared_ptr<const Common::Config> config);
         ~Context();
 
         void HandleInput() override;

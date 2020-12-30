@@ -25,10 +25,14 @@
 namespace Client {
     
     class SettingState : public State {
+    private:
         int _selectedMenu = -1;
         
+        bool _fullscreen;
         size_t _currentDisplayMode;
         std::vector<SDL_DisplayMode> _displayModes;
+        
+        void ApplyAndSave();
     public:
         SettingState(Application* app);
         

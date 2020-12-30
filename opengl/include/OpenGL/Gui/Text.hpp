@@ -27,8 +27,8 @@ namespace OpenGL {
     struct TextInput : public OpenGLWidget, virtual Gui::TextInput {
         int _iconId = -1;
         std::string _text;
-        int _cursorStart = 0;
-        int _cursorEnd = 0;
+        size_t _cursorStart = 0;
+        size_t _cursorEnd = 0;
     public:
         TextInput(int i);
 

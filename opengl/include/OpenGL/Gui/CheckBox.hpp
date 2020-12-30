@@ -27,13 +27,16 @@ namespace OpenGL {
     struct CheckBox : public OpenGLWidget, virtual Gui::CheckBox {
     private:
         bool _value;
+        bool* _valuePtr;;
         std::string _label;
         std::function<void(bool) > _onChange;
     public:
         CheckBox(int i);
 
+        CheckBox* Connect(bool* value) override;
         CheckBox* SetLabel(const std::string& label) override;
         CheckBox* SetValue(bool value) override;
+        bool GetValue() override;
         CheckBox* OnChanged(std::function<void(bool) > onChanged) override;
 
         void Draw(NVG::NVGcontext* context) const override;

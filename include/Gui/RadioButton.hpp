@@ -16,34 +16,27 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Blendish/Blendish.hpp>
-#include <OpenGL/Gui/Button.hpp>
-#include <OpenGL/Gui/Label.hpp>
-#include <OpenGL/Gui/Panel.hpp>
-#include <OpenGL/Gui/RadioButton.hpp>
-#include <OpenGL/Gui/Text.hpp>
+#ifndef GUI_RADIO_HPP
+#define GUI_RADIO_HPP
 
-#include "oui.h"
+#include <functional>
+#include <string>
 
-using namespace OpenGL;
-using namespace Blendish;
+#include <Gui/Widget.hpp>
 
-Panel::Panel(int i) : OpenGLWidget(i) {
+namespace Gui {
 
+    struct RadioButton : public TWidget<RadioButton> {
+
+        
+        virtual RadioButton* Connect(int* selectedId) = 0;
+        virtual RadioButton* SetIcon(int iconId) = 0;
+        virtual RadioButton* SetLabel(const std::string& label) = 0;
+       
+        
+        virtual RadioButton* OnSelected(std::function<void(Gui::RadioButton*) > onClickFunction) = 0;
+    };
 }
 
-Gui::Panel* Panel::Insert(Gui::WidgetBase* wdg) {
-    uiInsert(_id, wdg->GetId());
 
-    return this;
-}
-
-void Panel::Draw(NVG::NVGcontext* context) const {
-    UIrect rect = uiGetRect(_id);
-
-    bndBackground(context, rect.x, rect.y, rect.w, rect.h);
-    bndBevelInset(context, rect.x, rect.y, rect.w, rect.h, 4, 4);
-
-    OpenGLWidget::Draw(context);
-}
-
+#endif /* !GUI_RADIO_HPP */

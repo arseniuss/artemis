@@ -54,6 +54,7 @@ Context::Context(const std::string& title,
         std::shared_ptr<const Common::Config> config, SDL_WindowFlags flags) {
     SDL_DisplayMode current;
     int use_window = -1;
+    int f = flags;
 
     if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
         throw std::runtime_error(std::string("Cannot init SDL video: ") + SDL_GetError());
@@ -79,8 +80,15 @@ Context::Context(const std::string& title,
 
     IMG_Init(IMG_INIT_PNG);
 
+    int w = config->Get("Graphics", "ScreenWidth", current.w);
+    int h = config->Get("Graphics", "ScreenHeight", current.h);
+
+    if (config->Get("Graphics", "Fullscreen", false)) {
+        f |= SDL_WINDOW_FULLSCREEN;
+    }
+
     _window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED, current.w, current.h, flags);
+            SDL_WINDOWPOS_CENTERED, w, h, f);
     if (_window == nullptr) {
         throw std::runtime_error("Cannot create window!");
     }

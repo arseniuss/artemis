@@ -16,20 +16,48 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Gui/Common.hpp>
+
 #include "Client/SettingState.hpp"
 
 using namespace Client;
 
+void SettingState::ApplyAndSave() {
+    auto* window = _app.GetGraphics().GetWindow();
+    auto& current = _displayModes[_currentDisplayMode];
+
+    _app.GetConfig()->Set("Graphics", "Fullscreen", _fullscreen);
+    _app.GetConfig()->Set("Graphics", "ScreenWidth", current.w);
+    _app.GetConfig()->Set("Graphics", "ScreenHeight", current.h);
+    _app.GetConfig()->Set("Graphics", "ScreenFreqency", current.refresh_rate);
+
+    if (_fullscreen) {
+        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+    } else {
+        SDL_SetWindowFullscreen(window, 0);
+    }
+
+    SDL_SetWindowSize(window, current.w, current.h);
+
+    _app.GetConfig()->Save();
+    RebuildUI();
+}
+
 SettingState::SettingState(Application* app) : State(app, "Setting state") {
     SDL_DisplayMode current;
+    SDL_Window* window = app->GetContext().GetWindow();
 
-    SDL_GetCurrentDisplayMode(0, &current);
+    int idx = SDL_GetWindowDisplayIndex(window);
+
+    _fullscreen = app->GetConfig()->Get("Graphics", "Fullscreen", false);
+
+    SDL_GetCurrentDisplayMode(idx, &current);
 
     for (int i = 0; i < SDL_GetNumDisplayModes(0); i++) {
         SDL_DisplayMode mode;
 
-        if (SDL_GetDisplayMode(0, i, &mode) == 0) {
-            Common::Debug() << "Display mode #" << (i + 1) << " " <<
+        if (SDL_GetDisplayMode(idx, i, &mode) == 0) {
+            Common::Debug() << "Display #" << idx << " mode #" << (i + 1) << " " <<
                     mode.w << "x" << mode.h << "@" << mode.refresh_rate <<
                     std::endl;
 
@@ -45,11 +73,13 @@ SettingState::SettingState(Application* app) : State(app, "Setting state") {
 }
 
 void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
+    auto size = _app.GetContext().GetSize();
+    
     auto panel = builder.Create<Gui::Panel>()
             ->SetLayout(LAYOUT_CENTER)
             ->SetBox(BOX_COLUMN)
             ->SetMargins(0, 0, 0, 0)
-            ->SetSize(700, 500);
+            ->SetSize(0.8 * size.x, 0.7 * size.y);
 
     auto menuRow = builder.Create<Gui::Panel>()
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
@@ -65,15 +95,18 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
 
     auto buttonPanel = builder.Create<Gui::Panel>()
             ->SetSize(200, -1)
-            ->SetLayout(LAYOUT_RIGHT)
+            ->SetLayout(LAYOUT_HFILL | LAYOUT_RIGHT)
             ->SetBox(BOX_ROW);
 
     auto applyBtn = builder.Create<Gui::Button>()
-            ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
-            ->SetLabel("Apply");
+            ->SetLayout(LAYOUT_RIGHT)
+            ->SetSize(200, -1)
+            ->SetLabel("Apply & Save")
+            ->OnClick(std::bind(&SettingState::ApplyAndSave, this));
 
     auto exitBtn = builder.Create<Gui::Button>()
-            ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
+            ->SetLayout(LAYOUT_RIGHT)
+            ->SetSize(200, -1)
             ->SetLabel("Exit")
             ->OnClick([this]() {
                 //TODO: confirm 
@@ -85,46 +118,46 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
 
     panel->Insert(buttonPanel);
 
-    auto graphButton = builder.Create<Gui::Radio>()
+    auto graphButton = builder.Create<Gui::RadioButton>()
             ->Connect(&_selectedMenu)
             ->SetLabel("Graphics")
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
             ->SetMargins(1, 1, 1, 1);
 
-    graphButton->OnSelected([this](Gui::Radio * r) {
+    graphButton->OnSelected([this](Gui::RadioButton * r) {
         _selectedMenu = r->GetId();
         this->RebuildUI();
     });
 
-    auto audioButton = builder.Create<Gui::Radio>()
+    auto audioButton = builder.Create<Gui::RadioButton>()
             ->Connect(&_selectedMenu)
             ->SetLabel("Audio")
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
             ->SetMargins(1, 1, 1, 1);
 
-    audioButton->OnSelected([this](Gui::Radio * r) {
+    audioButton->OnSelected([this](Gui::RadioButton * r) {
         _selectedMenu = r->GetId();
         this->RebuildUI();
     });
 
-    auto mouseButton = builder.Create<Gui::Radio>()
+    auto mouseButton = builder.Create<Gui::RadioButton>()
             ->Connect(&_selectedMenu)
             ->SetLabel("Mouse")
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
             ->SetMargins(1, 1, 1, 1);
 
-    mouseButton->OnSelected([this](Gui::Radio * r) {
+    mouseButton->OnSelected([this](Gui::RadioButton * r) {
         _selectedMenu = r->GetId();
         this->RebuildUI();
     });
 
-    auto keyboardButton = builder.Create<Gui::Radio>()
+    auto keyboardButton = builder.Create<Gui::RadioButton>()
             ->Connect(&_selectedMenu)
             ->SetLabel("Keyboard")
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
             ->SetMargins(1, 1, 1, 1);
 
-    keyboardButton->OnSelected([this](Gui::Radio * r) {
+    keyboardButton->OnSelected([this](Gui::RadioButton * r) {
         _selectedMenu = r->GetId();
         this->RebuildUI();
     });
@@ -204,7 +237,8 @@ void SettingState::BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel*
     auto fscrLbl = builder.Create<Gui::Label>()
             ->SetSize(250, -1)
             ->SetLabel("Fullscreen");
-    auto fscrChb = builder.Create<Gui::CheckBox>();
+    auto fscrChb = builder.Create<Gui::CheckBox>()
+            ->Connect(&_fullscreen);
 
     row2->Insert(fscrLbl);
     row2->Insert(fscrChb);

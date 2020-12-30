@@ -46,6 +46,10 @@ namespace Client {
         Network::Context& GetNetwork() {
             return *_net;
         }
+
+        std::shared_ptr<Common::Config> GetConfig() {
+            return _config;
+        }
     };
 }
 
