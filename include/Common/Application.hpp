@@ -30,6 +30,13 @@
 namespace Common {
 
     class Application {
+    protected:
+        typedef std::vector<EventCallbackBase<bool>*> LoopVectorT;
+
+        std::vector<std::unique_ptr<State>> _states;
+        std::unique_ptr<State> _replaceState;
+        bool _isPoping = false;
+        LoopVectorT _loops;
     public:
         Application();
         ~Application();
@@ -51,18 +58,17 @@ namespace Common {
         }
 
         void PopState();
+        
+        template<typename T, typename... Args>
+        void ReplaceState(Args&&... args) {
+            _replaceState = std::make_unique<T>(std::forward<Args>(args)...);
+            _isPoping = true;
+        }
 
         virtual void Run() = 0;
 
         void AddLoop(EventCallbackBase<bool>* loop);
         void RemoveLoop(EventCallbackBase<bool>* loop);
-
-    protected:
-        typedef std::vector<EventCallbackBase<bool>*> LoopVectorT;
-
-        std::vector<std::unique_ptr<State>> _states;
-        bool _isPoping = false;
-        LoopVectorT _loops;
     };
 }
 

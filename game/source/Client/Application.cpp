@@ -84,7 +84,10 @@ void Application::Run() {
         _graphics->Render();
 
         if (_isPoping) {
-
+            Common::Debug() << "Poping state " << current->GetName() <<
+                    std::endl;
+            if (_replaceState)
+                current->OnDisable();
             current->OnPop();
             _loops.erase(
                     std::remove_if(
@@ -95,12 +98,31 @@ void Application::Run() {
                     }
             ),
             _loops.end());
-
+            
+            current->OnDisable();
             _states.pop_back();
-            if (_states.size()) {
-                auto&c = _states.back();
+            
+            // NOTE. current is unuseable after here
+            
+            if (_replaceState) {                
+                Common::Debug() << "Replacing state " <<
+                        _replaceState->GetName() << std::endl;
 
-                c->OnEnable();
+                _states.push_back({});
+                _states.back().swap(_replaceState);
+                
+                auto replace = _states.back().get();
+                
+                replace->OnPush();
+                
+                _replaceState = nullptr;
+
+            } else {
+                if (_states.size()) {
+                    auto&c = _states.back();
+
+                    c->OnEnable();
+                }
             }
             _isPoping = false;
         }

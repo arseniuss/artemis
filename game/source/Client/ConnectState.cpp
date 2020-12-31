@@ -16,11 +16,13 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Client/ConnectState.hpp>
 #include <Common/Debug.hpp>
 #include <Gui/Common.hpp>
 #include <Network/Client.hpp>
 #include <Network/Context.hpp>
+
+#include "Client/ConnectState.hpp"
+#include "Client/GameState.hpp"
 
 using namespace Client;
 
@@ -81,6 +83,7 @@ bool ConnectState::ConnectionLoop() {
             return true;
         case Network::Connected:
             _statusLabel->SetLabel("Connected!");
+            _app.ReplaceState<GameState>(&_app);
             return true;
         case Network::Connecting:
             _statusLabel->SetLabel("Connecting...");

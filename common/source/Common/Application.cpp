@@ -32,9 +32,6 @@ Application::~Application() {
 }
 
 void Application::PopState() {
-    auto& s = _states.back();
-    Debug() << "Poping state " << s->GetName() << std::endl;
-
     _isPoping = true;
 }
 
