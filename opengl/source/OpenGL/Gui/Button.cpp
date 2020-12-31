@@ -49,7 +49,7 @@ void Button::Draw(NVG::NVGcontext* context) const {
     UIrect rect = uiGetRect(_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
-    bndToolButton(context, rect.x, rect.y, rect.w, rect.h, -1, state,
+    bndToolButton(context, rect.x, rect.y, rect.w, rect.h, _corners, state,
             _iconId,
             _label.c_str());
     OpenGLWidget::Draw(context);

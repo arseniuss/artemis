@@ -39,11 +39,23 @@ namespace Gui {
 #define BOX_FLEX        0x002
 #define BOX_NO_WRAP     0x000
 #define BOX_WRAP        0x004
-#define BOX_START       
+#define BOX_START       0x000
+
+#define CORNER_NONE         0
+#define CORNER_TOP_LEFT     1
+#define CORNER_TOP_RIGHT    2
+#define CORNER_DOWN_RIGHT   4
+#define CORNER_DOWN_LEFT    8
+#define CORNER_ALL          0xf
+#define CORNER_TOP          3
+#define CORNER_DOWN         0xc
+#define CORNER_LEFT         9
+#define CORNER_RIGHT        6
 
     struct WidgetBase {
     protected:
         virtual void setBox(unsigned int box) = 0;
+        virtual void setCorners(int corners) = 0;
         virtual void setLayout(unsigned int layout) = 0;
         virtual void setMargins(int a, int b, int c, int d) = 0;
         virtual void setSize(int w, int h) = 0;
@@ -56,6 +68,12 @@ namespace Gui {
 
         T* SetBox(unsigned int box) {
             setBox(box);
+
+            return (T*)this;
+        }
+
+        T* SetCorners(int corner) {
+            setCorners(corner);
 
             return (T*)this;
         }
@@ -76,9 +94,8 @@ namespace Gui {
             return (T*)this;
         }
     };
-    
+
     struct Widget : public TWidget<Widget> {
-        
     };
 }
 

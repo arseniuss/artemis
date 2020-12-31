@@ -25,10 +25,15 @@ using namespace Blendish;
 using namespace OpenGL;
 
 OpenGLWidget::OpenGLWidget(int i) : _id(i) {
+    _corners = CORNER_NONE;
 }
 
 void OpenGLWidget::setBox(unsigned int box) {
     uiSetBox(_id, box);
+}
+
+void OpenGLWidget::setCorners(int corners) {
+    _corners = corners;
 }
 
 void OpenGLWidget::setLayout(unsigned int layout) {

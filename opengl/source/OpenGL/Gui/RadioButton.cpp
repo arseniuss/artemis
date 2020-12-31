@@ -75,7 +75,7 @@ void RadioButton::Draw(NVG::NVGcontext* context) const {
 
     if (_selectedId != nullptr && *_selectedId == _id)
         state = BND_ACTIVE;
-    bndRadioButton(context, rect.x, rect.y, rect.w, rect.h, BND_CORNER_ALL,
+    bndRadioButton(context, rect.x, rect.y, rect.w, rect.h, _corners,
             state, _iconId, _label.c_str());
 
     OpenGLWidget::Draw(context);

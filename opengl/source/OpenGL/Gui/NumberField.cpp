@@ -82,7 +82,7 @@ void NumberField::Draw(NVG::NVGcontext* context) const {
     UIrect rect = uiGetRect(_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(_id);
 
-    bndNumberField(context, rect.x, rect.y, rect.w, rect.h, BND_CORNER_NONE,
+    bndNumberField(context, rect.x, rect.y, rect.w, rect.h, _corners,
             state, _label.c_str(), _value.c_str());
 
     OpenGLWidget::Draw(context);

@@ -49,7 +49,7 @@ void TextInput::Draw(NVG::NVGcontext* context) const {
     UIrect rect = uiGetRect(this->_id);
     BNDwidgetState state = (BNDwidgetState) uiGetState(this->_id);
 
-    bndTextField(context, rect.x, rect.y, rect.w, rect.h, -1, state,
+    bndTextField(context, rect.x, rect.y, rect.w, rect.h, _corners, state,
             -1, _text.c_str(), _cursorStart, _cursorEnd);
 
     OpenGLWidget::Draw(context);
