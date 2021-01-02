@@ -74,7 +74,7 @@ SettingState::SettingState(Application* app) : State(app, "Setting state") {
 
 void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
     auto size = _app.GetContext().GetSize();
-    
+
     auto panel = builder.Create<Gui::Panel>()
             ->SetLayout(LAYOUT_CENTER)
             ->SetBox(BOX_COLUMN)
@@ -89,6 +89,7 @@ void SettingState::BuildUI(Gui::LayoutBuilder& builder) {
 
     auto content = builder.Create<Gui::Panel>()
             ->SetLayout(LAYOUT_FILL)
+            ->SetMargins(10, 10, 10, 10)
             ->SetBox(BOX_LAYOUT);
 
     panel->Insert(content);
@@ -191,21 +192,29 @@ bool SettingState::HandleEvent(const SDL_Event& event) {
 
 void SettingState::BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel* content) {
     auto container = builder.Create<Gui::Panel>()
-            ->SetLayout(LAYOUT_TOP | LAYOUT_LEFT)
-            ->SetBox(BOX_COLUMN);
+            ->SetLayout(LAYOUT_FILL)
+            ->SetBox(BOX_COLUMN)
+            ->SetIsVisible(true)
+            ;
 
     content->Insert(container);
 
     auto row1 = builder.Create<Gui::Panel>()
-            ->SetLayout(LAYOUT_LEFT | LAYOUT_TOP)
-            ->SetBox(BOX_ROW);
-
+            ->SetLayout(LAYOUT_LEFT | LAYOUT_HFILL)
+            ->SetBox(BOX_ROW)
+            ->SetIsVisible(false)
+            ;
     auto resLbl = builder.Create<Gui::Label>()
             ->SetSize(250, -1)
-            ->SetLabel("Resolution:");
+            ->SetLabel("Resolution:")
+            ;
     auto resNi = builder.Create<Gui::NumberField>()
             ->SetSize(250, -1)
-            ->SetLayout(LAYOUT_HFILL);
+            ;
+    auto row1Wrap = builder.Create<Gui::Panel>()
+            ->SetLayout(LAYOUT_HFILL)
+            ->SetIsVisible(false)
+            ;
 
     if (_currentDisplayMode < _displayModes.size()) {
         auto& mode = _displayModes[_currentDisplayMode];
@@ -228,21 +237,35 @@ void SettingState::BuildGraphicsContent(Gui::LayoutBuilder& builder, Gui::Panel*
 
     row1->Insert(resLbl);
     row1->Insert(resNi);
+    row1->Insert(row1Wrap);
 
     container->Insert(row1);
 
     auto row2 = builder.Create<Gui::Panel>()
-            ->SetLayout(LAYOUT_LEFT | LAYOUT_TOP)
-            ->SetBox(BOX_ROW);
+            ->SetLayout(LAYOUT_LEFT | LAYOUT_HFILL)
+            ->SetBox(BOX_ROW)
+            ->SetIsVisible(false)
+            ;
     auto fscrLbl = builder.Create<Gui::Label>()
             ->SetSize(250, -1)
             ->SetLabel("Fullscreen");
     auto fscrChb = builder.Create<Gui::CheckBox>()
             ->Connect(&_fullscreen);
-
+    auto row2Wrap = builder.Create<Gui::Panel>()
+            ->SetLayout(LAYOUT_HFILL)
+            ->SetIsVisible(false)
+            ;
     row2->Insert(fscrLbl);
     row2->Insert(fscrChb);
+    row2->Insert(row2Wrap);
 
     container->Insert(row2);
+
+    auto containerWrap = builder.Create<Gui::Panel>()
+            ->SetLayout(LAYOUT_FILL)
+            ->SetIsVisible(false)
+            ;
+
+    container->Insert(containerWrap);
 }
 

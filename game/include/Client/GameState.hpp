@@ -30,6 +30,8 @@ namespace Client {
         GameState(Application *app);
         virtual ~GameState() = default;
         
+        void BuildUI(Gui::LayoutBuilder& builder) override;
+ 
         bool HandleEvent(const SDL_Event& event) override;
 
     };
