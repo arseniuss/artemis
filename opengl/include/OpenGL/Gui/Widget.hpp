@@ -32,12 +32,16 @@ namespace OpenGL {
     struct OpenGLWidget : virtual Gui::Widget {
     protected:
         int _corners;
+        bool _isVisible;
+        bool _debug;
         
         void setBox(unsigned int box) override;
         void setCorners(int corners) override;
         void setLayout(unsigned int layout) override;
         void setMargins(int a, int b, int c, int d) override;
         void setSize(int w, int h) override;
+        void setIsVisible(bool isVisible) override;
+        void setDebug(bool debug) override;
     public:
         int _id;
 

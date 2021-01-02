@@ -26,6 +26,12 @@ using namespace OpenGL;
 
 OpenGLWidget::OpenGLWidget(int i) : _id(i) {
     _corners = CORNER_NONE;
+    _isVisible = true;
+    _debug = false;
+    
+    uiSetSize(_id, BND_TOOL_WIDTH, BND_WIDGET_HEIGHT);
+    uiSetLayout(_id, 0);
+    uiSetBox(_id, 0);
 }
 
 void OpenGLWidget::setBox(unsigned int box) {
@@ -40,8 +46,8 @@ void OpenGLWidget::setLayout(unsigned int layout) {
     uiSetLayout(_id, layout);
 }
 
-void OpenGLWidget::setMargins(int a, int b, int c, int d) {
-    uiSetMargins(_id, a, b, c, d);
+void OpenGLWidget::setMargins(int l, int t, int r, int b) {
+    uiSetMargins(_id, l, t, r, b);
 }
 
 void OpenGLWidget::setSize(int w, int h) {
@@ -51,15 +57,23 @@ void OpenGLWidget::setSize(int w, int h) {
     uiSetSize(_id, w, h);
 }
 
+void OpenGLWidget::setIsVisible(bool isVisible) {
+    _isVisible = isVisible;
+}
+
+void OpenGLWidget::setDebug(bool debug) {
+    _debug = debug;
+}
+
 int OpenGLWidget::GetId() const {
     return _id;
 }
 
 void OpenGLWidget::Draw(NVG::NVGcontext* context) const {
-    if (Context::Debug) {
+    if (Context::Debug || _debug) {
         UIrect rect = uiGetRect(_id);
 
-        int v = 5;
+        int v = 2;
 
         rect.x += v;
         rect.y += v;

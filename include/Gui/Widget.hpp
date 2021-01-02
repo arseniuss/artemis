@@ -57,14 +57,22 @@ namespace Gui {
         virtual void setBox(unsigned int box) = 0;
         virtual void setCorners(int corners) = 0;
         virtual void setLayout(unsigned int layout) = 0;
-        virtual void setMargins(int a, int b, int c, int d) = 0;
+        virtual void setMargins(int l, int t, int r, int b) = 0;
         virtual void setSize(int w, int h) = 0;
+        virtual void setIsVisible(bool isVisible) = 0;
+        virtual void setDebug(bool debug) = 0;
     public:
         virtual int GetId() const = 0;
     };
 
     template<typename T>
     struct TWidget : virtual WidgetBase {
+
+        T* SetDebug(bool debug) {
+            setDebug(debug);
+
+            return (T*)this;
+        }
 
         T* SetBox(unsigned int box) {
             setBox(box);
@@ -91,6 +99,11 @@ namespace Gui {
 
         T* SetSize(int w, int h) {
             setSize(w, h);
+            return (T*)this;
+        }
+
+        T* SetIsVisible(bool isVisible) {
+            setIsVisible(isVisible);
             return (T*)this;
         }
     };

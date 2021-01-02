@@ -29,13 +29,18 @@ Button::Button(int i) : OpenGLWidget(i) {
     _iconId = -1;
     _onClick = nullptr;
 
-    uiSetSize(i, 0, BND_WIDGET_HEIGHT);
     uiSetEvents(i, UI_BUTTON0_HOT_UP);
 }
 
 Gui::Button* Button::SetLabel(const std::string& label) {
     _label = label;
 
+    return this;
+}
+
+Button* Button::SetIcon(int iconId) {
+    _iconId = iconId;
+    
     return this;
 }
 

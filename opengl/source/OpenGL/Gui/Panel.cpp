@@ -39,10 +39,12 @@ Gui::Panel* Panel::Insert(Gui::WidgetBase* wdg) {
 }
 
 void Panel::Draw(NVG::NVGcontext* context) const {
-    UIrect rect = uiGetRect(_id);
+    if (_isVisible) {
+        UIrect rect = uiGetRect(_id);
 
-    bndBackground(context, rect.x, rect.y, rect.w, rect.h);
-    bndBevelInset(context, rect.x, rect.y, rect.w, rect.h, 4, 4);
+        bndBackground(context, rect.x, rect.y, rect.w, rect.h);
+        bndBevelInset(context, rect.x, rect.y, rect.w, rect.h, 4, 4);
+    }
 
     OpenGLWidget::Draw(context);
 }

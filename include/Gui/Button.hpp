@@ -27,6 +27,7 @@ namespace Gui {
 
     struct Button : public TWidget<Button> {
         virtual Button* SetLabel(const std::string& label) = 0;
+        virtual Button* SetIcon(int iconId) = 0;
         virtual Button* OnClick(std::function<void() > onClickFunction) = 0;
     };
 }

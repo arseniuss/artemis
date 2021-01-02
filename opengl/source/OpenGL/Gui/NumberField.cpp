@@ -31,7 +31,6 @@ NumberField::NumberField(int i) : OpenGLWidget(i) {
     _onDescClick = nullptr;
     _onIncClick = nullptr;
 
-    uiSetSize(i, BND_TOOL_WIDTH, BND_WIDGET_HEIGHT);
     uiSetEvents(i, UI_BUTTON0_HOT_UP | UI_BUTTON0_DOWN);
 }
 
