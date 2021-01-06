@@ -24,6 +24,8 @@
 #include <Gui/Panel.hpp>
 #include <Server/Engine.hpp>
 
+#include "Client/GameState.hpp"
+
 using namespace Client;
 
 MenuState::MenuState(Application* app) : State(app, "Menu state") {
@@ -92,7 +94,7 @@ void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
 
     testButton->SetLabel("TEST");
     testButton->OnClick([this]() {
-        _app.PushState<TestState>(&_app);
+        _app.PushState<GameState>(&_app);
     });
     testButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
     testButton->SetMargins(0, 1, 0, 0);

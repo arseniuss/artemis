@@ -37,6 +37,7 @@ void GameState::BuildUI(Gui::LayoutBuilder& builder) {
             ->SetLayout(LAYOUT_FILL)
             ->SetBox(BOX_LAYOUT)
             ->SetIsVisible(false)
+
             ;
     builder.Insert(panel);
 
@@ -44,15 +45,30 @@ void GameState::BuildUI(Gui::LayoutBuilder& builder) {
             ->SetMargins(5, 5, 5, 0)
             ->SetBox(BOX_ROW)
             ->SetIsVisible(false)
+            ->SetDebug(true)
             ->SetLayout(LAYOUT_HFILL | LAYOUT_TOP)
             ;
     panel->Insert(topPanel);
 
-    auto leftWrapPnl = builder.Create<Gui::Panel>()
+    auto leftPanel = builder.Create<Gui::Panel>()
+            ->SetSize(100, -1);
+    topPanel->Insert(leftPanel);
+
+    auto rightWrapPnl = builder.Create<Gui::Panel>()
             ->SetIsVisible(false)
             ->SetLayout(LAYOUT_HFILL)
             ;
-    topPanel->Insert(leftWrapPnl);
+    topPanel->Insert(rightWrapPnl);
+
+    auto centerPanel = builder.Create<Gui::Panel>()
+            ->SetSize(100, -1);
+    topPanel->Insert(centerPanel);
+    
+    auto leftWrapPanel = builder.Create<Gui::Panel>()
+            ->SetIsVisible(false)
+            ->SetLayout(LAYOUT_HFILL)
+            ;
+    topPanel->Insert(leftWrapPanel);
 
     auto helpBtn = builder.Create<Gui::Button>()
             ->SetIcon((1) | (29 << 8))
