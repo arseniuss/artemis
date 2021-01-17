@@ -39,8 +39,8 @@ namespace Client {
 
         void Run() override;
 
-        Graphics::Context& GetGraphics() {
-            return *_graphics;
+        std::shared_ptr<Graphics::Context> GetGraphics() {
+            return _graphics;
         }
 
         Network::Context& GetNetwork() {

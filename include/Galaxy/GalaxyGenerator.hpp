@@ -16,33 +16,19 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_STATE_HPP
-#define CLIENT_STATE_HPP
+#ifndef GALAXY_GALAXYGENERATOR_HPP
+#define GALAXY_GALAXYGENERATOR_HPP
 
-#include <Common/State.hpp>
-#include <Client/Application.hpp>
-#include <Graphics/Renderer.hpp>
+#include <vector>
 
-namespace Client {
+#include <Galaxy/Star.hpp>
 
-    class State : public Common::State {
-    protected:
-        Application& _app;
-        int root;
+namespace Galaxy {
+
+    class GalaxyGenerator {
     public:
-        State(Application* app, const std::string& name);
-
-        void OnEnable() override;
-        
-        virtual void BuildUI(Gui::LayoutBuilder& builder);
-        
-        void RebuildUI();
-        
-        virtual bool HandleEvent(const SDL_Event& event);
-        
-        virtual void Render(Graphics::Renderer& renderer);
+        virtual std::vector<Star>& Generate() = 0;
     };
 }
 
-#endif /* !CLIENT_STATE_HPP */
-
+#endif /* !GALAXY_GALAXYGENERATOR_HPP */

@@ -19,21 +19,16 @@
 #ifndef GRAPHICS_BUFFER_HPP
 #define GRAPHICS_BUFFER_HPP
 
-#include <cstddef>
+#include <glm/glm.hpp>
+
+#include <vector>
 
 namespace Graphics {
 
-    enum BufferType {
-        Array = 0
-    };
-
     class Buffer {
     public:
-
-        Buffer(enum BufferType type, const float *data, size_t size) {
-        }
-
-        virtual void Use() const = 0;
+        Buffer(std::vector<float>& data, int itemSize);
+        
     };
 }
 

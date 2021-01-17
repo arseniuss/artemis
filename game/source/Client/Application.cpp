@@ -45,6 +45,7 @@ void Application::Run() {
     std::chrono::high_resolution_clock timer;
     bool running = true;
     auto start = timer.now();
+    auto renderer = _graphics->GetRenderer();
 
     while (running) {
         if (_states.empty())
@@ -81,7 +82,9 @@ void Application::Run() {
         current->Update(deltaTime);
         _graphics->Update(deltaTime);
 
-        _graphics->Render();
+        renderer->Begin();
+        current->Render(*renderer);
+        renderer->Finish();
 
         if (_isPoping) {
             Common::Debug() << "Poping state " << current->GetName() <<

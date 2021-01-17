@@ -36,12 +36,12 @@ namespace World {
     template<typename T>
     using ChunkMap = std::unordered_map<glm::ivec3, T, ChunkMapHash>;
 
-    glm::ivec3 GetChunkPosition(const glm::ivec3& blockPosition);
-    glm::ivec3 GetBlockPosition(const glm::ivec3& blockPosition);
+    inline glm::ivec3 GetChunkPosition(const glm::ivec3& blockPosition) { return glm::ivec3(); } // TODO
+    inline glm::ivec3 GetBlockPosition(const glm::ivec3& blockPosition) { return glm::ivec3(); } // TODO
 
-    int GetBlockIndex(const glm::ivec3& blockPosition);
-    glm::ivec3 GetGlobalPosition(const glm::ivec3& blockPosition,
-            const glm::ivec3& chunkPosition);
+    inline int GetBlockIndex(const glm::ivec3& blockPosition) { return 0; }// TODO
+    inline glm::ivec3 GetGlobalPosition(const glm::ivec3& blockPosition,
+            const glm::ivec3& chunkPosition) { return glm::ivec3(); } // TODO
 }
 
 #endif /* !WORLD_COORDINATES_HPP */

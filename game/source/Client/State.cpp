@@ -24,7 +24,7 @@ using namespace Client;
 
 State::State(Application* app, const std::string& name) :
 Common::State(app, name), _app(*app) {
-
+    
 }
 
 void State::OnEnable() {
@@ -47,4 +47,7 @@ bool State::HandleEvent(const SDL_Event& event) {
     return false;
 }
 
+void State::Render(Graphics::Renderer& renderer) {
+    
+}
 

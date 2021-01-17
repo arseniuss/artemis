@@ -9,6 +9,7 @@ PLUGINDIR = $(BUILDDIR)/plugins
 SOURCES = \
     source/Client/Application.cpp \
     source/Client/ConnectState.cpp \
+    source/Client/GalaxyState.cpp \
     source/Client/GameState.cpp \
     source/Client/MenuState.cpp \
     source/Client/SettingState.cpp \
@@ -28,7 +29,7 @@ CFLAGS = -Iinclude -I../include -I../gui/include
 CXXFLAGS = -Iinclude -I../include -I../gui/include -std=c++2a
 LDFLAGS = -rdynamic -lstdc++ -lstdc++fs -ldl -pthread
 
-LIBS = sdl2 SDL2_image glm yaml-cpp
+LIBS = sdl2 SDL2_image glm yaml-cpp libxxhash
 STATIC_LIBS = \
     ../common/libartemis_common.a
     
@@ -62,5 +63,5 @@ copy-data:
 
 $(TARGET): $(OBJECTS) $(STATIC_LIBS) 
 	@ mkdir -p $(dir $@)
-	$(CXX) -o $@ $^ $(LDFLAGS) 
+	$(CXX) -o $@ -Wl,--whole-archive $(STATIC_LIBS) -Wl,--no-whole-archive $(OBJECTS)  $(LDFLAGS) 
 	@ chmod +x $@

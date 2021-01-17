@@ -22,27 +22,23 @@
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Context.hpp>
 #include <NanoVG/NanoVG.hpp>
+#include <OpenGL/Renderer.hpp>
 
 namespace OpenGL {
 
     class Context : public Graphics::Context {
     protected:
+        std::shared_ptr<OpenGL::Renderer> _renderer;
         SDL_GLContext _context;
 
         NVG::NVGcontext* _nvgContext;
-
-        Graphics::Shader* create(Type<Graphics::Shader> type,
-                const std::string& name) override;
-        Graphics::Buffer* create(Type<Graphics::Buffer> type,
-                Graphics::BufferType bt, const float* data,
-                size_t size) override;
-
+        
+        void drawLayout(int item, int corners);
     public:
         static bool Debug;
         static std::shared_ptr<Context> Instance;
 
-        Context(const std::string& title,
-                std::shared_ptr<const Common::Config> config);
+        Context(const std::string& title, std::shared_ptr<const Common::Config> config);
         ~Context();
 
         void HandleInput() override;
@@ -50,11 +46,11 @@ namespace OpenGL {
 
         void Update(float deltaTime) override;
 
-        void Render() override;
-
         void BuildLayout(std::function<void(Gui::LayoutBuilder&)>) override;
 
-        void DrawLayout(int item, int corners);
+        void DrawLayout();
+
+        std::shared_ptr<Graphics::Renderer> GetRenderer() override;
     };
 }
 

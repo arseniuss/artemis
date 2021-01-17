@@ -25,24 +25,21 @@
 #include <World/Entity.hpp>
 #include <Graphics/ViewFrustum.hpp>
 
+#include <Graphics/Object.hpp>
+
 namespace Graphics {
 
-    class Camera {
-    private:
-        glm::mat4 _projectionMatrix{1.0f};
-        glm::mat4 _projectionViewMatrix{1.0f};
-        glm::vec3 _position{1.0f};
-        glm::vec3 _rotation{1.0f};
-
-        Graphics::ViewFrustum _frustum;
+    class Camera : public Object {
+    protected:
+        glm::mat4 _matrixWorldInverse;
+        glm::mat4 _projMatrix;
+        glm::mat4 _projMatrixInverse;
     public:
-        Camera(float w, float h);
-
-        void Update(World::Entity& entity);
-
-        const Graphics::ViewFrustum& GetFrustum() const;
-        const glm::mat4& GetProjectionView() const;
-        const glm::vec3& GetPosition() const;
+        Camera();
+        
+        const glm::mat4& GetProjectionMatrix() const;
+        
+        const glm::mat4& GetMatrixWorldInverse() const;
     };
 }
 

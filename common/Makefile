@@ -7,10 +7,20 @@ SOURCES = \
     source/Common/Config.cpp \
     source/Common/Debug.cpp \
     source/Common/PluginManager.cpp \
+    source/Common/Random.cpp \
     source/Common/State.cpp \
+    source/Graphics/Buffer.cpp \
     source/Graphics/Camera.cpp \
+    source/Graphics/Geometry.cpp \
+    source/Graphics/Materials/PointsMaterials.cpp \
+    source/Graphics/Object.cpp \
+    source/Graphics/Objects/Points.cpp \
+    source/Graphics/Scene.cpp \
     source/Graphics/Utils.cpp \
     source/Graphics/ViewFrustum.cpp \
+    source/Maths/Frustum.cpp \
+    source/Maths/Plane.cpp \
+    source/Maths/Sphere.cpp \
     source/Network/Context.cpp \
     source/Network/Event.cpp \
     source/Network/Payload.cpp \
@@ -31,4 +41,3 @@ include ../scripts/common.mk
 $(TARGET): $(OBJECTS)
 	@ mkdir -p $(dir $@)
 	ar rvs $@ $^
-	objdump -D $@ > $(BUILDDIR)/$@.dump

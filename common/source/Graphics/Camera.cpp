@@ -23,27 +23,15 @@
 
 using namespace Graphics;
 
-Camera::Camera(float w, float h) {
-    _projectionMatrix = glm::perspective(3.14f / 2.0f, w / h, 0.01f, 2000.0f);
+Camera::Camera() {
+    _projMatrix = glm::mat4{1.0f};
+    _matrixWorldInverse = glm::mat4{1.0f};
 }
 
-void Camera::Update(World::Entity& entity) {
-    _frustum.Update(_projectionViewMatrix);
-    _position = entity.position;
-    _rotation = entity.rotation;
-
-    _projectionViewMatrix =
-            CreateProjectionViewMatrix(_position, _rotation, _projectionMatrix);
+const glm::mat4& Camera::GetMatrixWorldInverse() const {
+    return _matrixWorldInverse;
 }
 
-const ViewFrustum& Camera::GetFrustum() const {
-    return _frustum;
-}
-
-const glm::vec3& Camera::GetPosition() const {
-    return _position;
-}
-
-const glm::mat4& Camera::GetProjectionView() const {
-    return _projectionViewMatrix;
+const glm::mat4& Camera::GetProjectionMatrix() const {
+    return _projMatrix;
 }

@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_STATE_HPP
-#define CLIENT_STATE_HPP
+#ifndef GRAPHICS_SCENE_HPP
+#define GRAPHICS_SCENE_HPP
 
-#include <Common/State.hpp>
-#include <Client/Application.hpp>
-#include <Graphics/Renderer.hpp>
+#include <Graphics/Object.hpp>
 
-namespace Client {
+namespace Graphics {
 
-    class State : public Common::State {
-    protected:
-        Application& _app;
-        int root;
+    class Scene : public Object {
     public:
-        State(Application* app, const std::string& name);
-
-        void OnEnable() override;
-        
-        virtual void BuildUI(Gui::LayoutBuilder& builder);
-        
-        void RebuildUI();
-        
-        virtual bool HandleEvent(const SDL_Event& event);
-        
-        virtual void Render(Graphics::Renderer& renderer);
+        Scene();
     };
 }
 
-#endif /* !CLIENT_STATE_HPP */
-
+#endif /* !GRAPHICS_SCENE_HPP */

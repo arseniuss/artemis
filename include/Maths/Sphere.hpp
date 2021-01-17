@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,21 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_STATE_HPP
-#define CLIENT_STATE_HPP
+#ifndef MATHS_SPHERE_HPP
+#define MATHS_SPHERE_HPP
 
-#include <Common/State.hpp>
-#include <Client/Application.hpp>
-#include <Graphics/Renderer.hpp>
+#include <glm/glm.hpp>
 
-namespace Client {
-
-    class State : public Common::State {
+namespace Maths {
+    class Sphere {
     protected:
-        Application& _app;
-        int root;
+        glm::vec3 _center;
+        float _radius;
     public:
-        State(Application* app, const std::string& name);
-
-        void OnEnable() override;
+        const glm::vec3& GetCenter() const;
         
-        virtual void BuildUI(Gui::LayoutBuilder& builder);
-        
-        void RebuildUI();
-        
-        virtual bool HandleEvent(const SDL_Event& event);
-        
-        virtual void Render(Graphics::Renderer& renderer);
+        float GetRadius() const;
     };
 }
 
-#endif /* !CLIENT_STATE_HPP */
-
+#endif /* !MATHS_SPHERE_HPP */

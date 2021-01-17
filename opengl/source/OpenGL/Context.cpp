@@ -24,11 +24,11 @@
 
 #include <Blendish/Blendish.hpp>
 #include <NanoVG/NanoVG.hpp>
-#include <OpenGL/Buffer.hpp>
 #include <OpenGL/Context.hpp>
 #include <OpenGL/Debug.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Widget.hpp>
+#include <OpenGL/Renderer.hpp>
 #include <OpenGL/Shader.hpp>
 #include <glad.h>
 #include <oui.h>
@@ -46,16 +46,6 @@ void ui_handler(int item, UIevent event) {
     if (w) {
         w->HandleEvent(event);
     }
-}
-
-Graphics::Shader* Context::create(Type<Graphics::Shader> type,
-        const std::string& name) {
-    return new Shader(name);
-}
-
-Graphics::Buffer* Context::create(Type<Graphics::Buffer> type,
-        Graphics::BufferType bt, const float* data, size_t size) {
-    return new Buffer(bt, data, size);
 }
 
 bool Context::Debug = false;
@@ -98,6 +88,8 @@ Graphics::Context(title, config, SDL_WINDOW_OPENGL) {
 
     Blendish::bndSetFont(nvgCreateFont(_nvgContext, "system", fontFilename.c_str()));
     Blendish::bndSetIconImage(nvgCreateImage(_nvgContext, iconFilename.c_str(), 0));
+
+    _renderer = std::make_unique<OpenGL::Renderer>(*this);
 }
 
 Context::~Context() {
@@ -142,60 +134,49 @@ void Context::Update(float deltaTime) {
     uiProcess(deltaTime);
 }
 
-void Context::Render() {
-    int w, h;
-
-    SDL_GetWindowSize(_window, &w, &h);
-
-    //glClearColor(0.2, 0.4, 0.1, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
-
-    for (Graphics::DrawFunc func : _drawables) {
-        func(*this);
-        CheckOpenGLErrors();
-    }
-
-    if (uiGetItemCount() > 0) {
-        NVG::nvgBeginFrame(_nvgContext, w, h, (float) w / (float) h);
-
-        DrawLayout(0, Blendish::BND_CORNER_NONE);
-
-        NVG::nvgEndFrame(_nvgContext);
-    }
-
-    SDL_GL_SwapWindow(_window);
-}
-
 void Context::BuildLayout(std::function<void(Gui::LayoutBuilder&) > build) {
     OpenGL::LayoutBuilder builder(Instance);
 
     build(builder);
 }
 
-void Context::DrawLayout(int item, int corners) {
+void Context::DrawLayout() {
+    int w, h;
+
+    SDL_GetWindowSize(_window, &w, &h);
+
+    if (uiGetItemCount() > 0) {
+        NVG::nvgBeginFrame(_nvgContext, w, h, (float) w / (float) h);
+
+        drawLayout(0, Blendish::BND_CORNER_NONE);
+
+        NVG::nvgEndFrame(_nvgContext);
+    }
+}
+
+void Context::drawLayout(int item, int corners) {
     const OpenGLWidget* widget = static_cast<const OpenGLWidget*> (uiGetHandle(item));
 
     if (uiGetState(item) == UI_FROZEN) {
-        nvgGlobalAlpha(this->_nvgContext, BND_DISABLED_ALPHA);
+        nvgGlobalAlpha(_nvgContext, BND_DISABLED_ALPHA);
     }
 
     if (widget) {
-        widget->Draw(this->_nvgContext);
+        widget->Draw(_nvgContext);
     }
 
     int kid = uiFirstChild(item);
     while (kid > 0) {
-        this->DrawLayout(kid, corners);
+        drawLayout(kid, corners);
 
         kid = uiNextSibling(kid);
     }
 
     if (uiGetState(item) == UI_FROZEN) {
-        nvgGlobalAlpha(this->_nvgContext, 1.0);
+        nvgGlobalAlpha(_nvgContext, 1.0);
     }
 }
 
-
+std::shared_ptr<Graphics::Renderer> Context::GetRenderer() {
+    return _renderer;
+}

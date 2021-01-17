@@ -29,9 +29,6 @@ namespace Client {
     class TestState : public State {
         Graphics::Camera* _camera;
         
-        Graphics::Shader* shader;
-        Graphics::Buffer *vertex;
-        Graphics::Buffer *colors;
         
         size_t drawFuncIdx;
     public:

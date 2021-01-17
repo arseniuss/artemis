@@ -109,13 +109,3 @@ glm::ivec2 Context::GetSize() const {
 SDL_Window* Context::GetWindow() {
     return _window;
 }
-
-size_t Context::AddDrawFunction(DrawFunc func) {
-    _drawables.emplace_back(func);
-
-    return _drawables.size();
-}
-
-void Context::RemoveDrawFunction(size_t idx) {
-    _drawables.erase(_drawables.begin() + idx);
-}

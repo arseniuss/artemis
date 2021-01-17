@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,11 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_BUFFER_HPP
-#define OPENGL_BUFFER_HPP
+#include <Graphics/Geometry.hpp>
 
-#include <Graphics/Buffer.hpp>
+using namespace Graphics;
 
-#include <glad.h>
-
-namespace OpenGL {
-
-    class Buffer : public Graphics::Buffer {
-    private:
-        GLuint _id = (GLuint) - 1;
-        GLenum bufferType;
-
-        void create(enum Graphics::BufferType type, const float *data, size_t size);
-    public:
-        Buffer(enum Graphics::BufferType type, const float *data, size_t size);
-
-        void Use() const override;
-
-    };
+void Geometry::AddBuffer(const std::string& name, Buffer* buffer) {
+    
 }
 
-#endif /* !OPENGL_BUFFER_HPP */

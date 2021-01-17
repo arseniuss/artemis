@@ -30,15 +30,12 @@
 #include <SDL2/SDL_video.h>
 
 #include <Common/Config.hpp>
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Shader.hpp>
+#include <Graphics/Renderer.hpp>
 #include <Gui/LayoutBuilder.hpp>
 
 namespace Graphics {
 
     class Context;
-
-    using DrawFunc = std::function<void(Context&)>;
 
     typedef void (*InitGraphicsFunc)(void);
     typedef std::shared_ptr<Context> (*CreateContextFunc)(const std::string&,
@@ -53,11 +50,6 @@ namespace Graphics {
         };
 
         SDL_Window* _window;
-
-        std::vector<DrawFunc> _drawables;
-
-        virtual Graphics::Shader* create(Type<Graphics::Shader> type, const std::string& name) = 0;
-        virtual Graphics::Buffer* create(Type<Graphics::Buffer> type, enum BufferType bt, const float *data, size_t size) = 0;
     public:
         static std::shared_ptr<Context> Create(std::shared_ptr<const Common::Config> config);
 
@@ -74,11 +66,6 @@ namespace Graphics {
 
         virtual void Update(float deltaTime) = 0;
 
-        virtual void Render() = 0;
-
-        virtual size_t AddDrawFunction(DrawFunc func);
-        virtual void RemoveDrawFunction(size_t idx);
-
         virtual void BuildLayout(std::function<void(Gui::LayoutBuilder& b)>) = 0;
 
         template<typename T, typename... Args>
@@ -89,6 +76,8 @@ namespace Graphics {
 
             return create(type, std::forward<Args>(args)...);
         }
+        
+        virtual std::shared_ptr<Graphics::Renderer> GetRenderer() = 0;
     };
 }
 

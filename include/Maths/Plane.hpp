@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,34 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_STATE_HPP
-#define CLIENT_STATE_HPP
+#ifndef MATHS_PLANE_HPP
+#define MATHS_PLANE_HPP
 
-#include <Common/State.hpp>
-#include <Client/Application.hpp>
-#include <Graphics/Renderer.hpp>
+#include <glm/glm.hpp>
 
-namespace Client {
+#include <Maths/Sphere.hpp>
 
-    class State : public Common::State {
+namespace Maths {
+
+    class Plane {
     protected:
-        Application& _app;
-        int root;
+        glm::vec3 _normal;
+        float _constant;
     public:
-        State(Application* app, const std::string& name);
+        Plane();
+        
+        Plane(const glm::vec3& normal, float constant);
 
-        void OnEnable() override;
-        
-        virtual void BuildUI(Gui::LayoutBuilder& builder);
-        
-        void RebuildUI();
-        
-        virtual bool HandleEvent(const SDL_Event& event);
-        
-        virtual void Render(Graphics::Renderer& renderer);
+        Plane& Set(float x, float y, float z, float w);
+
+        Plane& Normalize();
+
+        Plane& Negate();
+
+        float Distance(const glm::vec3& point) const;
+
+        float Distance(const Sphere& sphere) const;
     };
 }
 
-#endif /* !CLIENT_STATE_HPP */
-
+#endif /* !MATHS_PLANE_HPP */

@@ -25,6 +25,7 @@
 #include <Server/Engine.hpp>
 
 #include "Client/GameState.hpp"
+#include "Client/GalaxyState.hpp"
 
 using namespace Client;
 
@@ -94,7 +95,7 @@ void MenuState::BuildUI(Gui::LayoutBuilder& builder) {
 
     testButton->SetLabel("TEST");
     testButton->OnClick([this]() {
-        _app.PushState<GameState>(&_app);
+        _app.PushState<GalaxyState>(&_app);
     });
     testButton->SetLayout(LAYOUT_HFILL | LAYOUT_TOP);
     testButton->SetMargins(0, 1, 0, 0);

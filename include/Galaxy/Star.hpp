@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,20 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CLIENT_STATE_HPP
-#define CLIENT_STATE_HPP
+#ifndef GALAXY_STAR_HPP
+#define GALAXY_STAR_HPP
 
-#include <Common/State.hpp>
-#include <Client/Application.hpp>
-#include <Graphics/Renderer.hpp>
+#include <glm/glm.hpp>
 
-namespace Client {
+#include <string>
 
-    class State : public Common::State {
-    protected:
-        Application& _app;
-        int root;
-    public:
-        State(Application* app, const std::string& name);
+namespace Galaxy {
 
-        void OnEnable() override;
-        
-        virtual void BuildUI(Gui::LayoutBuilder& builder);
-        
-        void RebuildUI();
-        
-        virtual bool HandleEvent(const SDL_Event& event);
-        
-        virtual void Render(Graphics::Renderer& renderer);
+    struct Star {
+        std::string name;
+        glm::vec3 position;
+        glm::vec3 color;
     };
 }
 
-#endif /* !CLIENT_STATE_HPP */
-
+#endif /* !GALAXY_STAR_HPP */

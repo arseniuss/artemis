@@ -23,7 +23,7 @@
 using namespace Client;
 
 void SettingState::ApplyAndSave() {
-    auto* window = _app.GetGraphics().GetWindow();
+    auto* window = _app.GetGraphics()->GetWindow();
     auto& current = _displayModes[_currentDisplayMode];
 
     _app.GetConfig()->Set("Graphics", "Fullscreen", _fullscreen);

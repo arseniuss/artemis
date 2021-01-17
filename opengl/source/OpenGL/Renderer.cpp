@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,12 +16,36 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <OpenGL/Buffer.hpp>
+#include <OpenGL/Renderer.hpp>
+#include <OpenGL/Context.hpp>
 
 using namespace OpenGL;
 
-Buffer::Buffer(std::vector<glm::vec3>& data, int itemSize) {
-    glGenBuffers(1, &_id);
-    glBindBuffer(GL_ARRAY_BUFFER, _id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * data.size(), data.data(), GL_DYNAMIC_DRAW);
+Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx) {
+
 }
+
+Renderer::~Renderer() {
+
+}
+
+void Renderer::Begin() {
+    auto win = _context.GetWindow();
+
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::Render(Graphics::Scene& scene, Graphics::Camera& camera) {
+    _projMatrix = camera.GetProjectionMatrix() * camera.GetMatrixWorldInverse();
+    _frustum.Update(_projMatrix);
+}
+
+void Renderer::Finish() {
+    auto win = _context.GetWindow();
+
+    _context.DrawLayout();
+
+    SDL_GL_SwapWindow(win);
+}
+

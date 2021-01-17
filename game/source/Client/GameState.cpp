@@ -26,10 +26,7 @@
 using namespace Client;
 
 GameState::GameState(Application *app) : State(app, "Game state") {
-
-    auto size = _app.GetContext().GetSize();
-
-    _camera = new Graphics::Camera(size.x, size.y);
+    _camera = new Graphics::Camera();
 }
 
 void GameState::BuildUI(Gui::LayoutBuilder& builder) {

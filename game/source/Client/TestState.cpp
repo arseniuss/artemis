@@ -100,9 +100,9 @@ static const float g_color_buffer_data[] = {
 };
 
 TestState::TestState(Application* app) : State(app, "Test state") {
-    auto size = _app.GetContext().GetSize();
 
-    _camera = new Graphics::Camera(size.x, size.y);
+
+    _camera = new Graphics::Camera();
 }
 
 void TestState::BuildUI(Gui::LayoutBuilder& builder) {
@@ -136,31 +136,15 @@ bool TestState::HandleEvent(const SDL_Event& event) {
 void TestState::OnPush() {
     State::OnPush();
 
-    auto& g = _app.GetGraphics();
-
-    shader = g.Create<Graphics::Shader>("triangle");
-    vertex = g.Create<Graphics::Buffer>(Graphics::Array, g_vertex_buffer_data,
-            sizeof (g_vertex_buffer_data));
-    colors = g.Create<Graphics::Buffer>(Graphics::Array,
-            g_color_buffer_data, sizeof (g_color_buffer_data));
-
-    drawFuncIdx = g.AddDrawFunction([this](Graphics::Context & context) {
-        return OnDraw(context);
-    });
+    
 }
 
 void TestState::OnPop() {
-    _app.GetGraphics().RemoveDrawFunction(drawFuncIdx);
+    
 }
 
 void TestState::OnDraw(Graphics::Context& context) {
-    shader->Use();
-
-    shader->SetUniform("MVP", _camera->GetProjectionView());
-    shader->SetBuffer("vertexPosition_modelspace", vertex);
-    shader->SetBuffer("vertexColor", colors);
-
-    shader->Draw();
+    
 }
 
 
