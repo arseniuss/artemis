@@ -29,6 +29,10 @@ namespace Galaxy {
         std::string name;
         glm::vec3 position;
         glm::vec3 color;
+
+        Star(glm::vec3 p, std::string n, double t) : name(n), position(p) {
+            
+        }
     };
 }
 

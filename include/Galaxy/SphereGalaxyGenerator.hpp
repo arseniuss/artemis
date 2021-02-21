@@ -16,21 +16,31 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#ifndef GALAXY_SPHEREGALAXYGENERATOR_HPP
+#define GALAXY_SPHEREGALAXYGENERATOR_HPP
 
-#include <memory>
-#include <string>
-#include <vector>
+#include <Galaxy/GalaxyGenerator.hpp>
 
-#include <Graphics/Buffer.hpp>
+namespace Galaxy {
 
-namespace Graphics {
-    class Geometry {
-        std::vector<std::shared_ptr<Buffer>> _buffers;
+    class SphereGalaxyGenerator : public GalaxyGenerator {
+    private:
+        size_t _size;
+        float _densityDeviation;
+        float _densityMean;
+        glm::vec3 _deviation;
+
+        std::vector<Star> _stars;
+    protected:
+        bool _isGenerated;
     public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+        SphereGalaxyGenerator(size_t sz, float densityDev = 0.0000025f, float densityMean = 0.000001f,
+                glm::vec3 deviation = glm::vec3{0.0000025f});
+
+        std::vector<Star>& Generate(std::knuth_b& random) override;
+
     };
+
 }
 
-#endif /* !GRAPHICS_GEOMETRY_HPP */
+#endif /* GALAXY_SPHEREGALAXYGENERATOR_HPP */

@@ -16,7 +16,9 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Galaxy/ClusterGalaxyGenerator.hpp>
+#include <random>
+
+#include <Galaxy/SphereGalaxyGenerator.hpp>
 #include <Graphics/Geometry.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Points.hpp>
@@ -27,9 +29,12 @@ using namespace Client;
 
 GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     auto graph = app->GetGraphics();
-
-    auto gen = new Galaxy::ClusterGalaxyGenerator();
-    std::vector<Galaxy::Star>& stars = gen->Generate();
+    
+    std::knuth_b rand(0);
+    auto gen = new Galaxy::SphereGalaxyGenerator(4000);
+    std::vector<Galaxy::Star>& stars = gen->Generate(rand);
+    
+    
 
     auto geo = new Graphics::Geometry();
     std::vector<float> positions;
@@ -45,13 +50,13 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
         positions[i + 1] = star.position.y;
         positions[i + 2] = star.position.z;
 
-        colors[i] = star.color.r;
-        colors[i + 1] = star.color.g;
-        colors[i + 2] = star.color.b;
+        colors[i] = 1.0f;
+        colors[i + 1] = 1.0f;
+        colors[i + 2] = 1.0f; // TODO: convert
     }
 
-    geo->AddBuffer("position", new Graphics::Buffer(positions, 3));
-    geo->AddBuffer("color", new Graphics::Buffer(colors, 3));
+    geo->AddBuffer("position", std::make_shared<Graphics::Buffer>(positions, 3));
+    geo->AddBuffer("color", std::make_shared<Graphics::Buffer>(colors, 3));
 
 
     auto material = new Graphics::PointsMaterial(15);

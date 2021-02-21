@@ -7,8 +7,10 @@ SOURCES = \
     source/Common/Config.cpp \
     source/Common/Debug.cpp \
     source/Common/PluginManager.cpp \
-    source/Common/Random.cpp \
     source/Common/State.cpp \
+    source/Galaxy/ClusterGalaxyGenerator.cpp \
+    source/Galaxy/GalaxyGenerator.cpp \
+    source/Galaxy/SphereGalaxyGenerator.cpp \
     source/Graphics/Buffer.cpp \
     source/Graphics/Camera.cpp \
     source/Graphics/Geometry.cpp \

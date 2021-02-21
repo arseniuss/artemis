@@ -19,7 +19,7 @@
 #ifndef GALAXY_GALAXYGENERATOR_HPP
 #define GALAXY_GALAXYGENERATOR_HPP
 
-#include <vector>
+#include <random>
 
 #include <Galaxy/Star.hpp>
 
@@ -27,7 +27,7 @@ namespace Galaxy {
 
     class GalaxyGenerator {
     public:
-        virtual std::vector<Star>& Generate() = 0;
+        virtual std::vector<Star>& Generate(std::knuth_b& random) = 0;
     };
 }
 

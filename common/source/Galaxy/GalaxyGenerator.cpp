@@ -16,21 +16,3 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
-
-#include <memory>
-#include <string>
-#include <vector>
-
-#include <Graphics/Buffer.hpp>
-
-namespace Graphics {
-    class Geometry {
-        std::vector<std::shared_ptr<Buffer>> _buffers;
-    public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
-    };
-}
-
-#endif /* !GRAPHICS_GEOMETRY_HPP */

@@ -25,12 +25,18 @@ namespace Galaxy {
 
     class ClusterGalaxyGenerator : public GalaxyGenerator {
     protected:
-        std::vector<Star> _stars;
-    public:
+        bool _generated;
 
-        std::vector<Star>& Generate() override {
-            return _stars;
-        }
+        GalaxyGenerator& _gen;
+        float _countMean;
+        float _countDeviation;
+        glm::vec3 _deviation;
+    public:
+        ClusterGalaxyGenerator(GalaxyGenerator& gen,
+                float countMean = 0.0000025f, float countDeviation = 0.000001f,
+                glm::vec3 deviation = glm::vec3{0.0000025f});
+
+        std::vector<Star>& Generate(std::knuth_b& random) override;
     };
 }
 

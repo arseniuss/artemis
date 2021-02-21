@@ -20,7 +20,7 @@
 
 using namespace Graphics;
 
-void Geometry::AddBuffer(const std::string& name, Buffer* buffer) {
+void Geometry::AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer) {
     
 }
 
