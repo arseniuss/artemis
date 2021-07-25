@@ -31,23 +31,27 @@ namespace Graphics {
     class Object : public std::enable_shared_from_this<Object> {
     protected:
         int _id;
+        size_t _hash;
         std::string _name;
 
         std::weak_ptr<Object> _parent;
         std::vector<std::shared_ptr<Object>> _children;
 
         glm::mat4x4 _matrix;
+        glm::mat4x4 _matrixWorld;
 
         glm::vec3 _position;
         glm::mat4 _rotation;
         glm::vec3 _scale;
         glm::quat _quat;
         bool _visible;
-    public:
+    public: 
         Object();
 
         int GetId() const;
+        size_t GetHash() const;
         const std::string& GetName() const;
+        glm::mat4x4 GetMatrixWorld() const;
 
         std::vector<std::shared_ptr<Object>>&GetChildren();
 
@@ -57,6 +61,7 @@ namespace Graphics {
         void UpdateMatrix();
         
         bool IsVisible() const;
+        bool IsFrustumCulled() const;
     };
     
     void Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&)> func);

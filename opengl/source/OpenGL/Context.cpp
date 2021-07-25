@@ -29,7 +29,6 @@
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 #include <OpenGL/Renderer.hpp>
-#include <OpenGL/Shader.hpp>
 #include <glad.h>
 #include <oui.h>
 

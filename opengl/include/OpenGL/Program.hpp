@@ -16,25 +16,27 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#ifndef OPENGL_PROGRAM_HPP
+#define OPENGL_PROGRAM_HPP
 
-#include <memory>
 #include <string>
-#include <vector>
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
+#include <Common/Dictionary.hpp>
 
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
-    public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+namespace OpenGL {
+    class Program {
+    protected:
+        unsigned int _id;
         
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
+        unsigned int load(unsigned int type, const std::string& filename);
+        
+        std::string generatePrecision(const Common::Dictionary& parameters);
+        std::string resolveIncludes(std::string& text);
+    public:
+        Program();
+        
+        void Build(const Common::Dictionary& parameters);
     };
 }
 
-#endif /* !GRAPHICS_GEOMETRY_HPP */
+#endif /* !OPENGL_PROGRAM_HPP */

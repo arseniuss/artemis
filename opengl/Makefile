@@ -7,6 +7,7 @@ SOURCES = \
     source/Blendish/blendish.cpp \
     source/NanoVG/NanoVG.cpp \
     source/NanoVG/nanovg.c \
+    source/OpenGL/Capabilities.cpp \
     source/OpenGL/Context.cpp \
     source/OpenGL/Gui.cpp \
     source/OpenGL/Gui/Button.cpp \
@@ -19,14 +20,15 @@ SOURCES = \
     source/OpenGL/Gui/TextInput.cpp \
     source/OpenGL/Gui/Widget.cpp \
     source/OpenGL/Gui/Window.cpp \
+    source/OpenGL/Program.cpp \
+    source/OpenGL/RenderItem.cpp \
     source/OpenGL/Renderer.cpp \
-    source/OpenGL/Shader.cpp \
     source/Plugin.cpp \
     source/glad.c \
     source/oui.cpp
 
 CFLAGS = -I include -I../include -I../gui/include  -fPIC
-CXXFLAGS = -Iinclude -I../include -I../gui/include -fPIC
+CXXFLAGS = -Iinclude -I../include -I../gui/include -fPIC -std=c++2a
 LDFLAGS = 
 
 all: $(TARGET)

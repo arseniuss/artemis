@@ -6,6 +6,7 @@ SOURCES = \
     source/Common/Application.cpp \
     source/Common/Config.cpp \
     source/Common/Debug.cpp \
+    source/Common/Dictionary.cpp \
     source/Common/PluginManager.cpp \
     source/Common/State.cpp \
     source/Galaxy/ClusterGalaxyGenerator.cpp \
@@ -14,12 +15,16 @@ SOURCES = \
     source/Graphics/Buffer.cpp \
     source/Graphics/Camera.cpp \
     source/Graphics/Geometry.cpp \
+    source/Graphics/Material.cpp \
     source/Graphics/Materials/PointsMaterials.cpp \
     source/Graphics/Object.cpp \
+    source/Graphics/Objects/LOD.cpp \
+    source/Graphics/Objects/Light.cpp \
     source/Graphics/Objects/Points.cpp \
     source/Graphics/Scene.cpp \
     source/Graphics/Utils.cpp \
     source/Graphics/ViewFrustum.cpp \
+    source/Graphics/ViewObject.cpp \
     source/Maths/Frustum.cpp \
     source/Maths/Plane.cpp \
     source/Maths/Sphere.cpp \

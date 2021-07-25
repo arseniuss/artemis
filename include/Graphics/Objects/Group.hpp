@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,10 +16,23 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <fstream>
-#include <experimental/filesystem>
+#ifndef GRAPHICS_OBJECTS_GROUP_HPP
+#define GRAPHICS_OBJECTS_GROUP_HPP
 
-#include <OpenGL/Debug.hpp>
-#include <OpenGL/Shader.hpp>
+#include <Graphics/Object.hpp>
 
-using namespace OpenGL;
+namespace Graphics {
+    
+    class Group : public Object {
+    private:
+        int _renderOrder;
+    public:
+        int GetRenderOrder() const {
+            return _renderOrder;
+        }
+        
+        size_t GetMaterialIndex() const;
+    };
+}
+
+#endif /* !GRAPHICS_OBJECTS_GROUP_HPP */

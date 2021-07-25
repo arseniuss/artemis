@@ -24,8 +24,8 @@
 namespace Client {
     class GalaxyState : public State {
     private:
-        Graphics::Scene* _scene;
-        Graphics::Camera* _camera;
+        std::shared_ptr<Graphics::Scene> _scene;
+        std::shared_ptr<Graphics::Camera> _camera;
     public:
         GalaxyState(Application *app);
         

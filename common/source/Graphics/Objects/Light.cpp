@@ -16,25 +16,10 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#include <Graphics/Objects/Light.hpp>
 
-#include <memory>
-#include <string>
-#include <vector>
+using namespace Graphics;
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
-
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
-    public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
-        
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
-    };
+bool Light::CastsShadow() const {
+    return true;
 }
-
-#endif /* !GRAPHICS_GEOMETRY_HPP */

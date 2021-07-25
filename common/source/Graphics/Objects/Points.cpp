@@ -16,11 +16,18 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Graphics/Geometry.hpp>
+#include <Graphics/Material.hpp>
 #include <Graphics/Objects/Points.hpp>
 
 using namespace Graphics;
 
-Points::Points(Geometry* geo, PointsMaterial* material) {
+static unsigned int pointIndex = 0;
 
+Points::Points(Geometry* geo, Material* material) : ViewObject() {
+    _name = "Points #" + std::to_string(pointIndex++);
+    _hash = typeid(Points).hash_code();
+    _geo = geo;
+    _mat = material;
 }
 

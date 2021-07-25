@@ -21,6 +21,9 @@
 using namespace Graphics;
 
 void Geometry::AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer) {
-    
+
 }
 
+std::vector<std::weak_ptr<Graphics::Group>>&Geometry::GetGroups() {
+    return _groups;
+}

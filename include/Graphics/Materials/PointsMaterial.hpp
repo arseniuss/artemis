@@ -21,9 +21,11 @@
 
 #include <cstddef>
 
+#include <Graphics/Material.hpp>
+
 namespace Graphics {
 
-    class PointsMaterial {
+    class PointsMaterial : public Material {
     public:
         PointsMaterial(size_t pointSize);
     };

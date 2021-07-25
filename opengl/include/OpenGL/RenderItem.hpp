@@ -16,25 +16,23 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#ifndef OPENGL_RENDERITEM_HPP
+#define OPENGL_RENDERITEM_HPP
 
 #include <memory>
-#include <string>
-#include <vector>
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
+#include <Graphics/Object.hpp>
 
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
+namespace OpenGL {
+    class RenderItem {
     public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
         
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
+        /**
+         * Update render item from updated object
+         * @param o
+         */
+        void Update(std::shared_ptr<Graphics::Object>& o);
     };
 }
 
-#endif /* !GRAPHICS_GEOMETRY_HPP */
+#endif /* !OPENGL_RENDERITEM_HPP */

@@ -23,7 +23,10 @@
 
 using namespace Graphics;
 
+static unsigned int cameraIndex = 0;
+
 Camera::Camera() {
+    _name = "Camers #" + std::to_string(cameraIndex++);
     _projMatrix = glm::mat4{1.0f};
     _matrixWorldInverse = glm::mat4{1.0f};
 }

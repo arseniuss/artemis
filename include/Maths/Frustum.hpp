@@ -21,6 +21,7 @@
 
 #include <array>
 
+#include <Graphics/Object.hpp>
 #include <Maths/Plane.hpp>
 
 namespace Maths {
@@ -31,6 +32,8 @@ namespace Maths {
     public:
 
         void Update(const glm::mat4& matrix);
+        
+        bool Intersects(const Graphics::Object& s) const;
     };
 }
 

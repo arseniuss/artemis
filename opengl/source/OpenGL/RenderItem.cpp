@@ -16,25 +16,28 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#include <Common.hpp>
+#include <Common/Debug.hpp>
+#include <Graphics/Objects/Points.hpp>
+#include <Graphics/Scene.hpp>
+#include <OpenGL/Program.hpp>
+#include <OpenGL/RenderItem.hpp>
 
-#include <memory>
-#include <string>
-#include <vector>
+using namespace OpenGL;
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
-
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
-    public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+void RenderItem::Update(std::shared_ptr<Graphics::Object>& o) {    
+    size_t h = o->GetHash();
+    
+    if(h == Common::__hash<Graphics::Scene>()) {
         
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
-    };
+    } else if(h == Common::__hash<Graphics::Points>()) {
+        auto p = std::static_pointer_cast<Graphics::Points>(o);
+        
+        //auto *g = p->GetGeometry();
+        //auto *m = p->GetMaterial();
+    } else {
+        Common::Error() << "Incorrect hash for: " << o->GetName() << std::endl;
+        
+    }
+    
 }
-
-#endif /* !GRAPHICS_GEOMETRY_HPP */

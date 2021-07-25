@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,25 +16,15 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#include <Common/Dictionary.hpp>
 
-#include <memory>
-#include <string>
-#include <vector>
+using namespace Common;
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
+const std::string& Dictionary::GetString(const std::string& name) const {
+    auto it = _data.find(name);
 
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
-    public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
-        
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
-    };
+    if (it == _data.end())
+        throw std::runtime_error(std::string("Dictionary has no key ") + name);
+
+    return *(std::string *)it->second;
 }
-
-#endif /* !GRAPHICS_GEOMETRY_HPP */

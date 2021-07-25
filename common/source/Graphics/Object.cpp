@@ -27,8 +27,8 @@ static int objectCounter = 0;
 Object::Object() {
     _id = ++objectCounter;
     _name = "unnamed object";
-    
-    
+
+
 
     _scale = {1, 1, 1};
     _visible = true;
@@ -36,6 +36,10 @@ Object::Object() {
 
 int Object::GetId() const {
     return _id;
+}
+
+size_t Object::GetHash() const {
+    return _hash;
 }
 
 const std::string& Object::GetName() const {
@@ -77,12 +81,25 @@ bool Object::IsVisible() const {
     return _visible;
 }
 
+bool Object::IsFrustumCulled() const {
+    return false;
+}
+
+glm::mat4x4 Object::GetMatrixWorld() const {
+    return _matrixWorld;
+}
+
+void Object::UpdateMatrix() {
+
+}
+
 void Graphics::Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func) {
     func(o);
 
-    for (auto c : o->GetChildren()) {
-        Graphics::Traverse(c, func);
-    }
+    if (o.get())
+        for (auto c : o->GetChildren()) {
+            Graphics::Traverse(c, func);
+        }
 }
 
 void Graphics::TraverseVisible(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func) {

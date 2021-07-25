@@ -16,25 +16,19 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#ifndef COMMON_DICTIONARY_HPP
+#define COMMON_DICTIONARY_HPP
 
-#include <memory>
 #include <string>
-#include <vector>
+#include <map>
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
-
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
+namespace Common {
+    class Dictionary {
+    private:
+        std::map<std::string, void*> _data;
     public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
-        
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
+        const std::string& GetString(const std::string& name) const;
     };
 }
 
-#endif /* !GRAPHICS_GEOMETRY_HPP */
+#endif /* !COMMON_DICTIONARY_HPP */

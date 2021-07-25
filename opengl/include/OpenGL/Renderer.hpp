@@ -19,28 +19,52 @@
 #ifndef OPENGL_RENDERER_HPP
 #define OPENGL_RENDERER_HPP
 
+#include <map>
+
+#include <Graphics/Objects/Light.hpp>
 #include <Graphics/Renderer.hpp>
 #include <Maths/Frustum.hpp>
+#include <OpenGL/Capabilities.hpp>
+#include <OpenGL/RenderItem.hpp>
 #include <OpenGL/Renderer.hpp>
 
 namespace OpenGL {
 
     class Context;
-    
+
     class Renderer : public Graphics::Renderer {
     private:
         OpenGL::Context& _context;
-        
+        OpenGL::Capabilities _capabilities;
+
         glm::mat4 _projMatrix;
-        
+
         Maths::Frustum _frustum;
+
+        std::map<std::weak_ptr<Graphics::Object>, std::shared_ptr<RenderItem>, std::owner_less<>> _items;
+        std::vector<std::weak_ptr<Graphics::Light>> _lights;
+        std::vector<std::weak_ptr<Graphics::Light>> _shadows;
+    protected:
+        void RenderObject(Graphics::Object& object, Graphics::Scene& scene, Graphics::Camera& camera,
+                Graphics::Geometry& geo, Graphics::Material& mat) override;
+        void ProjectObject(std::shared_ptr<Graphics::Object> o, 
+            std::shared_ptr<Graphics::Camera> camera,
+            int groupOrder, bool sortObjects);
+
+        void Push(Graphics::Object& objects,
+                Graphics::Geometry& geometry,
+                Graphics::Material& material,
+                int groupOrder,
+                float z,
+                Graphics::Group* group
+                );
     public:
         Renderer(OpenGL::Context& ctx);
         ~Renderer();
 
         void Begin() override;
 
-        void Render(Graphics::Scene& scene, Graphics::Camera& camera) override;
+        void Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Graphics::Camera> camera) override;
 
         void Finish() override;
     };

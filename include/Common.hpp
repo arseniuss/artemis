@@ -16,25 +16,18 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#ifndef COMMON_HPP
+#define COMMON_HPP
 
-#include <memory>
-#include <string>
-#include <vector>
+#include <stddef.h>
+#include <typeinfo>
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
+namespace Common {
 
-namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
-    public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
-        
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
-    };
+    template<typename T>
+    size_t __hash() {
+        return typeid (T).hash_code();
+    }
 }
 
-#endif /* !GRAPHICS_GEOMETRY_HPP */
+#endif /* !COMMON_HPP */

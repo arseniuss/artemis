@@ -16,25 +16,24 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_GEOMETRY_HPP
-#define GRAPHICS_GEOMETRY_HPP
+#ifndef GRAPHICS_VIEWOBJECT_HPP
+#define GRAPHICS_VIEWOBJECT_HPP
 
-#include <memory>
-#include <string>
-#include <vector>
-
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
+#include <Graphics/Geometry.hpp>
+#include <Graphics/Material.hpp>
 
 namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
+    
+    class ViewObject : public Object {
+    protected:
+        Geometry* _geo;
+        Material* _mat;
     public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+        ViewObject();
         
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
+        Geometry* GetGeometry() { return _geo; }
+        Material* GetMaterial() { return _mat; }
     };
 }
 
-#endif /* !GRAPHICS_GEOMETRY_HPP */
+#endif /* !GRAPHICS_VIEWOBJECT_HPP */

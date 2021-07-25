@@ -48,6 +48,6 @@ bool State::HandleEvent(const SDL_Event& event) {
 }
 
 void State::Render(Graphics::Renderer& renderer) {
-    
+    renderer.Render(nullptr, nullptr);
 }
 

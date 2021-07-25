@@ -25,6 +25,8 @@ namespace Graphics {
 
     class Scene : public Object {
     public:
+        static size_t Hash;
+        
         Scene();
     };
 }

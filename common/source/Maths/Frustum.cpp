@@ -50,3 +50,6 @@ void Frustum::Update(const glm::mat4& mat) {
             .Normalize();
 }
 
+bool Frustum::Intersects(const Graphics::Object& s) const {
+    return false;
+}

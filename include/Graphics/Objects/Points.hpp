@@ -20,14 +20,17 @@
 #define GRAPHICS_OBJECTS_POINTS_HPP
 
 #include <Graphics/Geometry.hpp>
-#include <Graphics/Materials/PointsMaterial.hpp>
-#include <Graphics/Object.hpp>
+#include <Graphics/Material.hpp>
+#include <Graphics/ViewObject.hpp>
 
 namespace Graphics {
 
-    class Points : public Object {
+    class Points : public ViewObject {
+    protected:
+
     public:
-        Points(Geometry* geo, PointsMaterial* material);
+        Points(Geometry* geo, Material* material);
+
     };
 }
 

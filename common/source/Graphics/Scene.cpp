@@ -20,7 +20,12 @@
 
 using namespace Graphics;
 
-Scene::Scene() {
+static unsigned int sceneIndex = 0;
 
+size_t Scene::Hash = typeid(Scene).hash_code();
+
+Scene::Scene() {
+    _name = "Scene #" + std::to_string(sceneIndex++);
+    _hash = Scene::Hash;
 }
 

@@ -29,12 +29,12 @@ using namespace Client;
 
 GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     auto graph = app->GetGraphics();
-    
+
     std::knuth_b rand(0);
     auto gen = new Galaxy::SphereGalaxyGenerator(4000);
     std::vector<Galaxy::Star>& stars = gen->Generate(rand);
-    
-    
+
+
 
     auto geo = new Graphics::Geometry();
     std::vector<float> positions;
@@ -61,12 +61,12 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
 
     auto material = new Graphics::PointsMaterial(15);
 
-    auto system =  std::make_shared<Graphics::Points>(geo, material);
+    auto system = std::make_shared<Graphics::Points>(geo, material);
 
-    _scene = new Graphics::Scene();
+    _scene = std::make_shared<Graphics::Scene>();
 
     _scene->Add(system->shared_from_this());
-    _camera = new Graphics::Camera();
+    _camera = std::make_shared<Graphics::Camera>();
 }
 
 void GalaxyState::BuildUI(Gui::LayoutBuilder& builder) {
@@ -86,6 +86,6 @@ bool GalaxyState::HandleEvent(const SDL_Event& event) {
 }
 
 void GalaxyState::Render(Graphics::Renderer& renderer) {
-    renderer.Render(*_scene, *_camera);
+    renderer.Render(_scene, _camera);
 }
 
