@@ -3,6 +3,10 @@ TARGET = libartemis_enet.so
 BUILDDIR = build
 OBJDIR = $(BUILDDIR)/obj
 
+INCLUDES = \
+    include \
+    ../common/include \
+    ../networking/include
 SOURCES = \
     source/ENet/Client.cpp \
     source/ENet/Context.cpp \
@@ -11,8 +15,8 @@ SOURCES = \
     source/ENet/Peer.cpp \
     source/Plugin.cpp
 
-CFLAGS = -I include -I../include  -fPIC
-CXXFLAGS = -Iinclude -I../include  -fPIC
+CFLAGS = $(addprefix -I,$(INCLUDES))  -fPIC
+CXXFLAGS = $(addprefix -I,$(INCLUDES))  -fPIC
 LDFLAGS = 
 
 LIBS = libenet

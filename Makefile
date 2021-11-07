@@ -1,16 +1,21 @@
 TARGETS = \
     common \
     enet \
+    game \
+    graphics \
+    graphics_tests \
+    logic \
+    networking \
     opengl \
-    plugins/default \
-    game
+    physics \
+    plugins/default
 
 .PHONY: $(TARGETS)
 
 all: $(TARGETS)
 
 $(TARGETS): 
-	$(MAKE) -C $@ all
+	-$(MAKE) -C $@ all
 	
 clean:
 	@ for i in $(TARGETS); do \

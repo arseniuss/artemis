@@ -22,7 +22,6 @@
 #include <glm/vec3.hpp>
 #include <glm/matrix.hpp>
 
-#include <World/Entity.hpp>
 #include <Graphics/ViewFrustum.hpp>
 
 #include <Graphics/Object.hpp>

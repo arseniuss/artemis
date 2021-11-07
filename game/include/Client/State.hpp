@@ -19,8 +19,11 @@
 #ifndef CLIENT_STATE_HPP
 #define CLIENT_STATE_HPP
 
+#include <SDL2/SDL.h>
+
 #include <Common/State.hpp>
 #include <Graphics/Renderer.hpp>
+#include <Gui/LayoutBuilder.hpp>
 
 namespace Client {
     class Application;

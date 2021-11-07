@@ -2,7 +2,11 @@ TARGET = libartemis_opengl.so
 
 BUILDDIR = build
 OBJDIR = $(BUILDDIR)/obj
-
+INCLUDES = \
+    include \
+    ../include \
+    ../common/include \
+    ../graphics/include
 SOURCES = \
     source/Blendish/blendish.cpp \
     source/NanoVG/NanoVG.cpp \
@@ -33,8 +37,8 @@ SOURCES = \
     source/glad.c \
     source/oui.cpp
 
-CFLAGS = -I include -I../include -I../gui/include  -fPIC
-CXXFLAGS = -Iinclude -I../include -I../gui/include -fPIC -std=c++2a
+CFLAGS = $(addprefix -I,$(INCLUDES))  -fPIC
+CXXFLAGS = $(addprefix -I,$(INCLUDES)) -fPIC -std=c++2a
 LDFLAGS = 
 
 all: $(TARGET)

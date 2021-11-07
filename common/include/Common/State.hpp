@@ -19,9 +19,7 @@
 #ifndef COMMON_STATE_HPP
 #define COMMON_STATE_HPP
 
-#include <SDL2/SDL_events.h>
-
-#include <Graphics/Context.hpp>
+#include <string>
 
 namespace Common {
     class Application;
@@ -34,15 +32,15 @@ namespace Common {
         virtual void OnPush();
 
         virtual void OnPop();
-        
+
         virtual void OnDisable();
-        
+
         virtual void OnEnable();
 
         virtual void HandleInput();
 
         virtual void Update(float deltaTime);
-        
+
         const std::string& GetName() const;
     protected:
         Application& _app;

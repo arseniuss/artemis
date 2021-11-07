@@ -9,42 +9,11 @@ SOURCES = \
     source/Common/Dictionary.cpp \
     source/Common/PluginManager.cpp \
     source/Common/State.cpp \
-    source/Galaxy/ClusterGalaxyGenerator.cpp \
-    source/Galaxy/GalaxyGenerator.cpp \
-    source/Galaxy/SphereGalaxyGenerator.cpp \
-    source/Graphics/Buffer.cpp \
-    source/Graphics/Camera.cpp \
-    source/Graphics/Color.cpp \
-    source/Graphics/Common.cpp \
-    source/Graphics/CubeTexture.cpp \
-    source/Graphics/Geometry.cpp \
-    source/Graphics/Material.cpp \
-    source/Graphics/Materials/PointsMaterials.cpp \
-    source/Graphics/Object.cpp \
-    source/Graphics/Objects/LOD.cpp \
-    source/Graphics/Objects/Light.cpp \
-    source/Graphics/Objects/Line.cpp \
-    source/Graphics/Objects/Points.cpp \
-    source/Graphics/Property.cpp \
-    source/Graphics/Scene.cpp \
-    source/Graphics/Texture.cpp \
-    source/Graphics/Utils.cpp \
-    source/Graphics/ViewFrustum.cpp \
-    source/Graphics/ViewObject.cpp \
-    source/Maths/Frustum.cpp \
     source/Maths/Plane.cpp \
     source/Maths/Sphere.cpp \
-    source/Network/Context.cpp \
-    source/Network/Event.cpp \
-    source/Network/Payload.cpp \
-    source/Network/Peer.cpp \
     source/Utility/Filesystem.cpp \
     source/Utility/Random.cpp \
-    source/Utility/String.cpp \
-    source/World/Block.cpp \
-    source/World/Chunk.cpp \
-    source/World/ChunkManager.cpp \
-    source/World/Coordinates.cpp
+    source/Utility/String.cpp
 
 CFLAGS = -Iinclude -I../include -fPIC -frtti
 CXXFLAGS = -Iinclude -I../include -fPIC -std=c++2a -frtti

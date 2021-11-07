@@ -6,6 +6,12 @@ LIBDIR = $(BUILDDIR)/lib
 DATADIR = $(BUILDDIR)/data
 PLUGINDIR = $(BUILDDIR)/plugins
 
+INCLUDES = \
+    ../common/include \
+    ../graphics/include \
+    ../logic/include \
+    ../networking/include \
+    include
 SOURCES = \
     source/Client/Application.cpp \
     source/Client/ConnectState.cpp \
@@ -15,7 +21,6 @@ SOURCES = \
     source/Client/SettingState.cpp \
     source/Client/State.cpp \
     source/Client/TestState.cpp \
-    source/Graphics/Context.cpp \
     source/Server/Engine.cpp \
     source/World/BlockManager.cpp \
     source/main.cpp
@@ -25,13 +30,16 @@ TARGET = $(BUILDDIR)/bin/$(PROGRAM)
 PLUGINS = \
     ../plugins/default/libartemis_default.so
 
-CFLAGS = -Iinclude -I../include -I../gui/include
-CXXFLAGS = -Iinclude -I../include -I../gui/include -std=c++2a
+CFLAGS = $(addprefix -I,$(INCLUDES))
+CXXFLAGS = $(addprefix -I,$(INCLUDES)) -std=c++2a
 LDFLAGS = -rdynamic -lstdc++ -lstdc++fs -ldl -pthread
 
 LIBS = sdl2 SDL2_image glm yaml-cpp
 STATIC_LIBS = \
-    ../common/libartemis_common.a
+    ../common/libartemis_common.a \
+    ../graphics/libartemis_graphics.a \
+    ../networking/libartemis_networking.a \
+    ../logic/libartemis_logic.a
     
 SHARED_LIBS = \
     ../opengl/libartemis_opengl.so \

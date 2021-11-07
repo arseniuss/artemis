@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,3 +109,4 @@ glm::ivec2 Context::GetSize() const {
 SDL_Window* Context::GetWindow() {
     return _window;
 }
+
