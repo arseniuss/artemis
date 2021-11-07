@@ -16,9 +16,11 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Client/State.hpp>
 #include <Gui/Widget.hpp>
 #include <Gui/Layout.hpp>
+
+#include "Client/State.hpp"
+#include "Client/Application.hpp"
 
 using namespace Client;
 

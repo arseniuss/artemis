@@ -21,52 +21,63 @@
 
 #include <map>
 
+#include <Common/Dictionary.hpp>
 #include <Graphics/Objects/Light.hpp>
 #include <Graphics/Renderer.hpp>
 #include <Maths/Frustum.hpp>
+#include <OpenGL/Background.hpp>
 #include <OpenGL/Capabilities.hpp>
-#include <OpenGL/RenderItem.hpp>
-#include <OpenGL/Renderer.hpp>
+#include <OpenGL/Program.hpp>
+#include <OpenGL/State.hpp>
 
 namespace OpenGL {
 
     class Context;
+    class RenderItem;
 
     class Renderer : public Graphics::Renderer {
     private:
         OpenGL::Context& _context;
         OpenGL::Capabilities _capabilities;
+        Common::Dictionary _properties;
+        State _state;
 
         glm::mat4 _projMatrix;
 
         Maths::Frustum _frustum;
 
-        std::map<std::weak_ptr<Graphics::Object>, std::shared_ptr<RenderItem>, std::owner_less<>> _items;
-        std::vector<std::weak_ptr<Graphics::Light>> _lights;
-        std::vector<std::weak_ptr<Graphics::Light>> _shadows;
-    protected:
-        void RenderObject(Graphics::Object& object, Graphics::Scene& scene, Graphics::Camera& camera,
-                Graphics::Geometry& geo, Graphics::Material& mat) override;
-        void ProjectObject(std::shared_ptr<Graphics::Object> o, 
-            std::shared_ptr<Graphics::Camera> camera,
-            int groupOrder, bool sortObjects);
+        Background background;
 
-        void Push(Graphics::Object& objects,
-                Graphics::Geometry& geometry,
-                Graphics::Material& material,
-                int groupOrder,
-                float z,
-                Graphics::Group* group
-                );
+        std::map<std::weak_ptr<Graphics::Object>, std::shared_ptr<RenderItem>, std::owner_less<>> _items;
+
+        std::vector<std::weak_ptr<RenderItem>> _transparentObjects;
+        std::vector<std::weak_ptr<RenderItem>> _opaqueObject;
+
+        Program _defaultProgram;
+
+        void setupProgram(std::shared_ptr<Graphics::Object> object,
+                std::shared_ptr<Graphics::Material> material, Graphics::Camera& camera);
+    protected:
+        void RenderObject(std::weak_ptr<RenderItem> object, std::shared_ptr<Graphics::Scene> scene,
+                std::shared_ptr<Graphics::Camera> camera);
+        void RenderObjects(std::vector<std::weak_ptr<RenderItem>> objects, std::shared_ptr<Graphics::Scene> scene,
+                std::shared_ptr<Graphics::Camera> camera);
+        /**
+         * Sort objects
+         * @param o
+         * @param camera
+         */
+        void ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_ptr<Graphics::Camera> camera);
+
+        void Push(Graphics::Object& objects, Graphics::Geometry& geometry, Graphics::Material& material);
+
+
+        void findProgram();
     public:
         Renderer(OpenGL::Context& ctx);
         ~Renderer();
 
-        void Begin() override;
-
         void Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Graphics::Camera> camera) override;
-
-        void Finish() override;
     };
 }
 

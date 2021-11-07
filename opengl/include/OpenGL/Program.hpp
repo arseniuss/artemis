@@ -22,20 +22,52 @@
 #include <string>
 
 #include <Common/Dictionary.hpp>
+#include <OpenGL/MaterialProperties.hpp>
+#include <OpenGL/Uniforms.hpp>
+
+#include "glad.h"
+
+namespace Graphics {
+    class Material;
+}
 
 namespace OpenGL {
-    class Program {
+
+    struct ProgramAttribute {
+        int location;
+        size_t type_hash;
+    };
+
+    using ProgramAttributes = std::map<std::string, ProgramAttribute>;
+
+    class Program : public std::enable_shared_from_this<Program> {
     protected:
         unsigned int _id;
-        
+        Uniforms _uniforms;
+        ProgramAttributes _attributes;
+
         unsigned int load(unsigned int type, const std::string& filename);
-        
-        std::string generatePrecision(const Common::Dictionary& parameters);
+
+        std::string generatePrecision(const MaterialProperties& parameters);
         std::string resolveIncludes(std::string& text);
+
+        GLuint compilerShader(GLenum shader_type, const std::string& source);
+        void createProgram(const std::string& vertexSource, const std::string& fragmentSource);
+
+        void updateAttributes();
+        void updateUniforms();
     public:
+        static std::shared_ptr<Program> Find(std::weak_ptr<Graphics::Material> material);
+
         Program();
-        
-        void Build(const Common::Dictionary& parameters);
+        ~Program();
+
+        void Build(const MaterialProperties& props);
+
+        Uniforms& GetUniforms();
+        const ProgramAttributes& GetAttributes();
+
+        void Use();
     };
 }
 

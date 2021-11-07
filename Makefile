@@ -5,12 +5,14 @@ TARGETS = \
     plugins/default \
     game
 
-all:
-	@ for i in $(TARGETS); do \
-	    make -C $$i all || exit 1; \
-	done
+.PHONY: $(TARGETS)
+
+all: $(TARGETS)
+
+$(TARGETS): 
+	$(MAKE) -C $@ all
 	
 clean:
 	@ for i in $(TARGETS); do \
-	    make -C $$i clean || exit 1; \
+	    $(MAKE) -C $$i clean || exit 1; \
 	done

@@ -38,18 +38,17 @@ SphereGalaxyGenerator::SphereGalaxyGenerator(size_t sz, float densityDev, float 
             << std::endl;
 }
 
-std::vector<Star>& SphereGalaxyGenerator::Generate(std::knuth_b& random) {
+std::vector<Star>& SphereGalaxyGenerator::Generate(Utility::Random& random) {
     if (!_isGenerated) {
         std::normal_distribution<double> nd(_densityMean, _densityDeviation);
-        auto density = std::max(0.0, nd(random));
+        auto density = std::max(0.0, (double)nd(random));
         auto countMax = std::max(0.0, _size * _size * _size * density);
 
         std::uniform_int_distribution<> uid(0, countMax);
 
         auto count = uid(random);
 
-        Common::Debug() << "Generating " << count << " stars" << std::endl;
-
+        Common::Debug() << "Generating " << count << " stars [0 .. " << countMax << "]" << std::endl;
 
         std::normal_distribution<double> xnd(0, _deviation.x * _size);
         std::normal_distribution<double> ynd(0, _deviation.y * _size);

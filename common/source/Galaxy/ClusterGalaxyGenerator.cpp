@@ -29,7 +29,7 @@ _gen(gen) {
     _deviation = deviation;
 }
 
-std::vector<Star>& ClusterGalaxyGenerator::Generate(std::knuth_b& random) {
+std::vector<Star>& ClusterGalaxyGenerator::Generate(Utility::Random& random) {
     auto& stars = _gen.Generate(random);
 
     if (!_generated) {

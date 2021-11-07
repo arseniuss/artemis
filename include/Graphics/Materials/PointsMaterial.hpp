@@ -26,8 +26,16 @@
 namespace Graphics {
 
     class PointsMaterial : public Material {
+    private:
+        float _pointSize;
     public:
+        static size_t Hash;
+
         PointsMaterial(size_t pointSize);
+
+        float GetPointSize() const {
+            return _pointSize;
+        }
     };
 }
 

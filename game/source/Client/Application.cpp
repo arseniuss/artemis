@@ -82,9 +82,7 @@ void Application::Run() {
         current->Update(deltaTime);
         _graphics->Update(deltaTime);
 
-        renderer->Begin();
         current->Render(*renderer);
-        renderer->Finish();
 
         if (_isPoping) {
             Common::Debug() << "Poping state " << current->GetName() <<

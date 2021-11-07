@@ -19,16 +19,50 @@
 #ifndef GRAPHICS_BUFFER_HPP
 #define GRAPHICS_BUFFER_HPP
 
+#include <string>
+#include <memory>
+#include <vector>
+
 #include <glm/glm.hpp>
 
-#include <vector>
+#include <Common/Observer.hpp>
 
 namespace Graphics {
 
-    class Buffer {
+    enum {
+        CONST_BUFFER,
+        DYNAMIC_BUFFER
+    };
+
+    class Buffer : public std::enable_shared_from_this<Buffer>, public Common::Observable {
+    private:
+        size_t _size;
+        void* _data;
+        size_t _itemSize;
+        int _type;
+        std::string _name;
     public:
         Buffer(std::vector<float>& data, int itemSize);
-        
+
+        size_t GetSize() const {
+            return _size;
+        }
+
+        void* GetData() {
+            return _data;
+        }
+
+        int GetType() {
+            return _type;
+        }
+
+        const std::string& GetName() const {
+            return _name;
+        }
+
+        void SetName(const std::string& name) {
+            _name = name;
+        }
     };
 }
 

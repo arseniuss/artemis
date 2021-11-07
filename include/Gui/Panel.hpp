@@ -19,10 +19,6 @@
 #ifndef GUI_PANEL_HPP
 #define GUI_PANEL_HPP
 
-#include <Gui/Button.hpp>
-#include <Gui/Label.hpp>
-#include <Gui/RadioButton.hpp>
-#include <Gui/TextInput.hpp>
 #include <Gui/Widget.hpp>
 
 namespace Gui {

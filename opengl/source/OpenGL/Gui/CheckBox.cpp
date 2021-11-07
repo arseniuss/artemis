@@ -36,7 +36,7 @@ CheckBox::CheckBox(int i) : OpenGLWidget(i) {
 
 CheckBox* CheckBox::Connect(bool* value) {
     _valuePtr = value;
-    
+
     return this;
 }
 

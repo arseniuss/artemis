@@ -21,5 +21,8 @@
 using namespace Graphics;
 
 Buffer::Buffer(std::vector<float>& data, int itemSize) {
-    
+    _data = (void *)data.data();
+    _type = CONST_BUFFER;
+    _size = data.size();
+    _itemSize = itemSize;
 }

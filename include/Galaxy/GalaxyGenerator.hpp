@@ -22,12 +22,13 @@
 #include <random>
 
 #include <Galaxy/Star.hpp>
+#include <Utility/Random.hpp>
 
 namespace Galaxy {
 
     class GalaxyGenerator {
     public:
-        virtual std::vector<Star>& Generate(std::knuth_b& random) = 0;
+        virtual std::vector<Star>& Generate(Utility::Random& random) = 0;
     };
 }
 

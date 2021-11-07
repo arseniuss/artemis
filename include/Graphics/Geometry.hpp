@@ -19,21 +19,30 @@
 #ifndef GRAPHICS_GEOMETRY_HPP
 #define GRAPHICS_GEOMETRY_HPP
 
+#include <map>
 #include <memory>
 #include <string>
-#include <vector>
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Objects/Group.hpp>
+#include <Common/Observer.hpp>
 
 namespace Graphics {
-    class Geometry {
-        std::vector<std::weak_ptr<Graphics::Group>> _groups;
-        std::vector<std::shared_ptr<Buffer>> _buffers;
+    class Buffer;
+
+    using BufferMap = std::map<std::string, std::shared_ptr<Buffer>>;
+
+    class Geometry : public std::enable_shared_from_this<Geometry>, public Common::Observable {
+        size_t _size;
+        BufferMap _buffers;
     public:
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+        Geometry();
         
-        std::vector<std::weak_ptr<Graphics::Group>>& GetGroups();
+        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+
+        BufferMap& GetBuffers();
+        
+        void Compute();
+        
+        size_t GetSize() const { return _size; }
     };
 }
 

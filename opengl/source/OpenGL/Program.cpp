@@ -16,62 +16,282 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <numeric>
 #include <regex>
 #include <vector>
 
-#include <OpenGL/Program.hpp>
+#include <glm/glm.hpp>
+
 #include <Common/Debug.hpp>
+#include <OpenGL/Program.hpp>
+#include <OpenGL/Uniforms.hpp>
+#include <Utility/Filesystem.hpp>
+#include <Utility/String.hpp>
 
 #include "glad.h"
 
+
+
 using namespace OpenGL;
 
-std::map<unsigned int, std::string> shaderExtensions = {
-    {GL_VERTEX_SHADER, "vert"},
-    {GL_FRAGMENT_SHADER, "frag"},
-    {GL_GEOMETRY_SHADER, "geom"}
-};
-
-Program::Program() {
+Program::Program() : _id(glCreateProgram()), _uniforms(_id) {
 
 }
 
-std::string Program::generatePrecision(const Common::Dictionary& parameters) {
-    std::string precision = parameters.GetString("precision");
-    std::string str = "precision " + precision + "float;\nprecision " + precision + " int;";
+Program::~Program() {
+    glDeleteProgram(_id);
+}
 
-    if (precision == "highp") {
-        str += "\n#define HIGH_PRECISION";
-    } else if (precision == "mediump") {
-        str += "\n#define MEDIUM_PRECISION";
-    } else if (precision == "lowp") {
-        str += "\n#define LOW_PRECISION";
+std::string Program::generatePrecision(const MaterialProperties& props) {
+    std::string str = "";
+    std::string precision = props.GetPrecision();
+    if (!precision.empty()) {
+        str = "precision " + precision + "float;\nprecision " + precision + " int;";
+
+        if (precision == "highp") {
+            str += "\n#define HIGH_PRECISION";
+        } else if (precision == "mediump") {
+            str += "\n#define MEDIUM_PRECISION";
+        } else if (precision == "lowp") {
+            str += "\n#define LOW_PRECISION";
+        }
     }
 
     return str;
 }
 
 std::string Program::resolveIncludes(std::string& text) {
-    static std::regex pattern("^[ \\t]*#include +<(.*)>$");
-    
-    return text;
+    return Utility::RegexReplace(text, "[ \\t]*#include +<(.*)>",
+            [](std::string match, const std::vector<std::string>& groups) {
+                std::string include = groups[1];
+
+                return Utility::LoadFullFile("data/shaders/" + include + "_inc.glsl");
+            });
 }
 
+GLuint Program::compilerShader(GLenum shader_type, const std::string& source) {
+    GLuint shader;
+    GLint test;
+    const char *src = source.data();
 
-void Program::Build(const Common::Dictionary& parameters) {
+    shader = glCreateShader(shader_type);
+    glShaderSource(shader, 1, &src, nullptr);
+
+    glCompileShader(shader);
+
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &test);
+    if (!test) {
+        std::vector<char> log(BUFSIZ);
+
+        glGetShaderInfoLog(shader, log.size(), nullptr, &log[0]);
+        Common::Error() << "Compilation failed: " << &log[0] << std::endl;
+        throw std::runtime_error(std::string(&log[0]));
+    }
+
+    return shader;
+}
+
+void Program::createProgram(const std::string& vertexSource, const std::string& fragmentSource) {
+    GLuint vertexShader = compilerShader(GL_VERTEX_SHADER, vertexSource);
+    GLuint fragmentShader = compilerShader(GL_FRAGMENT_SHADER, fragmentSource);
+
+    glAttachShader(_id, vertexShader);
+    glAttachShader(_id, fragmentShader);
+
+    glLinkProgram(_id);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+}
+
+void Program::updateAttributes() {
+    int count;
+
+    glGetProgramiv(_id, GL_ACTIVE_ATTRIBUTES, &count);
+
+    Common::Debug() << "Attribute count: " << count << std::endl;
+
+    for (int i = 0; i < count; i++) {
+        char name[80] = {0};
+
+        GLsizei len = 0;
+        GLint size = 0;
+        GLenum type = 0;
+
+        glGetActiveAttrib(_id, (GLuint) i, sizeof (name), &len, &size, &type, name);
+
+        Common::Debug() << "Attribute #" << i << ": name=\"" << name << "\"(" << len << ")" <<
+                " type=" << type << " size=" << size << std::endl;
+
+        size_t type_hash = 0;
+
+        switch (type) {
+            case GL_FLOAT: type_hash = typeid (float).hash_code();
+                break;
+            case GL_FLOAT_VEC2: type_hash = typeid (glm::vec2).hash_code();
+                break;
+            case GL_FLOAT_VEC3: type_hash = typeid (glm::vec3).hash_code();
+                break;
+            case GL_FLOAT_VEC4: type_hash = typeid (glm::vec4).hash_code();
+                break;
+
+            case GL_FLOAT_MAT2: type_hash = typeid (glm::mat2).hash_code();
+                break;
+            case GL_FLOAT_MAT3: type_hash = typeid (glm::mat3).hash_code();
+                break;
+            case GL_FLOAT_MAT4: type_hash = typeid (glm::mat4).hash_code();
+                break;
+
+            case GL_DOUBLE: type_hash = typeid (double).hash_code();
+                break;
+            case GL_DOUBLE_VEC2: type_hash = typeid (glm::dvec2).hash_code();
+                break;
+            case GL_DOUBLE_VEC3: type_hash = typeid (glm::dvec3).hash_code();
+                break;
+            case GL_DOUBLE_VEC4: type_hash = typeid (glm::dvec4).hash_code();
+                break;
+
+            case GL_DOUBLE_MAT2: type_hash = typeid (glm::dmat2).hash_code();
+                break;
+            case GL_DOUBLE_MAT3: type_hash = typeid (glm::dmat3).hash_code();
+                break;
+            case GL_DOUBLE_MAT4: type_hash = typeid (glm::dmat4).hash_code();
+                break;
+            default:
+                throw std::runtime_error(std::string("Unrecognised attribute type: ") + std::to_string(type));
+                break;
+        }
+
+        int location = glGetAttribLocation(_id, name);
+
+        _attributes.emplace(name, ProgramAttribute{location, type_hash});
+    }
+}
+
+void Program::updateUniforms() {
+    int count;
+
+    glGetProgramiv(_id, GL_ACTIVE_UNIFORMS, &count);
+
+    Common::Debug() << "Uniform count: " << count << std::endl;
+
+    for (int i = 0; i < count; i++) {
+        char name[80] = {0};
+
+        GLsizei len = 0;
+        GLint size = 0;
+        GLenum type = 0;
+
+        glGetActiveUniform(_id, (GLuint) i, sizeof (name), &len, &size, &type, name);
+
+        Common::Debug() << "Uniform #" << i << ": name=\"" << name << "\"(" << len << ")" <<
+                " type=" << type << " size=" << size << std::endl;
+
+        switch (type) {
+            case GL_FLOAT: _uniforms.Add<float>(i, name, size);
+                break;
+            case GL_FLOAT_VEC2: _uniforms.Add<glm::vec2>(i, name, size);
+                break;
+            case GL_FLOAT_VEC3: _uniforms.Add<glm::vec3>(i, name, size);
+                break;
+            case GL_FLOAT_VEC4: _uniforms.Add<glm::vec4>(i, name, size);
+                break;
+
+            case GL_FLOAT_MAT2: _uniforms.Add<glm::mat2>(i, name, size);
+                break;
+            case GL_FLOAT_MAT3: _uniforms.Add<glm::mat3>(i, name, size);
+                break;
+            case GL_FLOAT_MAT4: _uniforms.Add<glm::mat4>(i, name, size);
+                break;
+
+            case GL_DOUBLE: _uniforms.Add<double>(i, name, size);
+                break;
+            case GL_DOUBLE_VEC2: _uniforms.Add<glm::dvec2>(i, name, size);
+                break;
+            case GL_DOUBLE_VEC3: _uniforms.Add<glm::dvec3>(i, name, size);
+                break;
+            case GL_DOUBLE_VEC4: _uniforms.Add<glm::dvec4>(i, name, size);
+                break;
+
+            case GL_DOUBLE_MAT2: _uniforms.Add<glm::dmat2>(i, name, size);
+                break;
+            case GL_DOUBLE_MAT3: _uniforms.Add<glm::dmat3>(i, name, size);
+                break;
+            case GL_DOUBLE_MAT4: _uniforms.Add<glm::dmat4>(i, name, size);
+                break;
+
+            default:
+                throw std::runtime_error(std::string("Unrecognised uniform type: ") + std::to_string(type));
+        }
+    }
+}
+
+void Program::Build(const MaterialProperties& props) {
+    std::string vertextShaderContent = props.GetVertextShaderText();
+    std::string fragmentShaderContent = props.GetFragmentShaderText();
+
+    std::string versionString = "";
+
+    if (!props.GetGLSLVersion().empty()) {
+        versionString = "#version " + props.GetGLSLVersion() + "\n";
+    }
+
     std::vector<std::string> prefixVector = {
-        generatePrecision(parameters),
-        ("#define SHADER_NAME " + parameters.GetString("shaderName"))
+        generatePrecision(props),
+        "#define SHADER_NAME " + props.GetName() + "_vertex",
+
+        props.HasVertexColor() ? "#define USE_COLOR" : "",
+
+        "uniform mat4 modelMatrix;",
+        "uniform mat4 modelViewMatrix;",
+        "uniform mat4 projectionMatrix;",
+        "uniform mat4 viewMatrix;",
+        "uniform mat4 normalMatrix;",
+        ""
     };
     std::vector<std::string> prefixFragment = {
-        generatePrecision(parameters),
-        ("#define SHADER_NAME " + parameters.GetString("shaderName"))
+        generatePrecision(props),
+        "#define SHADER_NAME " + props.GetName() + "_fragment",
+        ""
     };
 
+    vertextShaderContent = resolveIncludes(vertextShaderContent);
+    fragmentShaderContent = resolveIncludes(fragmentShaderContent);
 
+    std::string vertexPrefixText = Utility::join(prefixVector.begin(), prefixVector.end(), "\n");
+    std::string fragmentPrefixText = Utility::join(prefixFragment.begin(), prefixFragment.end(), "\n");
+
+    const std::string fullVertexShader = versionString + vertexPrefixText + vertextShaderContent;
+    const std::string fullFragmentShader = versionString + fragmentPrefixText + fragmentShaderContent;
+
+    Common::Debug() << "--------------------------------------------------" << std::endl;
+    Common::Debug() << fullVertexShader << std::endl;
+    Common::Debug() << "--------------------------------------------------" << std::endl;
+    Common::Debug() << fullFragmentShader << std::endl;
+    Common::Debug() << "--------------------------------------------------" << std::endl;
+
+
+    createProgram(fullVertexShader, fullFragmentShader);
+
+    updateUniforms();
+    updateAttributes();
 }
+
+Uniforms& Program::GetUniforms() {
+    return _uniforms;
+}
+
+const ProgramAttributes& Program::GetAttributes() {
+    return _attributes;
+}
+
+void Program::Use() {
+    glUseProgram(_id);
+}
+
 
 

@@ -28,10 +28,9 @@ Object::Object() {
     _id = ++objectCounter;
     _name = "unnamed object";
 
-
-
     _scale = {1, 1, 1};
     _visible = true;
+    _isImmediateObject = true;
 }
 
 int Object::GetId() const {
@@ -85,8 +84,12 @@ bool Object::IsFrustumCulled() const {
     return false;
 }
 
-glm::mat4x4 Object::GetMatrixWorld() const {
-    return _matrixWorld;
+bool Object::IsImmediateObject() const {
+    return _isImmediateObject;
+}
+
+bool Object::IsInstancedMesh() const {
+    return _isInstancedMesh;
 }
 
 void Object::UpdateMatrix() {

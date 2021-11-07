@@ -19,20 +19,26 @@
 #ifndef GRAPHICS_VIEWOBJECT_HPP
 #define GRAPHICS_VIEWOBJECT_HPP
 
-#include <Graphics/Geometry.hpp>
-#include <Graphics/Material.hpp>
+#include <Graphics/Object.hpp>
 
 namespace Graphics {
-    
+    class Geometry;
+    class Material;
+
     class ViewObject : public Object {
     protected:
-        Geometry* _geo;
-        Material* _mat;
+        std::shared_ptr<Geometry> _geo;
+        std::shared_ptr<Material> _mat;
     public:
-        ViewObject();
-        
-        Geometry* GetGeometry() { return _geo; }
-        Material* GetMaterial() { return _mat; }
+        ViewObject(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+
+        std::shared_ptr<Geometry> GetGeometry() {
+            return _geo;
+        }
+
+        std::shared_ptr<Material> GetMaterial() {
+            return _mat;
+        }
     };
 }
 

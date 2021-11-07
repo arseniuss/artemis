@@ -24,8 +24,11 @@ static unsigned int sceneIndex = 0;
 
 size_t Scene::Hash = typeid(Scene).hash_code();
 
-Scene::Scene() {
+Scene::Scene() : _background() {
     _name = "Scene #" + std::to_string(sceneIndex++);
     _hash = Scene::Hash;
 }
 
+std::weak_ptr<Graphics::Property> Scene::GetBackground() {
+    return _background;
+}

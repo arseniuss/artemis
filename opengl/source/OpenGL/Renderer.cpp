@@ -16,9 +16,10 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-//#include <algorithm>
-
 #include <Common.hpp>
+#include <Common/Dictionary.hpp>
+#include <Graphics/Common.hpp>
+#include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Group.hpp>
 #include <Graphics/Objects/LOD.hpp>
 #include <Graphics/Objects/Light.hpp>
@@ -27,34 +28,33 @@
 #include <Graphics/Objects/Points.hpp>
 #include <Graphics/Objects/Sprite.hpp>
 #include <OpenGL/Context.hpp>
+#include <OpenGL/Program.hpp>
+#include <OpenGL/RenderItem.hpp>
 #include <OpenGL/Renderer.hpp>
 
 using namespace OpenGL;
 
 Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx) {
 
+    for (int i = 0; i < Graphics::LAST_COMPONENT; i++) {
+        const Graphics::ObjectDictionary& obj = Graphics::Objects[i];
+        auto material = new MaterialProperties(obj.MaterialName, obj.ObjectName);
+
+        _properties.Set<MaterialProperties>(obj.MaterialName, material);
+    }
 }
 
 Renderer::~Renderer() {
 
 }
 
-void Renderer::Begin() {
-    //auto win = _context.GetWindow();
-
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
 void Renderer::Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Graphics::Camera> camera) {
     std::vector<Graphics::Object*> list;
     auto _o = scene.get() ? scene->shared_from_this() : nullptr;
 
-    // TODO: light and shadow lists
-
     // Put all scene items into list
     Graphics::Traverse(_o, [this, &list](std::shared_ptr<Graphics::Object>& o) {
-        // TODO: check if is renderable
+        // Note. Do not remove objects if they're just invisible
         if (o.get())
             list.push_back(o.get());
     });
@@ -80,154 +80,24 @@ void Renderer::Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Gr
 
     if (camera.get()) {
         // Update matrix
-        _projMatrix = camera->GetProjectionMatrix() * camera->GetMatrixWorldInverse();
+        _projMatrix = camera->projection * camera->matrixWorldInverse;
         _frustum.Update(_projMatrix);
     }
 
-    ProjectObject(scene, camera, 0, false);
-}
+    _opaqueObject.clear();
+    _transparentObjects.clear();
 
-void Renderer::ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_ptr<Graphics::Camera> camera,
-        int groupOrder, bool sortObjects) {
-    if (!o.get())
-        return;
-    if (!o->IsVisible())
-        return;
+    ProjectObject(scene, camera);
 
-    size_t h = o->GetHash();
+    // render background
+    background.Render(scene);
 
-    if (h == Common::__hash<Graphics::Group>()) {
-        auto g = std::static_pointer_cast<Graphics::Group>(o);
-
-        groupOrder = g->GetRenderOrder();
-    } else if (h == Common::__hash<Graphics::LOD>()) {
-        auto l = std::static_pointer_cast<Graphics::LOD>(o);
-
-        if (l->AutoUpdate())
-            l->Update(camera);
-    } else if (h == Common::__hash<Graphics::Light>()) {
-        auto l = std::static_pointer_cast<Graphics::Light>(o);
-
-        //_lights.emplace_back(l->weak_from_this());
-
-        if (l->CastsShadow()) {
-            //_shadows.emplace_back(l->weak_from_this());
-        }
-    } else if (h == Common::__hash<Graphics::Sprite>()) {
-        if (!o->IsFrustumCulled() || _frustum.Intersects(*o)) {
-            float z = 1.0f;
-
-            if (sortObjects) {
-                //glm::mat4x4 m = o->GetMatrixWorld();
-                //glm::vec3 v = {
-                //    m[12],
-                //    m[13],
-                //    m[14]
-                //};
-
-                //v *= _projMatrix;
-                //z = v.z;
-            }
-
-            auto v = std::static_pointer_cast<Graphics::ViewObject>(o);
-            auto* g = v->GetGeometry();
-            auto* m = v->GetMaterial();
-
-            if (m->IsVisible()) {
-                Push(*o, *g, *m, groupOrder, z, nullptr);
-            }
-        }
-    } else if (
-            h == Common::__hash<Graphics::Mesh>() ||
-            h == Common::__hash<Graphics::Line>() ||
-            h == Common::__hash<Graphics::Points>()
-            ) {
-        if (!o->IsFrustumCulled() || _frustum.Intersects(*o)) {
-            float z = 1.0f;
-
-            if (sortObjects) {
-                //glm::mat4x4 m = o->GetMatrixWorld();
-                //glm::vec3 v = {
-                //    m[12],
-                //    m[13],
-                //    m[14]
-                //};
-
-                //v *= _projMatrix;
-                //z = v.z;
-            }
-
-            auto v = std::static_pointer_cast<Graphics::ViewObject>(o);
-            auto* g = v->GetGeometry();
-            auto* m = v->GetMaterial();
-
-            if (m->IsVisible()) {
-                if (m->IsArray()) {
-                    auto groups = g->GetGroups();
-                    auto materials = m->GetMaterials();
-
-                    for (size_t i = 0; i < groups.size(); i++) {
-                        auto group = groups[i];
-                        //auto material = materials[group->GetMaterialIndex()];
-
-                        //if (auto mat = material.lock()) {
-                        //    if (mat->IsVisible()) {
-                        //        //Push(*o, *g, *mat, groupOrder, z, *group);
-                        //    }
-                        //}
-                    }
-                } else {
-                    Push(*o, *g, *m, groupOrder, z, nullptr);
-                }
-            }
-        }
-
-    } else {
-        // TODO
-    }
-
-    auto& children = o->GetChildren();
-
-    for (size_t i = 0; i < children.size(); i++) {
-        //std::shared_ptr<Graphics::Object>& c = children[i];
-
-        //ProjectObject(c, camera, groupOrder, 0, false);
+    if (camera.get()) {
+        if (_opaqueObject.size() > 0) RenderObjects(_opaqueObject, scene, camera);
+        if (_transparentObjects.size() > 0) RenderObjects(_transparentObjects, scene, camera);
     }
 
 
-}
-
-void Renderer::Push(Graphics::Object& o, Graphics::Geometry& geometry, Graphics::Material& material, int groupOrder, float z, Graphics::Group* group) {
-    /*
-        std::shared_ptr<RenderItem> item;
-        auto it = _items.find(o.weak_from_this());
-        auto materialProperties = Properties.Get(material);
-
-        if (it == _items.end()) {
-            item = std::make_shared<RenderItem>(
-                    o.GetId(),
-                    o,
-                    geometry,
-                    material,
-                    materialProperties.Exists("PROGRAM") ? materialProperties.Get<Program>() : _defaultProgram,
-                    groupOrder,
-                    o->RenderOrder(),
-                    z,
-                    group
-                    );
-        } else {
-            item = it->second;
-        }
-
-        item->Update(o->shared_from_this());
-     */
-}
-
-void Renderer::RenderObject(Graphics::Object& object, Graphics::Scene& scene, Graphics::Camera& camera, Graphics::Geometry& geo, Graphics::Material& mat) {
-
-}
-
-void Renderer::Finish() {
     auto win = _context.GetWindow();
 
     _context.DrawLayout();
@@ -235,3 +105,73 @@ void Renderer::Finish() {
     SDL_GL_SwapWindow(win);
 }
 
+void Renderer::ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_ptr<Graphics::Camera> camera) {
+    if (!o.get()) return;
+    if (!o->IsVisible()) return;
+
+    size_t h = o->GetHash();
+
+    if (
+            h == Common::__hash<Graphics::Mesh>() ||
+            h == Common::__hash<Graphics::Line>() ||
+            h == Common::__hash<Graphics::Points>()
+            ) {
+
+        if (!o->IsFrustumCulled() || _frustum.Intersects(*o)) {
+            auto v = std::static_pointer_cast<Graphics::ViewObject>(o);
+            auto g = v->GetGeometry();
+            auto m = v->GetMaterial();
+
+            if (m->IsVisible()) {
+                Push(*o, *g, *m);
+            }
+        }
+    } else if (h == Common::__hash<Graphics::Scene>()) {
+    } else {
+        Common::Debug() << "Unrecognised object: " << o->GetName() << std::endl;
+    }
+
+    auto& children = o->GetChildren();
+
+    for (size_t i = 0; i < children.size(); i++) {
+        std::shared_ptr<Graphics::Object>& c = children[i];
+
+        ProjectObject(c, camera);
+    }
+}
+
+void Renderer::Push(Graphics::Object& object, Graphics::Geometry& geometry, Graphics::Material& material) {
+    std::shared_ptr<RenderItem> item;
+    auto it = _items.find(object.weak_from_this());
+
+    if (it == _items.end()) {
+        item = std::make_shared<RenderItem>();
+
+        item->object = object.weak_from_this();
+        item->geometry = geometry.weak_from_this();
+        item->material = material.weak_from_this();
+
+        _items.emplace(object.weak_from_this(), item);
+    } else {
+        item = it->second;
+    }
+
+    if (material.IsTransparent()) {
+        _transparentObjects.emplace_back(item);
+    } else {
+        _opaqueObject.emplace_back(item);
+    }
+}
+
+void Renderer::RenderObjects(std::vector<std::weak_ptr<RenderItem>> objects,
+        std::shared_ptr<Graphics::Scene> scene,
+        std::shared_ptr<Graphics::Camera> camera) {
+
+    for (size_t i = 0; i < objects.size(); i++) {
+        std::weak_ptr<RenderItem> wri = objects[i];
+
+        if (auto ri = wri.lock()) {
+            ri->Render(_state, _properties, camera);
+        }
+    }
+}

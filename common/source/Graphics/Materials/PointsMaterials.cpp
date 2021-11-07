@@ -17,9 +17,15 @@
  */
 
 #include <Graphics/Materials/PointsMaterial.hpp>
+#include <Graphics/Common.hpp>
 
 using namespace Graphics;
 
-PointsMaterial::PointsMaterial(size_t pointSize) {
+size_t PointsMaterial::Hash = typeid (PointsMaterial).hash_code();
 
+PointsMaterial::PointsMaterial(size_t pointSize) : Material() {
+    _name = Objects[POINT_COMPONENT].MaterialName + " #" + std::to_string(_id);
+    _typeName = Objects[POINT_COMPONENT].MaterialName;
+
+    _pointSize = pointSize;
 }

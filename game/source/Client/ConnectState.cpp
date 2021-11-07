@@ -23,6 +23,7 @@
 
 #include "Client/ConnectState.hpp"
 #include "Client/GameState.hpp"
+#include "Client/Application.hpp"
 
 using namespace Client;
 

@@ -19,17 +19,21 @@
 #ifndef GRAPHICS_OBJECTS_POINTS_HPP
 #define GRAPHICS_OBJECTS_POINTS_HPP
 
-#include <Graphics/Geometry.hpp>
-#include <Graphics/Material.hpp>
+#include <memory>
+
 #include <Graphics/ViewObject.hpp>
 
 namespace Graphics {
+    class Geometry;
+    class Material;
 
     class Points : public ViewObject {
     protected:
 
     public:
-        Points(Geometry* geo, Material* material);
+        static size_t Hash;
+
+        Points(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
 
     };
 }

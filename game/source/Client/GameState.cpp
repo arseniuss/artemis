@@ -20,13 +20,15 @@
 #include <Gui/Gui.hpp>
 #include <Gui/Panel.hpp>
 #include <Gui/Widget.hpp>
+#include <Gui/Button.hpp>
 
 #include "Client/GameState.hpp"
+#include "Client/Application.hpp"
 
 using namespace Client;
 
 GameState::GameState(Application *app) : State(app, "Game state") {
-    _camera = new Graphics::Camera();
+    //_camera = new Graphics::Camera();
 }
 
 void GameState::BuildUI(Gui::LayoutBuilder& builder) {

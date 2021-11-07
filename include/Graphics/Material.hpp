@@ -23,16 +23,44 @@
 #include <vector>
 
 namespace Graphics {
-    class Material {
+
+    enum {
+        DOUBLE_SIDED
+    };
+
+    class Material : public std::enable_shared_from_this<Material> {
     protected:
-        std::vector<std::weak_ptr<Material>> _materials;
+        int _id;
+        std::string& _typeName;
+        std::string _name;
+        int _version;
+        int _sides;
+
+        bool _isVisible;
+
+        bool _transparent;
     public:
         Material();
-        
+        Material(const std::string& name, const std::string& typeName);
+
+        const std::string& GetName() const;
+
+        const std::string& GetTypeName() const {
+            return _typeName;
+        }
+
         bool IsVisible() const;
-        bool IsArray() const;
-        
-        std::vector<std::weak_ptr<Material>>& GetMaterials();
+
+        float GetTransmission() const;
+        bool IsTransparent() const;
+
+        int GetVersion() const {
+            return _version;
+        }
+
+        int GetSides() const {
+            return _sides;
+        }
     };
 }
 

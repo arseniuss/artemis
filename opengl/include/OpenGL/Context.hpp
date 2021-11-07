@@ -22,9 +22,9 @@
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Context.hpp>
 #include <NanoVG/NanoVG.hpp>
-#include <OpenGL/Renderer.hpp>
 
 namespace OpenGL {
+    class Renderer;
 
     class Context : public Graphics::Context {
     protected:
@@ -32,7 +32,7 @@ namespace OpenGL {
         SDL_GLContext _context;
 
         NVG::NVGcontext* _nvgContext;
-        
+
         void drawLayout(int item, int corners);
     public:
         static bool Debug;

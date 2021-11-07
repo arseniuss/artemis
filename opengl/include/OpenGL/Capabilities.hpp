@@ -20,6 +20,7 @@
 #define OPENGL_CAPABILITIES_HPP
 
 namespace OpenGL {
+
     class Capabilities {
     private:
         int _maxTextures;
@@ -32,6 +33,8 @@ namespace OpenGL {
         int _maxFragmentUnifoms;
     public:
         Capabilities();
+
+        std::string VerifyPrecision(std::string precision) const;
     };
 }
 

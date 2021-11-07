@@ -16,12 +16,40 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Graphics/Buffer.hpp>
 #include <OpenGL/Buffer.hpp>
+
+#include "glad.h"
 
 using namespace OpenGL;
 
-Buffer::Buffer(std::vector<glm::vec3>& data, int itemSize) {
+Buffer::Buffer(std::shared_ptr<Graphics::Buffer> buffer) {
+    GLenum bufferType;
+
+    Common::Debug() << "Creating buffer " << buffer->GetName() << std::endl;
+
     glGenBuffers(1, &_id);
     glBindBuffer(GL_ARRAY_BUFFER, _id);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * data.size(), data.data(), GL_DYNAMIC_DRAW);
+
+    int type = buffer->GetType();
+
+    switch (type) {
+        case Graphics::CONST_BUFFER:
+            bufferType = GL_STATIC_DRAW;
+            break;
+        case Graphics::DYNAMIC_BUFFER:
+            bufferType = GL_DYNAMIC_DRAW;
+            break;
+        default:
+            throw std::runtime_error("Unrecognised buffer type: " + std::to_string(type));
+            break;
+    }
+
+    glBufferData(GL_ARRAY_BUFFER, buffer->GetSize(), buffer->GetData(), bufferType);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+Buffer::~Buffer() {
+    glDeleteBuffers(1, &_id);
+}
+

@@ -34,7 +34,7 @@ namespace OpenGL {
         int _corners;
         bool _isVisible;
         bool _debug;
-        
+
         void setBox(unsigned int box) override;
         void setCorners(int corners) override;
         void setLayout(unsigned int layout) override;

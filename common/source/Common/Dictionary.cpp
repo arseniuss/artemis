@@ -20,6 +20,18 @@
 
 using namespace Common;
 
+Dictionary::Dictionary() {
+    Set<int>("VERSION", 0);
+}
+
+bool Dictionary::Exists(const std::string& name) const {
+    return _data.find(name) != _data.end();
+}
+
+const Common::Dictionary& Dictionary::GetDictionary(const std::string& name) const {
+    return ConstGet<Common::Dictionary>(name);
+}
+
 const std::string& Dictionary::GetString(const std::string& name) const {
     auto it = _data.find(name);
 

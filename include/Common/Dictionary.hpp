@@ -23,11 +23,67 @@
 #include <map>
 
 namespace Common {
+
     class Dictionary {
-    private:
+    protected:
         std::map<std::string, void*> _data;
     public:
+        Dictionary();
+
+        bool Exists(const std::string& name) const;
+
+        template<typename Type>
+        void Set(const std::string& name, Type value) {
+            Type* i = new Type();
+
+            *i = value;
+
+            _data.emplace(name, i);
+        }
+
+        template<typename Type>
+        void Set(const std::string& name, Type* value) {
+            _data.emplace(name, value);
+        }
+
+        template<typename RetType>
+        RetType& Get(const std::string& name) {
+            auto it = _data.find(name);
+
+            if (it == _data.end())
+                throw std::runtime_error(std::string("Dictionary has no key \"") + name + "\"");
+
+            return *(RetType *) it->second;
+        }
+
+        template<typename RetType>
+        RetType& GetOrEmpty(const std::string& name) {
+            auto it = _data.find(name);
+
+            if (it == _data.end()) {
+                auto ret = new RetType();
+
+                _data.emplace(name, ret);
+
+                return *ret;
+            }
+
+            return *(RetType *) it->second;
+        }
+
+        template<typename RetType>
+        const RetType& ConstGet(const std::string& name) const {
+            auto it = _data.find(name);
+
+            if (it == _data.end())
+                throw std::runtime_error(std::string("Dictionary has no key \"") + name + "\"");
+
+            return *(RetType *) it->second;
+        }
+
+        const Common::Dictionary& GetDictionary(const std::string& name) const;
         const std::string& GetString(const std::string& name) const;
+
     };
 }
 

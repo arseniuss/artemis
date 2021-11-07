@@ -36,7 +36,7 @@ namespace Galaxy {
                 float countMean = 0.0000025f, float countDeviation = 0.000001f,
                 glm::vec3 deviation = glm::vec3{0.0000025f});
 
-        std::vector<Star>& Generate(std::knuth_b& random) override;
+        std::vector<Star>& Generate(Utility::Random& random) override;
     };
 }
 

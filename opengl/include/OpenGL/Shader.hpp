@@ -20,9 +20,10 @@
 #define OPENGL_SHADER_HPP
 
 namespace OpenGL {
+
     class Shader {
     public:
-        
+
     };
 }
 

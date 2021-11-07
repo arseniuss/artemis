@@ -22,17 +22,18 @@
 #include <Client/State.hpp>
 
 namespace Client {
+
     class GalaxyState : public State {
     private:
         std::shared_ptr<Graphics::Scene> _scene;
         std::shared_ptr<Graphics::Camera> _camera;
     public:
         GalaxyState(Application *app);
-        
+
         void BuildUI(Gui::LayoutBuilder& builder) override;
-        
+
         bool HandleEvent(const SDL_Event& event) override;
-        
+
         void Render(Graphics::Renderer& renderer) override;
 
     };

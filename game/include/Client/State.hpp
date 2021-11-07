@@ -20,10 +20,10 @@
 #define CLIENT_STATE_HPP
 
 #include <Common/State.hpp>
-#include <Client/Application.hpp>
 #include <Graphics/Renderer.hpp>
 
 namespace Client {
+    class Application;
 
     class State : public Common::State {
     protected:

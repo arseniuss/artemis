@@ -40,7 +40,7 @@ Gui::Button* Button::SetLabel(const std::string& label) {
 
 Button* Button::SetIcon(int iconId) {
     _iconId = iconId;
-    
+
     return this;
 }
 

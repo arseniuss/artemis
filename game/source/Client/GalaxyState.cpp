@@ -19,54 +19,55 @@
 #include <random>
 
 #include <Galaxy/SphereGalaxyGenerator.hpp>
+#include <Graphics/Buffer.hpp>
 #include <Graphics/Geometry.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Points.hpp>
 
 #include "Client/GalaxyState.hpp"
+#include "Client/Application.hpp"
 
 using namespace Client;
 
 GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     auto graph = app->GetGraphics();
 
-    std::knuth_b rand(0);
-    auto gen = new Galaxy::SphereGalaxyGenerator(4000);
+    Utility::Random rand(0);
+    auto gen = new Galaxy::SphereGalaxyGenerator(1000);
     std::vector<Galaxy::Star>& stars = gen->Generate(rand);
 
 
 
-    auto geo = new Graphics::Geometry();
+    auto geo = std::make_shared<Graphics::Geometry>();
     std::vector<float> positions;
     std::vector<float> colors;
-
-    positions.reserve(stars.size() * 3);
-    colors.reserve(stars.size() * 3);
 
     for (size_t i = 0; i < stars.size(); i++) {
         auto& star = stars[i];
 
-        positions[i] = star.position.x;
-        positions[i + 1] = star.position.y;
-        positions[i + 2] = star.position.z;
+        positions.emplace_back(star.position.x);
+        positions.emplace_back(star.position.y);
+        positions.emplace_back(star.position.z);
 
-        colors[i] = 1.0f;
-        colors[i + 1] = 1.0f;
-        colors[i + 2] = 1.0f; // TODO: convert
+        colors.emplace_back(1.0f);
+        colors.emplace_back(1.0f);
+        colors.emplace_back(1.0f); // TODO: convert
     }
 
     geo->AddBuffer("position", std::make_shared<Graphics::Buffer>(positions, 3));
     geo->AddBuffer("color", std::make_shared<Graphics::Buffer>(colors, 3));
 
+    geo->Compute();
 
-    auto material = new Graphics::PointsMaterial(15);
+    auto mat = std::make_shared<Graphics::PointsMaterial>(15);
 
-    auto system = std::make_shared<Graphics::Points>(geo, material);
+    auto system = std::make_shared<Graphics::Points>(geo, mat);
 
     _scene = std::make_shared<Graphics::Scene>();
 
+    auto windowSize = graph->GetSize();
     _scene->Add(system->shared_from_this());
-    _camera = std::make_shared<Graphics::Camera>();
+    _camera = std::make_shared<Graphics::Camera>(27, windowSize.x / windowSize.y, 5, 3500);
 }
 
 void GalaxyState::BuildUI(Gui::LayoutBuilder& builder) {

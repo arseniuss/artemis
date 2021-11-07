@@ -16,14 +16,27 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Graphics/Buffer.hpp>
 #include <Graphics/Geometry.hpp>
 
 using namespace Graphics;
 
+Geometry::Geometry() {
+    _size = 0;
+}
+
 void Geometry::AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer) {
-
+    buffer->SetName(name);
+    _buffers.emplace(name, buffer);
 }
 
-std::vector<std::weak_ptr<Graphics::Group>>&Geometry::GetGroups() {
-    return _groups;
+BufferMap& Geometry::GetBuffers() {
+    return _buffers;
 }
+
+void Geometry::Compute() {
+    if (_buffers.contains("position")) {
+        _size = _buffers["position"]->GetSize() / 3;
+    }
+}
+

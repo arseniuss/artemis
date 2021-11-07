@@ -20,18 +20,32 @@
 
 using namespace Graphics;
 
-Material::Material() {
+static int materialCounter = 0;
+std::string unnamed = "unnamed material";
 
+Material::Material() : _typeName(unnamed) {
+    _id = ++materialCounter;
+    _name = "unnamed material #" + std::to_string(_id);
+    _version = 1;
+
+    _isVisible = true;
+
+    _transparent = false;
 }
 
-bool Material::IsArray() const {
-    return false;
+Material::Material(const std::string& name, const std::string& typeName) : Material() {
+    _name = name;
+    _typeName = typeName;
+}
+
+const std::string& Material::GetName() const {
+    return _name;
+}
+
+bool Material::IsTransparent() const {
+    return _transparent;
 }
 
 bool Material::IsVisible() const {
-    return false;
-}
-
-std::vector<std::weak_ptr<Material>>&Material::GetMaterials() {
-    return _materials;
+    return _isVisible;
 }

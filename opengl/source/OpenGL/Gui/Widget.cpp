@@ -28,7 +28,7 @@ OpenGLWidget::OpenGLWidget(int i) : _id(i) {
     _corners = CORNER_NONE;
     _isVisible = true;
     _debug = false;
-    
+
     uiSetSize(_id, BND_TOOL_WIDTH, BND_WIDGET_HEIGHT);
     uiSetLayout(_id, 0);
     uiSetBox(_id, 0);

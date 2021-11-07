@@ -19,11 +19,25 @@
 #ifndef GRAPHICS_OBJECTS_LINE_HPP
 #define GRAPHICS_OBJECTS_LINE_HPP
 
+#include <Graphics/ViewObject.hpp>
+
 namespace Graphics {
 
-    class Line : public Object {
+    class Line : public ViewObject {
     private:
+        float _lineWidth;
+
+        bool _isLineLoop;
+        bool _isLineSegments;
     public:
+        static size_t Hash;
+
+        Line(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+
+        float GetLineWidth() const;
+
+        bool IsLineSegments() const;
+        bool IsLineLoop() const;
     };
 }
 

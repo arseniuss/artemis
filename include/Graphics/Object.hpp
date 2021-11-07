@@ -36,22 +36,27 @@ namespace Graphics {
 
         std::weak_ptr<Object> _parent;
         std::vector<std::shared_ptr<Object>> _children;
-
-        glm::mat4x4 _matrix;
-        glm::mat4x4 _matrixWorld;
-
+        
         glm::vec3 _position;
         glm::mat4 _rotation;
         glm::vec3 _scale;
         glm::quat _quat;
         bool _visible;
-    public: 
+        bool _isImmediateObject;
+        bool _isInstancedMesh;
+    public:
+        int count;
+        
+        glm::mat4 matrix;
+        glm::mat4 matrixWorld;
+        glm::mat4 modelViewMatrix;
+        glm::mat3 normalMatrix;
+        
         Object();
 
         int GetId() const;
         size_t GetHash() const;
         const std::string& GetName() const;
-        glm::mat4x4 GetMatrixWorld() const;
 
         std::vector<std::shared_ptr<Object>>&GetChildren();
 
@@ -62,6 +67,8 @@ namespace Graphics {
         
         bool IsVisible() const;
         bool IsFrustumCulled() const;
+        bool IsImmediateObject() const;
+        bool IsInstancedMesh() const;
     };
     
     void Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&)> func);

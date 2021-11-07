@@ -50,33 +50,62 @@ Capabilities::Capabilities() {
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &tmp);
     Common::Debug() << "MAX_TEXTURE_IMAGE_UNITS = " << tmp << std::endl;
     _maxTextures = tmp;
-    
+
     glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &tmp);
     Common::Debug() << "MAX_VERTEX_TEXTURE_IMAGE_UNITS = " << tmp << std::endl;
     _maxVertexTextures = tmp;
-    
+
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &tmp);
     Common::Debug() << "MAX_TEXTURE_SIZE = " << tmp << std::endl;
     _maxTextureSize = tmp;
-    
+
     glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &tmp);
     Common::Debug() << "MAX_CUBE_MAP_TEXTURE_SIZE = " << tmp << std::endl;
     _maxCubemapSize = tmp;
-    
+
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &tmp);
     Common::Debug() << "MAX_VERTEX_ATTRIBS = " << tmp << std::endl;
     _maxAttributes = tmp;
-    
+
     glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &tmp);
     Common::Debug() << "MAX_VERTEX_UNIFORM_VECTORS = " << tmp << std::endl;
     _maxVertexUniform = tmp;
-    
+
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &tmp);
     Common::Debug() << "MAX_VARYING_VECTORS = " << tmp << std::endl;
     _maxVarying = tmp;
-    
+
     glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &tmp);
     Common::Debug() << "MAX_FRAGMENT_UNIFORM_VECTORS = " << tmp << std::endl;
-    _maxFragmentUnifoms = tmp; 
+    _maxFragmentUnifoms = tmp;
+}
+
+static bool isPrecisionOK(GLenum precisionType) {
+    bool ok = true;
+    GLint precision;
+
+    glGetShaderPrecisionFormat(GL_VERTEX_SHADER, precisionType, nullptr, &precision);
+    ok &= precision > 0;
+    glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, precisionType, nullptr, &precision);
+    ok &= precision > 0;
+
+    return ok;
+}
+
+std::string Capabilities::VerifyPrecision(std::string precision) const {
+    if (precision == "highp") {
+        if (isPrecisionOK(GL_HIGH_FLOAT)) {
+            return "highp";
+        }
+        precision = "mediump";
+    }
+
+    if (precision == "mediump") {
+        if (isPrecisionOK(GL_MEDIUM_FLOAT)) {
+            return "mediump";
+        }
+    }
+
+    return "lowp";
 }
 

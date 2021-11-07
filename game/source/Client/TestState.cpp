@@ -102,7 +102,7 @@ static const float g_color_buffer_data[] = {
 TestState::TestState(Application* app) : State(app, "Test state") {
 
 
-    _camera = new Graphics::Camera();
+    // = new Graphics::Camera();
 }
 
 void TestState::BuildUI(Gui::LayoutBuilder& builder) {

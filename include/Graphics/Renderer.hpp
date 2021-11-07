@@ -28,14 +28,10 @@ namespace Graphics {
 
     class Renderer {
     protected:
-        virtual void RenderObject(Object& object, Scene& scene, Camera& camera, Geometry& geo, Material& mat) = 0;
+        
     public:
 
-        virtual void Begin() = 0;
-
         virtual void Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Graphics::Camera> camera) = 0;
-
-        virtual void Finish() = 0;
     };
 }
 

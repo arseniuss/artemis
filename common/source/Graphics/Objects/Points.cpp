@@ -24,10 +24,10 @@ using namespace Graphics;
 
 static unsigned int pointIndex = 0;
 
-Points::Points(Geometry* geo, Material* material) : ViewObject() {
+size_t Points::Hash = typeid (Points).hash_code();
+
+Points::Points(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat) {
     _name = "Points #" + std::to_string(pointIndex++);
-    _hash = typeid(Points).hash_code();
-    _geo = geo;
-    _mat = material;
+    _hash = typeid (Points).hash_code();
 }
 

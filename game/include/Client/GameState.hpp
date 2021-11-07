@@ -25,7 +25,7 @@
 namespace Client {
     class GameState : public State {
     private:
-        Graphics::Camera* _camera;
+        //Graphics::Camera* _camera;
     public:
         GameState(Application *app);
         virtual ~GameState() = default;

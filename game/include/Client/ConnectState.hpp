@@ -22,6 +22,10 @@
 #include <Client/State.hpp>
 #include <Gui/TextInput.hpp>
 
+namespace Network {
+    class Client;
+}
+
 namespace Client {
     class ConnectState : public State {
         Gui::TextInput *_textInput = nullptr;

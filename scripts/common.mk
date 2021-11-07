@@ -21,10 +21,10 @@ CXXFLAGS += $(foreach _lib,$(LIBS),$(shell pkg-config --cflags $(_lib)))
 LDFLAGS += $(foreach _lib,$(LIBS),$(shell pkg-config --libs $(_lib)))
 
 $(STATIC_LIBS): %.a: 
-	make -C $(dir $@) all
+	$(MAKE) -C $(dir $@) all
 	
 $(SHARED_LIBS): %.so:
-	make -C $(dir $@) all
+	$(MAKE) -C $(dir $@) all
 
 $(OBJDIR)/%.c.o: %.c
 	@ mkdir -p $(dir $@)
@@ -44,12 +44,12 @@ clean: clean-static-libs clean-shared-libs
 	
 clean-static-libs:
 	@ for lib in $(foreach _lib,$(STATIC_LIBS),$(dir $(_lib))); do \
-	    make -C $$lib clean; \
+	    $(MAKE) -C $$lib clean; \
 	done
 	
 clean-shared-libs:
 	@ for lib in $(foreach _lib,$(SHARED_LIBS),$(dir $(_lib))); do \
-	    make -C $$lib clean; \
+	    $(MAKE) -C $$lib clean; \
 	done
 
 -include $(DEPS)

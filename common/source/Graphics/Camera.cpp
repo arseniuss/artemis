@@ -25,16 +25,10 @@ using namespace Graphics;
 
 static unsigned int cameraIndex = 0;
 
-Camera::Camera() {
-    _name = "Camers #" + std::to_string(cameraIndex++);
-    _projMatrix = glm::mat4{1.0f};
-    _matrixWorldInverse = glm::mat4{1.0f};
-}
+Camera::Camera(float fov, float aspect, float near, float far) {
+    _name = "Camera #" + std::to_string(cameraIndex++);
 
-const glm::mat4& Camera::GetMatrixWorldInverse() const {
-    return _matrixWorldInverse;
-}
 
-const glm::mat4& Camera::GetProjectionMatrix() const {
-    return _projMatrix;
+    projection = glm::perspective(fov, aspect, near, far);
+    matrixWorldInverse = glm::mat4{1.0f};
 }

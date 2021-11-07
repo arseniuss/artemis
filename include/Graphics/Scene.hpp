@@ -20,14 +20,20 @@
 #define GRAPHICS_SCENE_HPP
 
 #include <Graphics/Object.hpp>
+#include <Graphics/Property.hpp>
 
 namespace Graphics {
 
     class Scene : public Object {
+    private:
+        // TODO
+        std::weak_ptr<Graphics::Property> _background;
     public:
         static size_t Hash;
-        
+
         Scene();
+
+        std::weak_ptr<Graphics::Property> GetBackground();
     };
 }
 

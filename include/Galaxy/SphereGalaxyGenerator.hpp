@@ -20,7 +20,6 @@
 #define GALAXY_SPHEREGALAXYGENERATOR_HPP
 
 #include <Galaxy/GalaxyGenerator.hpp>
-
 namespace Galaxy {
 
     class SphereGalaxyGenerator : public GalaxyGenerator {
@@ -37,7 +36,7 @@ namespace Galaxy {
         SphereGalaxyGenerator(size_t sz, float densityDev = 0.0000025f, float densityMean = 0.000001f,
                 glm::vec3 deviation = glm::vec3{0.0000025f});
 
-        std::vector<Star>& Generate(std::knuth_b& random) override;
+        std::vector<Star>& Generate(Utility::Random& random) override;
 
     };
 

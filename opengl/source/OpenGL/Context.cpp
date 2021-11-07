@@ -23,6 +23,7 @@
 #include <SDL2/SDL_keyboard.h>
 
 #include <Blendish/Blendish.hpp>
+#include <Graphics/Material.hpp>
 #include <NanoVG/NanoVG.hpp>
 #include <OpenGL/Context.hpp>
 #include <OpenGL/Debug.hpp>

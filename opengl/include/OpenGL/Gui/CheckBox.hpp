@@ -27,7 +27,8 @@ namespace OpenGL {
     struct CheckBox : public OpenGLWidget, virtual Gui::CheckBox {
     private:
         bool _value;
-        bool* _valuePtr;;
+        bool* _valuePtr;
+        ;
         std::string _label;
         std::function<void(bool) > _onChange;
     public:
