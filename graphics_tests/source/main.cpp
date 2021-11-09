@@ -21,6 +21,10 @@
 #include <Common/Config.hpp>
 #include <Graphics/Context.hpp>
 
+#include "Test.hpp"
+
+using namespace TestingFramework;
+
 int main(int argc, char** argv) {
     std::shared_ptr<Common::Config> config = std::make_shared<Common::Config>("config.yaml");
     std::shared_ptr<Graphics::Context> graphics = Graphics::Context::Create(config);
@@ -28,6 +32,10 @@ int main(int argc, char** argv) {
 
     bool running = true;
     SDL_Event event;
+
+    TestVector::iterator testIt = Tests.begin();
+
+    DEBUG("Test count " << Tests.size());
 
     while (running) {
         graphics->HandleInput();
@@ -37,9 +45,23 @@ int main(int argc, char** argv) {
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                 }
+                if (event.key.keysym.sym == SDLK_SPACE) {
+                    DEBUG("Moving to test test");
+                    testIt++;
+                    if (testIt != Tests.end()) {
+                        DEBUG("Next test name is " << testIt->GetName());
+                    }
+                }
             }
 
             graphics->HandleEvent(event);
+        }
+
+        if (testIt == Tests.end()) {
+            DEBUG("Testing done");
+            running = false;
+        } else {
+
         }
 
         renderer->Render(nullptr, nullptr);

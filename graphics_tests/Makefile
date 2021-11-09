@@ -12,6 +12,8 @@ INCLUDES = \
     ../graphics/include \
     ../common/include
 SOURCES = \
+    source/03_matrices_test.cpp \
+    source/Test.cpp \
     source/main.cpp
 
 TARGET = $(BUILDDIR)/bin/$(PROGRAM)
