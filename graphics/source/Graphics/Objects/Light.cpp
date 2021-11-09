@@ -16,9 +16,14 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Common.hpp>
 #include <Graphics/Objects/Light.hpp>
 
 using namespace Graphics;
+
+bool Graphics::Light::IsLightHash(size_t hash) {
+    return hash == Common::__hash<Graphics::Light>();
+}
 
 bool Light::CastsShadow() const {
     return true;

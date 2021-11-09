@@ -36,23 +36,26 @@ namespace Graphics {
 
         std::weak_ptr<Object> _parent;
         std::vector<std::shared_ptr<Object>> _children;
-        
+
         glm::vec3 _position;
-        glm::mat4 _rotation;
+        glm::vec3 _up;
+        glm::mat4 _translation;
+        glm::quat _quaternion;
         glm::vec3 _scale;
-        glm::quat _quat;
+
+        // local transformation matrix
+        glm::mat4 _matrix;
+        glm::mat4 _matrixWorld;
+        bool _matrixAutoUpdate;
+
         bool _visible;
         bool _isImmediateObject;
         bool _isInstancedMesh;
     public:
         int count;
-        
-        glm::mat4 matrix;
-        glm::mat4 matrixWorld;
-        glm::mat4 modelViewMatrix;
-        glm::mat3 normalMatrix;
-        
+
         Object();
+        virtual ~Object();
 
         int GetId() const;
         size_t GetHash() const;
@@ -63,16 +66,21 @@ namespace Graphics {
         Object& Add(std::shared_ptr<Object> obj);
         Object& Remove(std::shared_ptr<Object> obj);
         
+        glm::mat4 GetMatrixWorld() const { return _matrixWorld; }
+
         void UpdateMatrix();
-        
+        void UpdateWorldMatrix(bool updateParents, bool updateChildren);
+
         bool IsVisible() const;
         bool IsFrustumCulled() const;
         bool IsImmediateObject() const;
         bool IsInstancedMesh() const;
+        
+        void LookAt(glm::vec3 target);
     };
-    
-    void Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&)> func);
-    void TraverseVisible(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&)> func);
+
+    void Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func);
+    void TraverseVisible(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func);
 }
 
 #endif /* !GRAPHICS_OBJECT_HPP */

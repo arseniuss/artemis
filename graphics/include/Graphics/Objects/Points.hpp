@@ -34,6 +34,7 @@ namespace Graphics {
         static size_t Hash;
 
         Points(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+        virtual ~Points();
 
     };
 }

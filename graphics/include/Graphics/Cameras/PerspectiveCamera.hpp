@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,42 +16,24 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Common/Application.hpp>
-#include <Common/State.hpp>
+#ifndef GRAPHICS_CAMERAS_PESPECTIVECAMERA_HPP
+#define GRAPHICS_CAMERAS_PESPECTIVECAMERA_HPP
 
-using namespace Common;
+#include <Graphics/Camera.hpp>
 
-State::State(Application* app, const std::string& name) :
-_app(*app), _name(name) {
+namespace Graphics {
 
+    class PerspectiveCamera : public Camera {
+    protected:
+        float _fov;
+        float _aspect;
+        float _nearPlane;
+        float _farPlane;
+    public:
+        PerspectiveCamera();
+        PerspectiveCamera(float fov, float aspect, float nearPlane, float farPlane);
+
+        virtual void UpdateProjectionMatrix() override;
+    };
 }
-
-State::~State() {
-    Common::Debug() << "State " << _name << " died." << std::endl;
-}
-
-void State::HandleInput() {
-}
-
-void State::OnPush() {
-    OnEnable();
-}
-
-void State::OnPop() {
-    OnDisable();
-}
-
-void State::OnDisable() {
-
-}
-
-void State::OnEnable() {
-
-}
-
-void State::Update(float deltaTime) {
-}
-
-const std::string& State::GetName() const {
-    return _name;
-}
+#endif /* !GRAPHICS_CAMERAS_PESPECTIVECAMERA_HPP */

@@ -31,3 +31,8 @@ Points::Points(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat) : V
     _hash = typeid (Points).hash_code();
 }
 
+Points::~Points() {
+    
+}
+
+

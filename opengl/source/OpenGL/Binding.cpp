@@ -46,6 +46,8 @@ void Binding::createMapping(std::weak_ptr<Graphics::Geometry> geometry) {
 }
 
 Binding::~Binding() {
+    Common::Debug() << "Binding " << _id << " died" << std::endl;
+
     glDeleteVertexArrays(1, &_id);
 }
 
@@ -72,6 +74,7 @@ std::shared_ptr<Buffer> Binding::GetBuffer(std::shared_ptr<Graphics::Buffer> buf
 }
 
 void Binding::RemoveBuffer(std::weak_ptr<Graphics::Buffer> buffer) {
+    Common::Debug() << "Removing buffer" << std::endl;
     if (_buffers.contains(buffer)) {
         _buffers.erase(buffer);
     }

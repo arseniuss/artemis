@@ -26,6 +26,8 @@ namespace Graphics {
     class Light : public Object {
     private:
     public:
+        static bool IsLightHash(size_t hash);
+        
         bool CastsShadow() const;
     };
 }

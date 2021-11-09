@@ -44,7 +44,7 @@ namespace OpenGL {
         void createMapping(std::weak_ptr<Graphics::Geometry> geometry);
     public:
         Binding(std::weak_ptr<Graphics::Geometry> geometry);
-        ~Binding();
+        virtual ~Binding();
 
         void Use();
 

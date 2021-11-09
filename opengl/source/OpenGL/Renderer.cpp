@@ -80,8 +80,8 @@ void Renderer::Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Gr
 
     if (camera.get()) {
         // Update matrix
-        _projMatrix = camera->projection * camera->matrixWorldInverse;
-        _frustum.Update(_projMatrix);
+        _projMatrix = camera->GetProjectionMatrix() * camera->GetViewMatrix();
+        _frustum.Update(camera->GetProjectionMatrix());
     }
 
     _opaqueObject.clear();

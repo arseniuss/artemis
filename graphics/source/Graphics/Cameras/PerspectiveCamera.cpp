@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,37 +16,30 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Common.hpp>
-#include <Graphics/Camera.hpp>
 #include <Graphics/Cameras/PerspectiveCamera.hpp>
-#include <Graphics/Utils.hpp>
 
 using namespace Graphics;
 
-static unsigned int cameraIndex = 0;
+PerspectiveCamera::PerspectiveCamera() {
+    _fov = 50.0f;
+    _aspect = 1.0f;
+    _nearPlane = 0.1f;
+    _farPlane = 2000.0f;
 
-bool Graphics::Camera::IsCameraHash(size_t hash) {
-    return hash == Common::__hash<Graphics::Camera>() ||
-            hash == Common::__hash<Graphics::PerspectiveCamera>();
+    UpdateProjectionMatrix();
 }
 
-Camera::Camera() {
-    _name = "Camera #" + std::to_string(cameraIndex++);
+PerspectiveCamera::PerspectiveCamera(float fov, float aspect, float nearPlane, float farPlane) {
+    _fov = fov;
+    _aspect = aspect;
+    _nearPlane = nearPlane;
+    _farPlane = farPlane;
+
+    UpdateProjectionMatrix();
 }
 
-Camera::~Camera() {
-
+void PerspectiveCamera::UpdateProjectionMatrix() {
+    _projectionMatrix = glm::perspective(_fov, _aspect, _nearPlane, _farPlane);
 }
 
-glm::mat4 Camera::GetProjectionMatrix() const {
-    return _projectionMatrix;
-}
-
-glm::mat4 Camera::GetViewMatrix() const {
-    return _viewMatrix;
-}
-
-void Camera::UpdateProjectionMatrix() {
-
-}
 

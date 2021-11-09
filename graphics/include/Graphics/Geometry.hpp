@@ -30,19 +30,22 @@ namespace Graphics {
 
     using BufferMap = std::map<std::string, std::shared_ptr<Buffer>>;
 
-    class Geometry : public std::enable_shared_from_this<Geometry>, public Common::Observable {
+    class Geometry : public Common::Observable, public std::enable_shared_from_this<Geometry> {
         size_t _size;
         BufferMap _buffers;
     public:
         Geometry();
-        
+        virtual ~Geometry();
+
         virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
 
         BufferMap& GetBuffers();
-        
+
         void Compute();
-        
-        size_t GetSize() const { return _size; }
+
+        size_t GetSize() const {
+            return _size;
+        }
     };
 }
 

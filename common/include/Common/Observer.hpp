@@ -39,7 +39,9 @@ namespace Common {
         Observable() {
         }
 
-        ~Observable() {
+        virtual ~Observable() {
+            Common::Debug() << "Observable died (destructs=" << _onDestruct.size() << ")" << std::endl;
+
             for (OnDestructCallback callback : _onDestruct) {
                 callback(this);
             }
@@ -51,19 +53,22 @@ namespace Common {
     };
 
     template<class TObserver, class TObservable>
-    inline void RegisterOnDestruct(TObserver* a, std::shared_ptr<TObservable> b, std::function<void(std::shared_ptr<TObserver>, std::weak_ptr<TObservable>) > f) {
-        std::weak_ptr<TObserver> w = a->weak_from_this();
+    inline void RegisterOnDestruct(TObserver* observer, std::shared_ptr<TObservable> observable,
+            std::function<void(TObserver*, std::weak_ptr<TObservable>) > func) {
+        //std::weak_ptr<TObserver> w = a->weak_from_this();
 
         Common::Debug() << "Registering " << typeid (TObserver).name() << " to " << typeid (TObservable).name() << std::endl;
 
-        b->OnDestruct([w, f](Common::Observable * o) {
+        observable->OnDestruct([observer, func](Common::Observable * o) {
             TObservable* b = reinterpret_cast<TObservable*> (o);
 
-            if (auto s = w.lock()) {
-                Common::Debug() << typeid (TObservable).name() << " died --> calling " << typeid (TObserver).name() << std::endl;
+            Common::Debug() << "On " << typeid (TObservable).name() << " died (" << typeid (TObserver).name() << ")" << std::endl;
 
-                        f(s, b->weak_from_this());
-            }
+            //if (auto s = w.lock()) {
+            Common::Debug() << typeid (TObservable).name() << " died --> calling " << typeid (TObserver).name() << std::endl;
+
+            func(observer, b->weak_from_this());
+            //}
         });
     }
 }

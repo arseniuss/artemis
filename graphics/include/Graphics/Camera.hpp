@@ -30,12 +30,18 @@ namespace Graphics {
 
     class Camera : public Object {
     protected:        
-        glm::mat4 _projMatrixInverse;
+        glm::mat4 _projectionMatrix;
+        glm::mat4 _viewMatrix;
     public:
-        glm::mat4 matrixWorldInverse;
-        glm::mat4 projection;
+        static bool IsCameraHash(size_t hash);
         
-        Camera(float fov, float aspect, float near, float far);
+        Camera();
+        virtual ~Camera();
+        
+        glm::mat4 GetProjectionMatrix() const;
+        glm::mat4 GetViewMatrix() const;
+        
+        virtual void UpdateProjectionMatrix();
     };
 }
 

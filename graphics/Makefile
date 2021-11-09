@@ -11,6 +11,7 @@ INCLUDES = \
 SOURCES = \
     source/Graphics/Buffer.cpp \
     source/Graphics/Camera.cpp \
+    source/Graphics/Cameras/PerspectiveCamera.cpp \
     source/Graphics/Color.cpp \
     source/Graphics/Common.cpp \
     source/Graphics/Context.cpp \

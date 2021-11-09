@@ -71,6 +71,7 @@ std::shared_ptr<Binding> State::GetBindingState(std::shared_ptr<Graphics::Geomet
 }
 
 void State::Remove(std::weak_ptr<Graphics::Geometry> geometry) {
+    Common::Debug() << "Removing geometry" << std::endl;
     if (_bindings.contains(geometry)) {
         _bindings.erase(geometry);
     }

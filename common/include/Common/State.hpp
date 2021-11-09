@@ -27,7 +27,7 @@ namespace Common {
     class State {
     public:
         State(Application* app, const std::string& name);
-        ~State();
+        virtual ~State();
 
         virtual void OnPush();
 

@@ -20,6 +20,7 @@
 
 #include <Galaxy/SphereGalaxyGenerator.hpp>
 #include <Graphics/Buffer.hpp>
+#include <Graphics/Cameras/PerspectiveCamera.hpp>
 #include <Graphics/Geometry.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Points.hpp>
@@ -67,7 +68,7 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
 
     auto windowSize = graph->GetSize();
     _scene->Add(system->shared_from_this());
-    _camera = std::make_shared<Graphics::Camera>(27, windowSize.x / windowSize.y, 5, 3500);
+    _camera = std::make_shared<Graphics::PerspectiveCamera>(27, windowSize.x / windowSize.y, 5, 3500);
 }
 
 void GalaxyState::BuildUI(Gui::LayoutBuilder& builder) {

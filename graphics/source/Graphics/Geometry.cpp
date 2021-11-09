@@ -25,6 +25,10 @@ Geometry::Geometry() {
     _size = 0;
 }
 
+Geometry::~Geometry() {
+    Common::Debug() << "Geometry died." << std::endl;
+}
+
 void Geometry::AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer) {
     buffer->SetName(name);
     _buffers.emplace(name, buffer);

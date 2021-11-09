@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,42 +16,30 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Common/Application.hpp>
-#include <Common/State.hpp>
+#ifndef GRAPHICS_MATHS_HPP
+#define GRAPHICS_MATHS_HPP
 
-using namespace Common;
+#include <glm/gtc/quaternion.hpp>
 
-State::State(Application* app, const std::string& name) :
-_app(*app), _name(name) {
 
+namespace Graphics {
+    namespace Maths {
+
+        inline glm::mat4 ExtractRotation(const glm::mat4& m) {
+            glm::vec3 scale;
+
+            for (int i = 0; i < 3; i++)
+                scale[i] = glm::length(glm::vec3(m[i]));
+
+            const glm::mat3 rot(
+                    glm::vec3(m[0]) / scale[0],
+                    glm::vec3(m[1]) / scale[1],
+                    glm::vec3(m[2]) / scale[2]
+                    );
+
+            return rot;
+        }
+    }
 }
 
-State::~State() {
-    Common::Debug() << "State " << _name << " died." << std::endl;
-}
-
-void State::HandleInput() {
-}
-
-void State::OnPush() {
-    OnEnable();
-}
-
-void State::OnPop() {
-    OnDisable();
-}
-
-void State::OnDisable() {
-
-}
-
-void State::OnEnable() {
-
-}
-
-void State::Update(float deltaTime) {
-}
-
-const std::string& State::GetName() const {
-    return _name;
-}
+#endif /* !GRAPHICS_MATHS_HPP */

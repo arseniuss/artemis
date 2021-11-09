@@ -156,7 +156,7 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
     }
 
     if (refreshProgram || state.GetCamera() != camera) {
-        programUniforms.Set("projectionMatrix", camera->projection);
+        programUniforms.Set("projectionMatrix", camera->GetProjectionMatrix());
 
         if (state.GetCamera() != camera) {
             state.SetCamera(camera);
@@ -176,9 +176,9 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
         }
     }
 
-    programUniforms.Set("modelViewMatrix", obj->modelViewMatrix);
+    //programUniforms.Set("modelViewMatrix", obj->modelViewMatrix);
     //programUniforms.Set("normalMatrix", camera->normalMatrix);
-    programUniforms.Set("modelMatrix", camera->matrix);
+    //programUniforms.Set("modelMatrix", camera->matrix);
 
     (void) (refreshLights);
 
@@ -208,8 +208,8 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
     auto geo = geometry.lock();
 
 
-    obj->modelViewMatrix = camera->matrixWorldInverse * obj->matrixWorld;
-    obj->normalMatrix = glm::transpose(glm::inverse(obj->modelViewMatrix));
+    //obj->modelViewMatrix = camera->matrixWorldInverse * obj->matrixWorld;
+    //obj->normalMatrix = glm::transpose(glm::inverse(obj->modelViewMatrix));
 
     auto program = setProgram(state, properties, camera, mat, obj);
 
