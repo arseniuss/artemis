@@ -28,55 +28,55 @@ Capabilities::Capabilities() {
     GLint precision;
 
     glGetShaderPrecisionFormat(GL_VERTEX_SHADER, GL_HIGH_FLOAT, range, &precision);
-    Common::Debug() << "VERTEX_SHADER HIGH_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision << std::endl;
+    DEBUG("VERTEX_SHADER HIGH_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     glGetShaderPrecisionFormat(GL_VERTEX_SHADER, GL_MEDIUM_FLOAT, range, &precision);
-    Common::Debug() << "VERTEX_SHADER MEDIUM_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision << std::endl;
+    DEBUG("VERTEX_SHADER MEDIUM_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     glGetShaderPrecisionFormat(GL_VERTEX_SHADER, GL_LOW_FLOAT, range, &precision);
-    Common::Debug() << "VERTEX_SHADER LOW_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision << std::endl;
+    DEBUG("VERTEX_SHADER LOW_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, range, &precision);
-    Common::Debug() << "FRAGMENT_SHADER HIGH_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision << std::endl;
+    DEBUG("FRAGMENT_SHADER HIGH_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_MEDIUM_FLOAT, range, &precision);
-    Common::Debug() << "FRAGMENT_SHADER MEDIUM_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision << std::endl;
+    DEBUG("FRAGMENT_SHADER MEDIUM_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_LOW_FLOAT, range, &precision);
-    Common::Debug() << "FRAGMENT_SHADER LOW_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision << std::endl;
+    DEBUG("FRAGMENT_SHADER LOW_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     GLint tmp;
 
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &tmp);
-    Common::Debug() << "MAX_TEXTURE_IMAGE_UNITS = " << tmp << std::endl;
+    DEBUG("MAX_TEXTURE_IMAGE_UNITS = " << tmp);
     _maxTextures = tmp;
 
     glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &tmp);
-    Common::Debug() << "MAX_VERTEX_TEXTURE_IMAGE_UNITS = " << tmp << std::endl;
+    DEBUG("MAX_VERTEX_TEXTURE_IMAGE_UNITS = " << tmp);
     _maxVertexTextures = tmp;
 
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &tmp);
-    Common::Debug() << "MAX_TEXTURE_SIZE = " << tmp << std::endl;
+    DEBUG("MAX_TEXTURE_SIZE = " << tmp);
     _maxTextureSize = tmp;
 
     glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &tmp);
-    Common::Debug() << "MAX_CUBE_MAP_TEXTURE_SIZE = " << tmp << std::endl;
+    DEBUG("MAX_CUBE_MAP_TEXTURE_SIZE = " << tmp);
     _maxCubemapSize = tmp;
 
     glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &tmp);
-    Common::Debug() << "MAX_VERTEX_ATTRIBS = " << tmp << std::endl;
+    DEBUG("MAX_VERTEX_ATTRIBS = " << tmp);
     _maxAttributes = tmp;
 
     glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &tmp);
-    Common::Debug() << "MAX_VERTEX_UNIFORM_VECTORS = " << tmp << std::endl;
+    DEBUG("MAX_VERTEX_UNIFORM_VECTORS = " << tmp);
     _maxVertexUniform = tmp;
 
     glGetIntegerv(GL_MAX_VARYING_VECTORS, &tmp);
-    Common::Debug() << "MAX_VARYING_VECTORS = " << tmp << std::endl;
+    DEBUG("MAX_VARYING_VECTORS = " << tmp);
     _maxVarying = tmp;
 
     glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &tmp);
-    Common::Debug() << "MAX_FRAGMENT_UNIFORM_VECTORS = " << tmp << std::endl;
+    DEBUG("MAX_FRAGMENT_UNIFORM_VECTORS = " << tmp);
     _maxFragmentUnifoms = tmp;
 }
 

@@ -26,7 +26,7 @@ using namespace OpenGL;
 Buffer::Buffer(std::shared_ptr<Graphics::Buffer> buffer) {
     GLenum bufferType;
 
-    Common::Debug() << "Creating buffer " << buffer->GetName() << std::endl;
+    DEBUG("Creating buffer " << buffer->GetName());
 
     glGenBuffers(1, &_id);
     glBindBuffer(GL_ARRAY_BUFFER, _id);

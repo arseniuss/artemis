@@ -31,11 +31,10 @@ SphereGalaxyGenerator::SphereGalaxyGenerator(size_t sz, float densityDev, float 
     _densityMean = densityMean;
     _deviation = deviation;
     
-    Common::Debug() << "size=" << _size 
+    DEBUG("size=" << _size 
             << " densityDeviation=" << _densityDeviation 
             << " densituMean=" << _densityMean
-            << " deviation=[" << _deviation.x << "," << _deviation.y << "," << _deviation.z << "]"
-            << std::endl;
+            << " deviation=[" << _deviation.x << "," << _deviation.y << "," << _deviation.z << "]");
 }
 
 std::vector<Star>& SphereGalaxyGenerator::Generate(Utility::Random& random) {
@@ -48,7 +47,7 @@ std::vector<Star>& SphereGalaxyGenerator::Generate(Utility::Random& random) {
 
         auto count = uid(random);
 
-        Common::Debug() << "Generating " << count << " stars [0 .. " << countMax << "]" << std::endl;
+        DEBUG("Generating " << count << " stars [0 .. " << countMax << "]");
 
         std::normal_distribution<double> xnd(0, _deviation.x * _size);
         std::normal_distribution<double> ynd(0, _deviation.y * _size);
@@ -74,7 +73,7 @@ std::vector<Star>& SphereGalaxyGenerator::Generate(Utility::Random& random) {
         }
 
         _isGenerated = true;
-        Common::Debug() << "Done" << std::endl;
+        DEBUG("Done");
     }
 
     return _stars;

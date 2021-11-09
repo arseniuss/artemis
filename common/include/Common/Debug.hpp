@@ -21,39 +21,10 @@
 
 #include <iostream>
 
-namespace Common {
-    typedef std::ostream& (*str_fn)(std::ostream&);
-
-    class Log {
-    public:
-
-        Log(std::ostream& o);
-
-        template<typename T>
-        Log& operator<<(T t) {
-
-            _output << t;
-
-            return *this;
-        }
-
-        Log& operator<<(str_fn func);
-    private:
-        std::ostream& _output;
-    };
-
-    class Debug : public Log {
-    public:
-
-        Debug();
-    };
-
-    class Error : public Log {
-    public:
-
-        Error();
-    };
-}
+#ifdef NDEBUG
+#define DEBUG(x)
+#else
+#define DEBUG(x)    std::cout << x << std::endl;
+#endif
 
 #endif /* !COMMON_DEBUG_HPP */
-

@@ -46,7 +46,7 @@ Object::Object() {
 }
 
 Object::~Object() {
-    Common::Debug() << "Object " << _name << " died." << std::endl;
+    DEBUG("Object " << _name << " died.");
 }
 
 int Object::GetId() const {
@@ -67,9 +67,9 @@ std::vector<std::shared_ptr<Object> >& Object::GetChildren() {
 
 Object& Object::Add(std::shared_ptr<Object> obj) {
     if (!obj) {
-        Common::Debug() << "Cannot add null object" << std::endl;
+        DEBUG("Cannot add null object");
     } else if (obj.get() == this) {
-        Common::Debug() << "Cannot add object to itself" << std::endl;
+        DEBUG("Cannot add object to itself");
     } else {
         if (auto parent = obj->_parent.lock()) {
             parent->Remove(obj);

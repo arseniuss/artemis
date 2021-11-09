@@ -52,7 +52,7 @@ namespace Common {
             _states.push_back(std::make_unique<T>(std::forward<Args>(args)...));
             auto& s = _states.back();
 
-            Debug() << "Pushing state " << s->GetName() << std::endl;
+            DEBUG("Pushing state " << s->GetName());
 
             s->OnPush();
         }

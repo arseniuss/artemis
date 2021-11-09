@@ -85,8 +85,7 @@ void Application::Run() {
         current->Render(*renderer);
 
         if (_isPoping) {
-            Common::Debug() << "Poping state " << current->GetName() <<
-                    std::endl;
+            DEBUG("Poping state " << current->GetName());
             if (_replaceState)
                 current->OnDisable();
             current->OnPop();
@@ -106,8 +105,7 @@ void Application::Run() {
             // NOTE. current is unuseable after here
             
             if (_replaceState) {                
-                Common::Debug() << "Replacing state " <<
-                        _replaceState->GetName() << std::endl;
+                DEBUG("Replacing state " << _replaceState->GetName());
 
                 _states.push_back({});
                 _states.back().swap(_replaceState);

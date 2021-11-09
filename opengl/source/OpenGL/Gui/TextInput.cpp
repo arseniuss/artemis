@@ -62,11 +62,8 @@ void TextInput::HandleEvent(UIevent event) {
             UIrect rect = uiGetRect(this->_id);
             UIvec2 cursor = uiGetCursor();
 
-            Common::Debug() << "RECT " << rect.x << ", " << rect.y <<
-                    "|" << rect.w << ", " << rect.h << std::endl;
-            Common::Debug() << "CUR " << cursor.x << ", " << cursor.y <<
-                    std::endl;
-
+            DEBUG("RECT " << rect.x << ", " << rect.y <<  "|" << rect.w << ", " << rect.h);
+            DEBUG("CUR " << cursor.x << ", " << cursor.y);
 
             for (size_t i = 0; i < _text.size(); i++) {
 

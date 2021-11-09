@@ -62,7 +62,7 @@ void RenderItem::Update(std::shared_ptr<Graphics::Object> o) {
         //auto *g = p->GetGeometry();
         //auto *m = p->GetMaterial();
     } else {
-        Common::Error() << "Incorrect hash for: " << o->GetName() << std::endl;
+        DEBUG("Incorrect hash for: " << o->GetName());
 
     }
 
@@ -191,15 +191,15 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
     GLsizei count = 0;
 
     if (object.expired()) {
-        Common::Debug() << "Object expired" << std::endl;
+        DEBUG("Object expired");
         return;
     }
     if (material.expired()) {
-        Common::Debug() << "Material expired" << std::endl;
+        DEBUG("Material expired");
         return;
     }
     if (geometry.expired()) {
-        Common::Debug() << "Geometry expired" << std::endl;
+        DEBUG("Geometry expired");
         return;
     }
 

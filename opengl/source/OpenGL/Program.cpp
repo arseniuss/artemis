@@ -88,7 +88,7 @@ GLuint Program::compilerShader(GLenum shader_type, const std::string& source) {
         std::vector<char> log(BUFSIZ);
 
         glGetShaderInfoLog(shader, log.size(), nullptr, &log[0]);
-        Common::Error() << "Compilation failed: " << &log[0] << std::endl;
+        DEBUG("Compilation failed: " << &log[0]);
         throw std::runtime_error(std::string(&log[0]));
     }
 
@@ -113,7 +113,7 @@ void Program::updateAttributes() {
 
     glGetProgramiv(_id, GL_ACTIVE_ATTRIBUTES, &count);
 
-    Common::Debug() << "Attribute count: " << count << std::endl;
+    DEBUG("Attribute count: " << count);
 
     for (int i = 0; i < count; i++) {
         char name[80] = {0};
@@ -124,8 +124,7 @@ void Program::updateAttributes() {
 
         glGetActiveAttrib(_id, (GLuint) i, sizeof (name), &len, &size, &type, name);
 
-        Common::Debug() << "Attribute #" << i << ": name=\"" << name << "\"(" << len << ")" <<
-                " type=" << type << " size=" << size << std::endl;
+        DEBUG("Attribute #" << i << ": name=\"" << name << "\"(" << len << ")" << " type=" << type << " size=" << size);
 
         size_t type_hash = 0;
 
@@ -177,7 +176,7 @@ void Program::updateUniforms() {
 
     glGetProgramiv(_id, GL_ACTIVE_UNIFORMS, &count);
 
-    Common::Debug() << "Uniform count: " << count << std::endl;
+    DEBUG("Uniform count: " << count);
 
     for (int i = 0; i < count; i++) {
         char name[80] = {0};
@@ -188,8 +187,7 @@ void Program::updateUniforms() {
 
         glGetActiveUniform(_id, (GLuint) i, sizeof (name), &len, &size, &type, name);
 
-        Common::Debug() << "Uniform #" << i << ": name=\"" << name << "\"(" << len << ")" <<
-                " type=" << type << " size=" << size << std::endl;
+        DEBUG("Uniform #" << i << ": name=\"" << name << "\"(" << len << ")" << " type=" << type << " size=" << size);
 
         switch (type) {
             case GL_FLOAT: _uniforms.Add<float>(i, name, size);
@@ -268,11 +266,11 @@ void Program::Build(const MaterialProperties& props) {
     const std::string fullVertexShader = versionString + vertexPrefixText + vertextShaderContent;
     const std::string fullFragmentShader = versionString + fragmentPrefixText + fragmentShaderContent;
 
-    Common::Debug() << "--------------------------------------------------" << std::endl;
-    Common::Debug() << fullVertexShader << std::endl;
-    Common::Debug() << "--------------------------------------------------" << std::endl;
-    Common::Debug() << fullFragmentShader << std::endl;
-    Common::Debug() << "--------------------------------------------------" << std::endl;
+    DEBUG("--------------------------------------------------");
+    DEBUG(fullVertexShader);
+    DEBUG("--------------------------------------------------");
+    DEBUG(fullFragmentShader);
+    DEBUG("--------------------------------------------------");
 
 
     createProgram(fullVertexShader, fullFragmentShader);

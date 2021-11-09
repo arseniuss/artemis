@@ -40,7 +40,7 @@ namespace Common {
         }
 
         virtual ~Observable() {
-            Common::Debug() << "Observable died (destructs=" << _onDestruct.size() << ")" << std::endl;
+            DEBUG("Observable died (destructs=" << _onDestruct.size() << ")");
 
             for (OnDestructCallback callback : _onDestruct) {
                 callback(this);
@@ -57,15 +57,15 @@ namespace Common {
             std::function<void(TObserver*, std::weak_ptr<TObservable>) > func) {
         //std::weak_ptr<TObserver> w = a->weak_from_this();
 
-        Common::Debug() << "Registering " << typeid (TObserver).name() << " to " << typeid (TObservable).name() << std::endl;
+        DEBUG("Registering " << typeid (TObserver).name() << " to " << typeid (TObservable).name());
 
         observable->OnDestruct([observer, func](Common::Observable * o) {
             TObservable* b = reinterpret_cast<TObservable*> (o);
 
-            Common::Debug() << "On " << typeid (TObservable).name() << " died (" << typeid (TObserver).name() << ")" << std::endl;
+            DEBUG("On " << typeid (TObservable).name() << " died (" << typeid (TObserver).name() << ")");
 
             //if (auto s = w.lock()) {
-            Common::Debug() << typeid (TObservable).name() << " died --> calling " << typeid (TObserver).name() << std::endl;
+            DEBUG(typeid (TObservable).name() << " died --> calling " << typeid (TObserver).name());
 
             func(observer, b->weak_from_this());
             //}

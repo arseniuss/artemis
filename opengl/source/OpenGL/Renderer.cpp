@@ -67,13 +67,13 @@ void Renderer::Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Gr
             bool erase = std::find(list.begin(), list.end(), ptr) == list.end();
 
             if (erase) {
-                Common::Debug() << "Renderer: removing " << sp->GetName() << std::endl;
+                DEBUG("Renderer: removing " << sp->GetName());
             }
 
             return erase;
         }
 
-        Common::Debug() << "Warning: item expired!" << std::endl;
+        DEBUG("Warning: item expired!");
 
         return true;
     });
@@ -128,7 +128,7 @@ void Renderer::ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_pt
         }
     } else if (h == Common::__hash<Graphics::Scene>()) {
     } else {
-        Common::Debug() << "Unrecognised object: " << o->GetName() << std::endl;
+        DEBUG("Unrecognised object: " << o->GetName());
     }
 
     auto& children = o->GetChildren();

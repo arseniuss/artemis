@@ -57,9 +57,8 @@ SettingState::SettingState(Application* app) : State(app, "Setting state") {
         SDL_DisplayMode mode;
 
         if (SDL_GetDisplayMode(idx, i, &mode) == 0) {
-            Common::Debug() << "Display #" << idx << " mode #" << (i + 1) << " " <<
-                    mode.w << "x" << mode.h << "@" << mode.refresh_rate <<
-                    std::endl;
+            DEBUG("Display #" << idx << " mode #" << (i + 1) << " " <<
+                    mode.w << "x" << mode.h << "@" << mode.refresh_rate);
 
             size_t idx = _displayModes.size();
 

@@ -26,7 +26,7 @@ Geometry::Geometry() {
 }
 
 Geometry::~Geometry() {
-    Common::Debug() << "Geometry died." << std::endl;
+    DEBUG("Geometry died.");
 }
 
 void Geometry::AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer) {

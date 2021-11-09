@@ -23,7 +23,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "Debug.hpp"
+#include <Common/Debug.hpp>
 
 namespace Common {
 
@@ -43,16 +43,14 @@ namespace Common {
                 }
             }
 
-            Debug() << "Config " << section << "." << key << " do not exist!"
-                    << std::endl;
+            DEBUG("Config " << section << "." << key << " do not exist!");
 
             return defaultValue;
         }
 
         template<typename T>
         void Set(const std::string& section, const std::string& key, T value) {
-            Debug() << "Set config " << section << " " << key << " := " <<
-                    value << std::endl;
+            DEBUG("Set config " << section << " " << key << " := " << value);
             _config[section][key] = value;
         }
         

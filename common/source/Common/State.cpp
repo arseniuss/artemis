@@ -27,7 +27,7 @@ _app(*app), _name(name) {
 }
 
 State::~State() {
-    Common::Debug() << "State " << _name << " died." << std::endl;
+    DEBUG("State " << _name << " died.");
 }
 
 void State::HandleInput() {

@@ -39,7 +39,7 @@ void Application::AddLoop(EventCallbackBase<bool>* loop) {
     LoopVectorT::iterator it = std::find(_loops.begin(), _loops.end(), loop);
 
     if (it != _loops.end()) {
-        Debug() << "Loop exists";
+        DEBUG("Loop exists");
         return;
     }
     

@@ -5,7 +5,6 @@ OBJDIR = $(BUILDDIR)/obj
 SOURCES = \
     source/Common/Application.cpp \
     source/Common/Config.cpp \
-    source/Common/Debug.cpp \
     source/Common/Dictionary.cpp \
     source/Common/PluginManager.cpp \
     source/Common/State.cpp \

@@ -79,7 +79,7 @@ void Engine::main() {
 
             switch (event->GetType()) {
                 case Network::Connect:
-                    Common::Debug() << "Server: connect" << std::endl;
+                    DEBUG("Server: connect");
                     addPending(peer);
                     break;
                 case Network::Disconnect:
