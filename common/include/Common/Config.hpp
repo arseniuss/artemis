@@ -34,6 +34,16 @@ namespace Common {
     public:
         Config(const std::string& filename);
 
+        bool Exists(const std::string& section, const std::string& key) {
+            if (_config.Type() == YAML::NodeType::Map && _config[section]) {
+                if (_config[section][key] && _config[section][key].IsScalar()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         template<class T>
         T Get(const std::string& section, const std::string& key,
                 T defaultValue) const {
@@ -53,7 +63,7 @@ namespace Common {
             DEBUG("Set config " << section << " " << key << " := " << value);
             _config[section][key] = value;
         }
-        
+
         void Save();
     };
 }

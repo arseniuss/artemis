@@ -27,6 +27,8 @@ namespace Utility {
 
     std::string RegexReplace(std::string text, std::string pattern, MatcherFunction matcher);
 
+    std::string Demangle(const std::string& name);
+
     template<typename T>
     std::string join(T first, T last, const std::string delim = ",") {
         std::ostringstream res;
@@ -39,6 +41,11 @@ namespace Utility {
         }
 
         return res.str();
+    }
+
+    template<typename T>
+    std::string NameOf() {
+        return Demangle(typeid (T).name());
     }
 }
 

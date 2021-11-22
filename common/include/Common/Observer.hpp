@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <Common/Debug.hpp>
+#include <Utility/String.hpp>
 
 namespace Common {
     class Observable;
@@ -57,15 +58,15 @@ namespace Common {
             std::function<void(TObserver*, std::weak_ptr<TObservable>) > func) {
         //std::weak_ptr<TObserver> w = a->weak_from_this();
 
-        DEBUG("Registering " << typeid (TObserver).name() << " to " << typeid (TObservable).name());
+        DEBUG("Registering " << Utility::NameOf<TObserver>() << " to " << Utility::NameOf<TObservable>());
 
         observable->OnDestruct([observer, func](Common::Observable * o) {
             TObservable* b = reinterpret_cast<TObservable*> (o);
 
-            DEBUG("On " << typeid (TObservable).name() << " died (" << typeid (TObserver).name() << ")");
+            DEBUG("On " << Utility::NameOf<TObservable>() << " died (" << Utility::NameOf<TObserver>() << ")");
 
             //if (auto s = w.lock()) {
-            DEBUG(typeid (TObservable).name() << " died --> calling " << typeid (TObserver).name());
+            DEBUG(Utility::NameOf<TObservable>() << " died --> calling " << Utility::NameOf<TObserver>());
 
             func(observer, b->weak_from_this());
             //}

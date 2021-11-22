@@ -17,6 +17,7 @@
  */
 
 #include <regex>
+#include <cxxabi.h>
 
 #include <Common/Debug.hpp>
 #include <Utility/String.hpp>
@@ -30,18 +31,41 @@ std::string Utility::RegexReplace(std::string text, std::string pattern, Matcher
     std::string ret = "";
     std::string suffix;
 
-    while (std::regex_search(text, matches, r)) {
-        std::vector<std::string> mat;
+    if (std::regex_search(text, matches, r)) {
+        while (std::regex_search(text, matches, r)) {
+            std::vector<std::string> mat;
 
-        for (size_t i = 0; i < matches.size(); i++) {
-            mat.emplace_back(matches[i]);
+            for (size_t i = 0; i < matches.size(); i++) {
+                mat.emplace_back(matches[i]);
+            }
+
+            ret += std::string(matches.prefix()) + matcher(matches[0], mat);
+            suffix = text = matches.suffix();
         }
 
-        ret += std::string(matches.prefix()) + matcher(matches[0], mat);
-        suffix = text = matches.suffix();
+        ret += suffix;
+
+        return ret;
     }
 
-    ret += suffix;
+    return text;
+}
 
-    return ret;
+std::string Utility::Demangle(const std::string& name) {
+    size_t size;
+    int status;
+    char * ret = abi::__cxa_demangle(name.c_str(), nullptr, &size, &status);
+
+    if (ret) free((void *) ret);
+
+    if (status == 0) {
+        char temp[size];
+
+        ret = abi::__cxa_demangle(name.c_str(), temp, &size, &status);
+        ret[size] = 0;
+
+        return std::string(ret);
+    }
+
+    return name;
 }

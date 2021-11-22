@@ -23,7 +23,7 @@
 
 using namespace Common;
 
-Config::Config(const std::string& filename) {
+Config::Config(const std::string& filename) : _config() {
     _filename = filename;
 
     if (std::filesystem::exists(filename))

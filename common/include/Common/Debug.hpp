@@ -23,8 +23,10 @@
 
 #ifdef NDEBUG
 #define DEBUG(x)
+#define DEBUG_ONCE(x)
 #else
-#define DEBUG(x)    std::cout << x << std::endl;
+#define DEBUG(x)            std::cout << x << std::endl;
+#define DEBUG_ONCE(x)       ({static bool sent = false; if(!sent) { std::cout << x << std::endl; sent = true; }})
 #endif
 
 #endif /* !COMMON_DEBUG_HPP */
