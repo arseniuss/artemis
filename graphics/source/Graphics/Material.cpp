@@ -23,7 +23,9 @@ using namespace Graphics;
 static int materialCounter = 0;
 std::string unnamed = "unnamed material";
 
-Material::Material() : _typeName(unnamed) {
+size_t Material::Hash = typeid(Material).hash_code();
+
+Material::Material() : _typeName(unnamed) { 
     _id = ++materialCounter;
     _name = "unnamed material #" + std::to_string(_id);
     _version = 1;

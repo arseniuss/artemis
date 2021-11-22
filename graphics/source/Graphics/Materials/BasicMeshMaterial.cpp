@@ -16,16 +16,24 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Graphics/Materials/PointsMaterial.hpp>
-#include <Graphics/Common.hpp>
+#include <Graphics/Materials/BasicMeshMaterial.hpp>
 
 using namespace Graphics;
 
-size_t PointsMaterial::Hash = typeid (PointsMaterial).hash_code();
+int basicMeshMaterialCounter = 0;
 
-PointsMaterial::PointsMaterial(size_t pointSize) : Material() {
-    _name = Objects[POINT_COMPONENT].MaterialName + " #" + std::to_string(_id);
-    _typeName = Objects[POINT_COMPONENT].MaterialName;
+size_t BasicMeshMaterial::Hash = typeid (BasicMeshMaterial).hash_code();
 
-    _pointSize = pointSize;
+BasicMeshMaterial::BasicMeshMaterial() : Material() {
+    _hash = BasicMeshMaterial::Hash;
+    _name = "basic mesh material #" + std::to_string(++basicMeshMaterialCounter);
+    _typeName = "basic mesh material";
+}
+
+void BasicMeshMaterial::SetColor(Color color) {
+    _color = color;
+}
+
+Color BasicMeshMaterial::GetColor() const {
+    return _color;
 }

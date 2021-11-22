@@ -29,7 +29,7 @@ Geometry::~Geometry() {
     DEBUG("Geometry died.");
 }
 
-void Geometry::AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer) {
+void Geometry::AddBuffer(const std::string& name, std::shared_ptr<BaseBuffer> buffer) {
     buffer->SetName(name);
     _buffers.emplace(name, buffer);
 }
@@ -40,7 +40,13 @@ BufferMap& Geometry::GetBuffers() {
 
 void Geometry::Compute() {
     if (_buffers.contains("position")) {
-        _size = _buffers["position"]->GetSize() / 3;
+        _size = _buffers["position"]->GetCount() / 3;
     }
+    _computed = true;
 }
+
+size_t Geometry::GetSize() const {
+    return _size;
+}
+
 

@@ -24,9 +24,9 @@
 namespace Graphics {
 
     class Property : public std::enable_shared_from_this<Property> {
-    private:
+    protected:
         size_t _hash;
-    public:        
+    public: 
         size_t GetHash() const;
     };
 }

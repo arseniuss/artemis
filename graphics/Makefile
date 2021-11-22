@@ -18,11 +18,14 @@ SOURCES = \
     source/Graphics/CubeTexture.cpp \
     source/Graphics/Geometry.cpp \
     source/Graphics/Material.cpp \
-    source/Graphics/Materials/PointsMaterials.cpp \
+    source/Graphics/Materials/BasicMeshMaterial.cpp \
+    source/Graphics/Materials/CustomMaterial.cpp \
+    source/Graphics/Materials/PointsMaterial.cpp \
     source/Graphics/Object.cpp \
     source/Graphics/Objects/LOD.cpp \
     source/Graphics/Objects/Light.cpp \
     source/Graphics/Objects/Line.cpp \
+    source/Graphics/Objects/Mesh.cpp \
     source/Graphics/Objects/Points.cpp \
     source/Graphics/Property.cpp \
     source/Graphics/Scene.cpp \

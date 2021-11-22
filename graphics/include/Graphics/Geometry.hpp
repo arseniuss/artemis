@@ -26,26 +26,25 @@
 #include <Common/Observer.hpp>
 
 namespace Graphics {
-    class Buffer;
+    class BaseBuffer;
 
-    using BufferMap = std::map<std::string, std::shared_ptr<Buffer>>;
+    using BufferMap = std::map<std::string, std::shared_ptr<BaseBuffer>>;
 
     class Geometry : public Common::Observable, public std::enable_shared_from_this<Geometry> {
         size_t _size;
         BufferMap _buffers;
+        bool _computed = false;
     public:
         Geometry();
         virtual ~Geometry();
 
-        virtual void AddBuffer(const std::string& name, std::shared_ptr<Buffer> buffer);
+        virtual void AddBuffer(const std::string& name, std::shared_ptr<BaseBuffer> buffer);
 
         BufferMap& GetBuffers();
 
         void Compute();
 
-        size_t GetSize() const {
-            return _size;
-        }
+        size_t GetSize() const;
     };
 }
 

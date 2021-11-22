@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,29 +16,24 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_SHADER_HPP
-#define GRAPHICS_SHADER_HPP
+#ifndef GRAPHICS_MATERIALS_BASICMESHMATERIAL_HPP
+#define GRAPHICS_MATERIALS_BASICMESHMATERIAL_HPP
 
-#include <string>
-
-#include <glm/glm.hpp>
-
-#include <Graphics/Buffer.hpp>
+#include <Graphics/Color.hpp>
+#include <Graphics/Material.hpp>
 
 namespace Graphics {
-
-    class Shader {
+    class BasicMeshMaterial : public Material {
+    private:
+        Color _color;
     public:
-        virtual void Use() = 0;
-
-        virtual void Draw() = 0;
-
-        virtual void SetUniform(const std::string& name,
-                const glm::mat4 value, bool transpose = false) = 0;
-
-        virtual void SetBuffer(const std::string& name,
-                const Buffer* buffer) = 0;
+        static size_t Hash;
+        
+        BasicMeshMaterial();
+        
+        void SetColor(Color color);
+        Color GetColor() const;
     };
 }
 
-#endif /* !GRAPHICS_SHADER_HPP */
+#endif /* !GRAPHICS_MATERIALS_BASICMESHMATERIAL_HPP */

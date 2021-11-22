@@ -22,17 +22,7 @@
 #include <string>
 
 namespace Graphics {
-    enum {
-        POINT_COMPONENT,
-        LAST_COMPONENT
-    };
-    
-    struct ObjectDictionary {
-        std::string ObjectName;
-        std::string MaterialName;
-    };
-    
-    extern const ObjectDictionary Objects[];
+
 }
 
 #endif /* !GRAPHICS_COMMON_HPP */

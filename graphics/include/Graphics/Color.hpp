@@ -29,17 +29,20 @@ namespace Graphics {
     private:
         glm::vec4 _value;
     public:
+        static size_t Hash;
+        static Color Rgb(uint32_t value);
+        
         float& r;
         float& g;
         float& b;
         float& a;
 
-        static size_t Hash;
-
-        static Color Rgb(uint32_t value);
-
         Color();
         Color(float r, float g, float b, float a = 0);
+        
+        Color& operator=(const Color& other);
+        
+        glm::vec4 GetVector() const;
     };
 }
 

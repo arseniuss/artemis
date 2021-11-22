@@ -16,7 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Graphics/Common.hpp>
+#include <Graphics/Materials/CustomMaterial.hpp>
 
 using namespace Graphics;
 
+static int customCounter = 0;
+
+size_t CustomMaterial::Hash = typeid (CustomMaterial).hash_code();
+
+CustomMaterial::CustomMaterial() : Material() {
+    _id = ++customCounter;
+    _hash = CustomMaterial::Hash;
+    _name = "custom material #" + std::to_string(_id);
+    _typeName = "custom material";
+}

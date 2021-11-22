@@ -34,6 +34,7 @@ namespace Graphics {
         Scene();
 
         std::weak_ptr<Graphics::Property> GetBackground();
+        void SetBackground(std::shared_ptr<Graphics::Property> background);
     };
 }
 

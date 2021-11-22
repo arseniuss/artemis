@@ -22,7 +22,7 @@ using namespace Graphics;
 
 static unsigned int sceneIndex = 0;
 
-size_t Scene::Hash = typeid(Scene).hash_code();
+size_t Scene::Hash = typeid (Scene).hash_code();
 
 Scene::Scene() : _background() {
     _name = "Scene #" + std::to_string(sceneIndex++);
@@ -32,3 +32,8 @@ Scene::Scene() : _background() {
 std::weak_ptr<Graphics::Property> Scene::GetBackground() {
     return _background;
 }
+
+void Scene::SetBackground(std::shared_ptr<Graphics::Property> background) {
+    _background = background->weak_from_this();
+}
+

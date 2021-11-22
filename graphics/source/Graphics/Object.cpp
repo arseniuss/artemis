@@ -38,11 +38,15 @@ Object::Object() {
     _translation = glm::mat4(1.0f);
     _quaternion = {1, 0, 0, 0};
     _scale = {1, 1, 1};
+
+    _matrix = glm::mat4(1);
+    _matrixAutoUpdate = true;
+
     _up = {0, 1, 0};
     _visible = true;
     _isImmediateObject = true;
     _isInstancedMesh = false;
-    _matrixAutoUpdate = true;
+
 }
 
 Object::~Object() {
@@ -59,6 +63,10 @@ size_t Object::GetHash() const {
 
 const std::string& Object::GetName() const {
     return _name;
+}
+
+void Object::SetPosition(glm::vec3 position) {
+    _position = position;
 }
 
 std::vector<std::shared_ptr<Object> >& Object::GetChildren() {
@@ -157,6 +165,14 @@ void Object::UpdateWorldMatrix(bool updateParents, bool updateChildren) {
             child->UpdateWorldMatrix(false, true);
         }
     }
+}
+
+glm::mat4 Object::GetMatrix() const {
+    return _matrix;
+}
+
+glm::mat4 Object::GetMatrixWorld() const {
+    return _matrixWorld;
 }
 
 void Graphics::Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func) {

@@ -16,7 +16,20 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Graphics/Common.hpp>
+#include <Graphics/Objects/Mesh.hpp>
 
 using namespace Graphics;
+
+static unsigned int meshIndex = 0;
+
+size_t Mesh::Hash = typeid (Mesh).hash_code();
+
+Mesh::Mesh(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat) {
+    _name = "Mesh #" + std::to_string(meshIndex++);
+    _hash = Mesh::Hash;
+}
+
+Mesh::~Mesh() {
+
+}
 

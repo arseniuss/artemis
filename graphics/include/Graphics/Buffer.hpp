@@ -34,34 +34,61 @@ namespace Graphics {
         DYNAMIC_BUFFER
     };
 
-    class Buffer : public std::enable_shared_from_this<Buffer>, public Common::Observable {
-    private:
-        size_t _size;
-        void* _data;
+    class BaseBuffer : public std::enable_shared_from_this<BaseBuffer>, public Common::Observable {
+    protected:
+
+        const void* _data;
+        size_t _dataSize;
+        size_t _dataElementSize;
+
+
         size_t _itemSize;
-        int _type;
+        size_t _type;
+        int _bufferType;
         std::string _name;
+        ssize_t _stride;
+        size_t _offset;
     public:
-        Buffer(std::vector<float>& data, int itemSize);
+        BaseBuffer();
 
-        size_t GetSize() const {
-            return _size;
+        size_t GetDataSize() const;
+        size_t GetItemSize() const;
+        size_t GetCount() const;
+
+        const void* GetData();
+
+        int GetBufferType() const;
+        size_t GetType() const;
+        ssize_t GetStride() const;
+        size_t GetOffset() const;
+
+        const std::string& GetName() const;
+
+        void SetName(const std::string& name);
+    };
+
+    template<typename TItem>
+    class Buffer : public BaseBuffer {
+    public:
+
+        Buffer(const std::vector<TItem>& data, int itemSize) : BaseBuffer() {
+            _data = (const void *) data.data();
+            _dataSize = data.size() * sizeof (TItem);
+            _dataElementSize = sizeof (TItem);
+
+            _itemSize = itemSize;
+            _type = typeid (TItem).hash_code();
+            _bufferType = CONST_BUFFER;
         }
 
-        void* GetData() {
-            return _data;
-        }
+        Buffer(const TItem* data, size_t dataSize, int itemSize) : BaseBuffer() {
+            _data = data;
+            _dataSize = dataSize;
+            _dataElementSize = sizeof (TItem);
 
-        int GetType() {
-            return _type;
-        }
-
-        const std::string& GetName() const {
-            return _name;
-        }
-
-        void SetName(const std::string& name) {
-            _name = name;
+            _itemSize = itemSize;
+            _type = typeid (TItem).hash_code();
+            _bufferType = CONST_BUFFER;
         }
     };
 }

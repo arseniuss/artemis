@@ -19,9 +19,16 @@
 #ifndef GRAPHICS_MATERIALS_CUSTOMMATERIALL_HPP
 #define GRAPHICS_MATERIALS_CUSTOMMATERIALL_HPP
 
+#include <Graphics/Material.hpp>
+
 namespace Graphics {
 
-    class CustomMaterial {
+    class CustomMaterial : public Material {
+    private:
+    public:
+        static size_t Hash;
+        
+        CustomMaterial();
     };
 }
 

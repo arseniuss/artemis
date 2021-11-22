@@ -32,9 +32,19 @@ Color Color::Rgb(uint32_t value) {
 
 Color::Color() : r(_value.r), g(_value.g), b(_value.b), a(_value.a) {
     _value = {0, 0, 0, 0};
-
+    _hash = Color::Hash;
 }
 
 Color::Color(float r, float g, float b, float a) : Color() {
     _value = {r, g, b, a};
+}
+
+Color& Color::operator=(const Color& other) {
+    _value = other._value;
+
+    return *this;
+}
+
+glm::vec4 Color::GetVector() const {
+    return _value;
 }

@@ -30,6 +30,7 @@ namespace Graphics {
 
     class Material : public std::enable_shared_from_this<Material> {
     protected:
+        size_t _hash;
         int _id;
         std::string& _typeName;
         std::string _name;
@@ -40,6 +41,8 @@ namespace Graphics {
 
         bool _transparent;
     public:
+        static size_t Hash;
+        
         Material();
         Material(const std::string& name, const std::string& typeName);
 
@@ -60,6 +63,10 @@ namespace Graphics {
 
         int GetSides() const {
             return _sides;
+        }
+
+        size_t GetHash() const {
+            return _hash;
         }
     };
 }

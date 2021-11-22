@@ -32,6 +32,10 @@ bool Graphics::Camera::IsCameraHash(size_t hash) {
 
 Camera::Camera() {
     _name = "Camera #" + std::to_string(cameraIndex++);
+
+    _viewMatrix = glm::lookAt(glm::vec3(4, 3, 3),
+            glm::vec3(0, 0, 0),
+            glm::vec3(0, 1, 0));
 }
 
 Camera::~Camera() {
@@ -39,10 +43,12 @@ Camera::~Camera() {
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const {
+
     return _projectionMatrix;
 }
 
 glm::mat4 Camera::GetViewMatrix() const {
+
     return _viewMatrix;
 }
 

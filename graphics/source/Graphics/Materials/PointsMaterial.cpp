@@ -16,7 +16,16 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Common.hpp>
 
 using namespace Graphics;
 
+size_t PointsMaterial::Hash = typeid (PointsMaterial).hash_code();
+
+PointsMaterial::PointsMaterial(size_t pointSize) : Material() {
+    _name = "point material #" + std::to_string(_id);
+    _typeName = "point material";
+
+    _pointSize = pointSize;
+}

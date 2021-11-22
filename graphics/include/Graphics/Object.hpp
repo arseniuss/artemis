@@ -60,16 +60,19 @@ namespace Graphics {
         int GetId() const;
         size_t GetHash() const;
         const std::string& GetName() const;
+        
+        void SetPosition(glm::vec3 position);
 
         std::vector<std::shared_ptr<Object>>&GetChildren();
 
         Object& Add(std::shared_ptr<Object> obj);
         Object& Remove(std::shared_ptr<Object> obj);
         
-        glm::mat4 GetMatrixWorld() const { return _matrixWorld; }
-
         void UpdateMatrix();
         void UpdateWorldMatrix(bool updateParents, bool updateChildren);
+        
+        glm::mat4 GetMatrix() const;
+        glm::mat4 GetMatrixWorld() const;
 
         bool IsVisible() const;
         bool IsFrustumCulled() const;

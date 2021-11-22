@@ -19,11 +19,19 @@
 #ifndef GRAPHICS_OBJECTS_MESH_HPP
 #define GRAPHICS_OBJECTS_MESH_HPP
 
+#include <memory>
+
+#include <Graphics/ViewObject.hpp>
+
 namespace Graphics {
-    
-    class Mesh : public Object {
+
+    class Mesh : public ViewObject {
     private:
     public:
+        static size_t Hash;
+        
+        Mesh(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+        virtual ~Mesh();
     };
 }
 
