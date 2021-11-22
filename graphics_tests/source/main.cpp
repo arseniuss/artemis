@@ -25,7 +25,7 @@
 
 using namespace TestingFramework;
 
-int main(int argc, char** argv) {
+void loop() {
     std::shared_ptr<Common::Config> config = std::make_shared<Common::Config>("config.yaml");
     std::shared_ptr<Graphics::Context> graphics = Graphics::Context::Create(config);
     std::shared_ptr<Graphics::Renderer> renderer = graphics->GetRenderer();
@@ -36,6 +36,9 @@ int main(int argc, char** argv) {
     TestVector::iterator testIt = Tests.begin();
 
     DEBUG("Test count " << Tests.size());
+    if (testIt != Tests.end()) {
+        (*testIt)->Init(graphics);
+    }
 
     while (running) {
         graphics->HandleInput();
@@ -49,7 +52,8 @@ int main(int argc, char** argv) {
                     DEBUG("Moving to test test");
                     testIt++;
                     if (testIt != Tests.end()) {
-                        DEBUG("Next test name is " << testIt->GetName());
+                        DEBUG("Next test name is " << (*testIt)->GetName());
+                        (*testIt)->Init(graphics);
                     }
                 }
             }
@@ -61,12 +65,20 @@ int main(int argc, char** argv) {
             DEBUG("Testing done");
             running = false;
         } else {
+            auto scene = (*testIt)->GetScene();
+            auto camera = (*testIt)->GetCamera();
 
+            renderer->Render(scene, camera);
         }
-
-        renderer->Render(nullptr, nullptr);
     }
 
+    Tests.clear();
+}
+
+int main(int argc, char** argv) {
+    loop();
+
+    DEBUG("Testing is done!");
 
     return 0;
 }

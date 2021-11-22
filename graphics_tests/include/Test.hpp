@@ -19,25 +19,35 @@
 #ifndef TEST_HPP
 #define TEST_HPP
 
-#include <vector>
+#include <memory>
 #include <string>
+#include <vector>
+
+namespace Graphics {
+    class Camera;
+    class Context;
+    class Scene;
+}
 
 namespace TestingFramework {
     class Test;
-    
-    using TestVector = std::vector<Test>;
-    
+
+    using TestVector = std::vector<std::shared_ptr<Test>>;
+
     class Test {
     private:
         std::string _name;
     public:
-        
-
         Test(std::string name);
-        
+
         const std::string& GetName() const;
+
+        virtual void Init(std::shared_ptr<Graphics::Context> context) = 0;
+
+        virtual std::shared_ptr<Graphics::Scene> GetScene() = 0;
+        virtual std::shared_ptr<Graphics::Camera> GetCamera() = 0;
     };
-    
+
     extern TestVector Tests;
 }
 
