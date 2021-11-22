@@ -27,6 +27,7 @@
 #include <glm/glm.hpp>
 
 #include <Common/Debug.hpp>
+#include <OpenGL/Debug.hpp>
 #include <OpenGL/Program.hpp>
 #include <OpenGL/Uniforms.hpp>
 #include <Utility/Filesystem.hpp>
@@ -34,23 +35,23 @@
 
 #include "glad.h"
 
-
-
 using namespace OpenGL;
 
-Program::Program() : _id(glCreateProgram()), _uniforms(_id) {
-
+Program::Program() : _uniforms() {
+    GL_CHECK(_id = glCreateProgram());
+    _uniforms = Uniforms(_id);
 }
 
 Program::~Program() {
-    glDeleteProgram(_id);
+    GL_CHECK2(glDeleteProgram, _id);
 }
 
 std::string Program::generatePrecision(const MaterialProperties& props) {
     std::string str = "";
     std::string precision = props.GetPrecision();
+
     if (!precision.empty()) {
-        str = "precision " + precision + "float;\nprecision " + precision + " int;";
+        str = "precision " + precision + " float;\nprecision " + precision + " int;";
 
         if (precision == "highp") {
             str += "\n#define HIGH_PRECISION";
@@ -69,7 +70,7 @@ std::string Program::resolveIncludes(std::string& text) {
             [](std::string match, const std::vector<std::string>& groups) {
                 std::string include = groups[1];
 
-                return Utility::LoadFullFile("data/shaders/" + include + "_inc.glsl");
+                return Utility::LoadFullFile("data/snips/" + include + "_inc.glsl");
             });
 }
 
@@ -78,16 +79,16 @@ GLuint Program::compilerShader(GLenum shader_type, const std::string& source) {
     GLint test;
     const char *src = source.data();
 
-    shader = glCreateShader(shader_type);
-    glShaderSource(shader, 1, &src, nullptr);
+    GL_CHECK(shader = glCreateShader(shader_type));
+    GL_CHECK2(glShaderSource, shader, 1, &src, nullptr);
 
-    glCompileShader(shader);
+    GL_CHECK2(glCompileShader, shader);
 
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &test);
+    GL_CHECK2(glGetShaderiv, shader, GL_COMPILE_STATUS, &test);
     if (!test) {
         std::vector<char> log(BUFSIZ);
 
-        glGetShaderInfoLog(shader, log.size(), nullptr, &log[0]);
+        GL_CHECK2(glGetShaderInfoLog, shader, log.size(), nullptr, &log[0]);
         DEBUG("Compilation failed: " << &log[0]);
         throw std::runtime_error(std::string(&log[0]));
     }
@@ -99,19 +100,19 @@ void Program::createProgram(const std::string& vertexSource, const std::string& 
     GLuint vertexShader = compilerShader(GL_VERTEX_SHADER, vertexSource);
     GLuint fragmentShader = compilerShader(GL_FRAGMENT_SHADER, fragmentSource);
 
-    glAttachShader(_id, vertexShader);
-    glAttachShader(_id, fragmentShader);
+    GL_CHECK2(glAttachShader, _id, vertexShader);
+    GL_CHECK2(glAttachShader, _id, fragmentShader);
 
-    glLinkProgram(_id);
+    GL_CHECK2(glLinkProgram, _id);
 
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    GL_CHECK2(glDeleteShader, vertexShader);
+    GL_CHECK2(glDeleteShader, fragmentShader);
 }
 
 void Program::updateAttributes() {
     int count;
 
-    glGetProgramiv(_id, GL_ACTIVE_ATTRIBUTES, &count);
+    GL_CHECK2(glGetProgramiv, _id, GL_ACTIVE_ATTRIBUTES, &count);
 
     DEBUG("Attribute count: " << count);
 
@@ -122,7 +123,7 @@ void Program::updateAttributes() {
         GLint size = 0;
         GLenum type = 0;
 
-        glGetActiveAttrib(_id, (GLuint) i, sizeof (name), &len, &size, &type, name);
+        GL_CHECK2(glGetActiveAttrib, _id, (GLuint) i, sizeof (name), &len, &size, &type, name);
 
         DEBUG("Attribute #" << i << ": name=\"" << name << "\"(" << len << ")" << " type=" << type << " size=" << size);
 
@@ -165,7 +166,9 @@ void Program::updateAttributes() {
                 break;
         }
 
-        int location = glGetAttribLocation(_id, name);
+        int location;
+
+        GL_CHECK(location = glGetAttribLocation(_id, name));
 
         _attributes.emplace(name, ProgramAttribute{location, type_hash});
     }
@@ -174,7 +177,7 @@ void Program::updateAttributes() {
 void Program::updateUniforms() {
     int count;
 
-    glGetProgramiv(_id, GL_ACTIVE_UNIFORMS, &count);
+    GL_CHECK2(glGetProgramiv, _id, GL_ACTIVE_UNIFORMS, &count);
 
     DEBUG("Uniform count: " << count);
 
@@ -185,7 +188,7 @@ void Program::updateUniforms() {
         GLint size = 0;
         GLenum type = 0;
 
-        glGetActiveUniform(_id, (GLuint) i, sizeof (name), &len, &size, &type, name);
+        GL_CHECK2(glGetActiveUniform, _id, (GLuint) i, sizeof (name), &len, &size, &type, name);
 
         DEBUG("Uniform #" << i << ": name=\"" << name << "\"(" << len << ")" << " type=" << type << " size=" << size);
 
@@ -239,7 +242,7 @@ void Program::Build(const MaterialProperties& props) {
     }
 
     std::vector<std::string> prefixVector = {
-        generatePrecision(props),
+        //generatePrecision(props),
         "#define SHADER_NAME " + props.GetName() + "_vertex",
 
         props.HasVertexColor() ? "#define USE_COLOR" : "",
@@ -252,7 +255,7 @@ void Program::Build(const MaterialProperties& props) {
         ""
     };
     std::vector<std::string> prefixFragment = {
-        generatePrecision(props),
+        //generatePrecision(props),
         "#define SHADER_NAME " + props.GetName() + "_fragment",
         ""
     };
@@ -288,8 +291,5 @@ const ProgramAttributes& Program::GetAttributes() {
 }
 
 void Program::Use() {
-    glUseProgram(_id);
+    GL_CHECK2(glUseProgram, _id);
 }
-
-
-

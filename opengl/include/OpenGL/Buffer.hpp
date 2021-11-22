@@ -21,14 +21,22 @@
 
 #include "glad.h"
 
+namespace Graphics {
+    class BaseBuffer;
+}
+
 namespace OpenGL {
 
     class Buffer {
     private:
         GLuint _id;
+        GLenum _type;
     public:
-        Buffer(std::shared_ptr<Graphics::Buffer> buffer);
+        Buffer(std::shared_ptr<Graphics::BaseBuffer> buffer);
         ~Buffer();
+
+        GLenum GetType() const;
+        GLuint GetId() const;
     };
 }
 

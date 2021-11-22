@@ -34,6 +34,9 @@ namespace OpenGL {
         int location;
         size_t hash;
         size_t size;
+
+        bool isSet = false;
+        std::string value;
     };
 
     class Uniforms {
@@ -41,6 +44,7 @@ namespace OpenGL {
         unsigned int _programId;
         std::map<std::string, Uniform> _data;
     public:
+        Uniforms();
         Uniforms(GLuint programId);
         ~Uniforms();
 
@@ -67,6 +71,10 @@ namespace OpenGL {
         void Set(const std::string& name, glm::mat2 value);
         void Set(const std::string& name, glm::mat3 value);
         void Set(const std::string& name, glm::mat4 value);
+
+        bool Exists(const std::string& name) const;
+
+        bool Dump();
     };
 
 }

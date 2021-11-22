@@ -4,6 +4,7 @@
 
 uniform float size;
 uniform float scale;
+
 void main() {
     #include <project_vertex>
     

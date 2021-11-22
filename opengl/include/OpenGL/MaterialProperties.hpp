@@ -31,56 +31,48 @@ namespace OpenGL {
     private:
         int _version = 0;
 
-        std::string _precision;
-
         std::string _name;
+        std::string _precision = "highp";
+        
+        bool _instancing = false;
+        bool _instancedColor = false;
+        
+        bool _vertexColors = false;
+        bool _vertexAlphas = false;
+        bool _vertexUVs = false;
+        
         std::string _glslVersion = "330 core";
+        std::string _shaderName;
 
         std::string _vertexShaderText;
         std::string _fragmentShaderText;
 
-        bool _hasVertexColors = false;
-
         std::shared_ptr<Program> _program;
-
-        std::string loadShader(GLenum type);
     public:
-        MaterialProperties(const std::string& materialName, const std::string& objectName);
+        MaterialProperties();
+
+        void Load(const std::string& name);
+
+        int GetVersion() const;
+        void SetVersion(int version);
+
+        const std::string& GetName() const;
 
         const std::string& GetPrecision() const;
 
         std::shared_ptr<Program> GetProgram();
-
-        void SetProgram(std::shared_ptr<Program> program) {
-            _program = program;
-        }
-
-        int GetVersion() const {
-            return _version;
-        }
-
-        void SetVersion(int version) {
-            _version = version;
-        }
-
-        const std::string& GetName() const {
-            return _name;
-        }
+        void SetProgram(std::shared_ptr<Program> program);
 
         std::string GetGLSLVersion() const {
             return _glslVersion;
         }
 
-        const std::string& GetVertextShaderText() const {
-            return _vertexShaderText;
-        }
+        const std::string& GetVertextShaderText() const;
 
-        const std::string& GetFragmentShaderText() const {
-            return _fragmentShaderText;
-        }
+        const std::string& GetFragmentShaderText() const;
 
         bool HasVertexColor() const {
-            return _hasVertexColors;
+            return _vertexColors;
         }
     };
 }

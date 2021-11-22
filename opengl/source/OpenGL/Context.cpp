@@ -27,9 +27,11 @@
 #include <NanoVG/NanoVG.hpp>
 #include <OpenGL/Context.hpp>
 #include <OpenGL/Debug.hpp>
+#include <OpenGL/Debug.hpp>
 #include <OpenGL/Gui/LayoutBuilder.hpp>
 #include <OpenGL/Gui/Widget.hpp>
 #include <OpenGL/Renderer.hpp>
+
 #include <glad.h>
 #include <oui.h>
 
@@ -68,12 +70,12 @@ Graphics::Context(title, config, SDL_WINDOW_OPENGL) {
 
     gladLoadGL();
 
-    glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, w, h);
-    glDepthFunc(GL_LESS);
+    //GL_CHECK2(glEnable, GL_DEPTH_TEST);
+    GL_CHECK2(glViewport, 0, 0, w, h);
+    //GL_CHECK2(glDepthFunc, GL_LESS);
 
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
+    GL_CHECK2(glGenVertexArrays, 1, &VertexArrayID);
+    GL_CHECK2(glBindVertexArray, VertexArrayID);
 
     uiMakeCurrent(uiCreateContext(4096, 1 << 20));
     uiSetHandler(&ui_handler);

@@ -30,11 +30,14 @@
 #include <Graphics/Objects/Points.hpp>
 #include <Graphics/Scene.hpp>
 #include <OpenGL/Binding.hpp>
+#include <OpenGL/Debug.hpp>
 #include <OpenGL/MaterialProperties.hpp>
 #include <OpenGL/Program.hpp>
 #include <OpenGL/RenderItem.hpp>
 
 #include <glad.h>
+
+#include "Graphics/Materials/BasicMeshMaterial.hpp"
 
 using namespace OpenGL;
 
@@ -48,78 +51,12 @@ void RenderItem::Reset(State& state) {
 
 void RenderItem::Build() {
 
-
-}
-
-void RenderItem::Update(std::shared_ptr<Graphics::Object> o) {
-    size_t h = o->GetHash();
-
-    if (h == Common::__hash<Graphics::Scene>()) {
-
-    } else if (h == Common::__hash<Graphics::Points>()) {
-        auto p = std::static_pointer_cast<Graphics::Points>(o);
-
-        //auto *g = p->GetGeometry();
-        //auto *m = p->GetMaterial();
-    } else {
-        DEBUG("Incorrect hash for: " << o->GetName());
-
-    }
-
 }
 
 bool RenderItem::needsUpdate() {
     return true;
 }
 
-/*
-void RenderItem::setupBinding(State& state, std::shared_ptr<Program> program, std::shared_ptr<Graphics::Geometry> geo) {
-    auto binding = state.GetBindingState(geo);
-    bool updateBuffers = needsUpdate();
-    auto mappings = state.GetMappings(geometry);
-
-    binding->Use();
-
-    if (updateBuffers) {
-
-        auto& programAttributes = program->GetAttributes();
-
-        for (ProgramAttributes::value_type p : programAttributes) {
-            std::string name = p.first;
-            ProgramAttribute programAttribute = p.second;
-
-            if (programAttribute.location >= 0) {
-
-                if (mappings.contains(name)) {
-                    auto map = mappings[name];
-                    GLenum bufferType;
-                    int type = map->first->GetType();
-
-                    switch (type) {
-                        case Graphics::CONST_BUFFER:
-                            bufferType = GL_STATIC_DRAW;
-                            break;
-                        case Graphics::DYNAMIC_BUFFER:
-                            bufferType = GL_DYNAMIC_DRAW;
-                            break;
-                        default:
-                            throw std::runtime_error("Unrecognised buffer type: " + std::to_string(type));
-                            break;
-                    }
-
-                    glBindBuffer(GL_ARRAY_BUFFER, map->second);
-                    glBufferData(GL_ARRAY_BUFFER, map->first->GetSize(), map->first->GetData(), bufferType);
-                    // TODO: change 3
-                    glVertexAttribPointer(programAttribute.location, 3, )
-                }
-            }
-        }
-    }
-    
-
-
-}
- */
 std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary& properties,
         std::shared_ptr<Graphics::Camera> camera, std::shared_ptr<Graphics::Material> mat,
         std::shared_ptr<Graphics::Object> obj) {
@@ -156,7 +93,8 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
     }
 
     if (refreshProgram || state.GetCamera() != camera) {
-        programUniforms.Set("projectionMatrix", camera->GetProjectionMatrix());
+        if (programUniforms.Exists("projectionMatrix"))
+            programUniforms.Set("projectionMatrix", camera->GetProjectionMatrix());
 
         if (state.GetCamera() != camera) {
             state.SetCamera(camera);
@@ -167,20 +105,31 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
     }
 
     if (refreshMaterial) {
-        auto h = obj->GetHash();
+        auto h = mat->GetHash();
 
         if (h == Graphics::PointsMaterial::Hash) {
             auto pm = std::static_pointer_cast<Graphics::PointsMaterial> (mat);
 
             programUniforms.Set("size", pm->GetPointSize());
+
+        } else if (h == Graphics::BasicMeshMaterial::Hash) {
+            auto m = std::static_pointer_cast<Graphics::BasicMeshMaterial>(mat);
+
+            programUniforms.Set("color", m->GetColor().GetVector());
+        } else {
+            throw std::runtime_error("Unsupported material: " + mat->GetName());
         }
     }
-
-    //programUniforms.Set("modelViewMatrix", obj->modelViewMatrix);
+    
+    if (programUniforms.Exists("viewMatrix"))
+        programUniforms.Set("viewMatrix", camera->GetViewMatrix());
     //programUniforms.Set("normalMatrix", camera->normalMatrix);
-    //programUniforms.Set("modelMatrix", camera->matrix);
+    if (programUniforms.Exists("modelMatrix"))
+        programUniforms.Set("modelMatrix", obj->GetMatrix());
 
     (void) (refreshLights);
+
+    DEBUG_ONCE(programUniforms.Dump());
 
     return program;
 }
@@ -207,6 +156,7 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
     auto mat = material.lock();
     auto geo = geometry.lock();
 
+    geo->Compute();
 
     //obj->modelViewMatrix = camera->matrixWorldInverse * obj->matrixWorld;
     //obj->normalMatrix = glm::transpose(glm::inverse(obj->modelViewMatrix));
@@ -214,7 +164,9 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
     auto program = setProgram(state, properties, camera, mat, obj);
 
     state.SetMaterial(mat);
-    state.GetBindingState(geo);
+    auto binding = state.GetBindingState(geo, program);
+
+    binding->Use();
 
     // TODO
     start = 0;
@@ -241,12 +193,10 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
         mode = GL_TRIANGLES;
     }
 
-
-
     if (obj->IsInstancedMesh()) {
-        glDrawArraysInstanced(mode, start, count, obj->count);
+        GL_CHECK2(glDrawArraysInstanced, mode, start, count, obj->count);
     } else {
-        glDrawArrays(mode, start, count);
+        GL_CHECK2(glDrawArrays, mode, start, count);
     }
 }
 

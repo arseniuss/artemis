@@ -24,32 +24,36 @@
 
 #include <Common/Observer.hpp>
 
+#include "glad.h"
+
 namespace Graphics {
-    class Buffer;
+    class BaseBuffer;
     class Geometry;
 }
 
 namespace OpenGL {
     class Buffer;
+    class Program;
 
-    using BufferMap = std::map<std::weak_ptr<Graphics::Buffer>,
+    using BufferMap = std::map<std::weak_ptr<Graphics::BaseBuffer>,
             std::shared_ptr<Buffer>, std::owner_less<>>;
 
     class Binding : public std::enable_shared_from_this<Binding> {
     private:
-        unsigned int _id;
+        GLuint _id = 0;
 
+        std::weak_ptr<Graphics::Geometry> _geometry;
         BufferMap _buffers;
 
-        void createMapping(std::weak_ptr<Graphics::Geometry> geometry);
+        void createMapping(std::shared_ptr<Program> program);
     public:
-        Binding(std::weak_ptr<Graphics::Geometry> geometry);
+        Binding(std::weak_ptr<Graphics::Geometry> geometry, std::shared_ptr<Program> program);
         virtual ~Binding();
 
         void Use();
 
-        std::shared_ptr<Buffer> GetBuffer(std::shared_ptr<Graphics::Buffer> buf);
-        void RemoveBuffer(std::weak_ptr<Graphics::Buffer> buffer);
+        std::shared_ptr<Buffer> GetBuffer(std::shared_ptr<Graphics::BaseBuffer> buf);
+        void RemoveBuffer(std::weak_ptr<Graphics::BaseBuffer> buffer);
     };
 }
 

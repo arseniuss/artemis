@@ -21,7 +21,40 @@
 
 #include <stdexcept>
 
+#include <Common/Debug.hpp>
+
 #include <glad.h>
+
+#ifdef NDEBUG
+#define GL_CHECK(x)     x;
+#define GL_CHECK2(name, ...)    name(__VA_ARGS__);
+#else
+#define GL_CHECK(x)     DEBUG_ONCE("[OpenGL] " #x); x; OpenGL::CheckOpenGLErrors();
+
+#define GL_CHECK2(name, ...)    \
+    ({ \
+        static bool once = false; \
+        \
+        if(!once) { \
+            std::cout << "[OpenGL] " #name << "(" << __VA_ARGS__; std::cout << ") <=> "; \
+            std::cout << #name << "(" << #__VA_ARGS__ << ")" << std::endl; \
+            once = true; \
+        } \
+        name(__VA_ARGS__); \
+        OpenGL::CheckOpenGLErrors(); \
+    })
+#endif
+
+template <typename T>
+std::ostream& operator,(std::ostream& out, const T& t) {
+    out << "," << t;
+    return out;
+}
+
+inline std::ostream& operator,(std::ostream& out, std::ostream&(*f)(std::ostream&)) {
+    out << f;
+    return out;
+}
 
 namespace OpenGL {
 

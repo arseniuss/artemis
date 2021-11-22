@@ -18,20 +18,21 @@
 
 #include <Graphics/Buffer.hpp>
 #include <OpenGL/Buffer.hpp>
+#include <OpenGL/Debug.hpp>
 
 #include "glad.h"
 
 using namespace OpenGL;
 
-Buffer::Buffer(std::shared_ptr<Graphics::Buffer> buffer) {
+Buffer::Buffer(std::shared_ptr<Graphics::BaseBuffer> buffer) {
     GLenum bufferType;
 
     DEBUG("Creating buffer " << buffer->GetName());
 
-    glGenBuffers(1, &_id);
-    glBindBuffer(GL_ARRAY_BUFFER, _id);
+    GL_CHECK2(glGenBuffers, 1, &_id);
+    GL_CHECK2(glBindBuffer, GL_ARRAY_BUFFER, _id);
 
-    int type = buffer->GetType();
+    int type = buffer->GetBufferType();
 
     switch (type) {
         case Graphics::CONST_BUFFER:
@@ -45,11 +46,26 @@ Buffer::Buffer(std::shared_ptr<Graphics::Buffer> buffer) {
             break;
     }
 
-    glBufferData(GL_ARRAY_BUFFER, buffer->GetSize(), buffer->GetData(), bufferType);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    size_t itemType = buffer->GetType();
+
+    if (itemType == typeid (float).hash_code()) {
+        _type = GL_FLOAT;
+    } else {
+        throw std::runtime_error("Unregonised buffer type: " + std::to_string(itemType));
+    }
+
+    GL_CHECK2(glBufferData, GL_ARRAY_BUFFER, buffer->GetDataSize(), buffer->GetData(), bufferType);
+    GL_CHECK2(glBindBuffer, GL_ARRAY_BUFFER, 0);
 }
 
 Buffer::~Buffer() {
-    glDeleteBuffers(1, &_id);
+    GL_CHECK2(glDeleteBuffers, 1, &_id);
 }
 
+GLenum Buffer::GetType() const {
+    return _type;
+}
+
+GLuint Buffer::GetId() const {
+    return _id;
+}

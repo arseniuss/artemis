@@ -23,17 +23,20 @@
 #include <Graphics/Scene.hpp>
 #include <Graphics/Texture.hpp>
 #include <OpenGL/Background.hpp>
+#include <OpenGL/Debug.hpp>
 
 #include <glad.h>
 
 using namespace OpenGL;
 
 void Background::clearColor(Graphics::Color color) {
-    glClearColor(color.r, color.g, color.b, color.a);
+    GL_CHECK2(glClearColor, color.r, color.g, color.b, color.a);
 }
 
 void Background::clear() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //GL_CHECK2(glEnable, GL_DEPTH_TEST);
+    //GL_CHECK2(glDepthFunc, GL_LESS);
+    GL_CHECK2(glClear, (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
 Background::Background() : _clearColor(Graphics::Color::Rgb(0x000000)) {
@@ -59,9 +62,9 @@ void Background::Render(std::shared_ptr<Graphics::Scene> scene) {
         size_t h = background->GetHash();
 
         if (h == Graphics::Color::Hash) {
-            auto color = std::static_pointer_cast<Graphics::Color>(background);
+            std::shared_ptr<Graphics::Color> color = std::static_pointer_cast<Graphics::Color>(background);
 
-
+            clearColor(*color.get());
         } else if (h == Graphics::CubeTexture::Hash) {
             // TODO
         } else if (h == Graphics::Texture::Hash) {

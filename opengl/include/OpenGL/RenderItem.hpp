@@ -57,12 +57,6 @@ namespace OpenGL {
 
         void Reset(State& state);
 
-        /**
-         * Update render item from updated object
-         * @param o
-         */
-        void Update(std::shared_ptr<Graphics::Object> o);
-
         void Build();
 
         void Render(State& state, Common::Dictionary& properties, std::shared_ptr<Graphics::Camera> camera);

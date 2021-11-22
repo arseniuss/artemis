@@ -19,6 +19,7 @@
 #include <Common.hpp>
 #include <Common/Dictionary.hpp>
 #include <Graphics/Common.hpp>
+#include <Graphics/Materials/BasicMeshMaterial.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Group.hpp>
 #include <Graphics/Objects/LOD.hpp>
@@ -34,14 +35,17 @@
 
 using namespace OpenGL;
 
+template <typename T>
+void SetProperty(Common::Dictionary& dic) {
+    std::string name = T().GetTypeName();
+    MaterialProperties prop;
+
+    prop.Load(name);
+    dic.Set(name, prop);
+}
+
 Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx) {
-
-    for (int i = 0; i < Graphics::LAST_COMPONENT; i++) {
-        const Graphics::ObjectDictionary& obj = Graphics::Objects[i];
-        auto material = new MaterialProperties(obj.MaterialName, obj.ObjectName);
-
-        _properties.Set<MaterialProperties>(obj.MaterialName, material);
-    }
+    SetProperty<Graphics::BasicMeshMaterial>(_properties);
 }
 
 Renderer::~Renderer() {
@@ -108,6 +112,7 @@ void Renderer::Render(std::shared_ptr<Graphics::Scene> scene, std::shared_ptr<Gr
 void Renderer::ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_ptr<Graphics::Camera> camera) {
     if (!o.get()) return;
     if (!o->IsVisible()) return;
+
 
     size_t h = o->GetHash();
 

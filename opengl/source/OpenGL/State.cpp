@@ -24,6 +24,7 @@
 #include <OpenGL/Binding.hpp>
 #include <OpenGL/Program.hpp>
 #include <OpenGL/State.hpp>
+#include <OpenGL/Debug.hpp>
 
 #include <glad.h>
 
@@ -45,22 +46,23 @@ bool State::ChangeProgram(std::shared_ptr<Program> program) {
 
 void State::SetMaterial(std::shared_ptr<Graphics::Material> material) {
     if (material->GetSides() == Graphics::DOUBLE_SIDED) {
-        glDisable(GL_CULL_FACE);
+        //GL_CHECK2(glDisable, GL_CULL_FACE);
     } else {
-        glEnable(GL_CULL_FACE);
+        //GL_CHECK2(glEnable, GL_CULL_FACE);
     }
 
     // TODO
 }
 
-std::shared_ptr<Binding> State::GetBindingState(std::shared_ptr<Graphics::Geometry> geometry) {
+std::shared_ptr<Binding> State::GetBindingState(std::shared_ptr<Graphics::Geometry> geometry,
+        std::shared_ptr<Program> program) {
     auto weak_geo = geometry->weak_from_this();
 
     if (_bindings.contains(weak_geo)) {
         return _bindings[weak_geo];
     }
 
-    std::shared_ptr<Binding> binding = std::make_shared<Binding>(weak_geo);
+    auto binding = std::make_shared<Binding>(weak_geo, program);
 
     _bindings.emplace(geometry, binding);
     Common::RegisterOnDestruct<State, Graphics::Geometry>(this, geometry, [](auto a, auto b) {
@@ -76,45 +78,3 @@ void State::Remove(std::weak_ptr<Graphics::Geometry> geometry) {
         _bindings.erase(geometry);
     }
 }
-
-
-// TODO: remove this
-/*
-MappingMap State::GetMappings(std::weak_ptr<Graphics::Geometry> geometry) {
-    MappingMap mapping;
-
-    if (auto geo = geometry.lock()) {
-        auto& buffers = geo->GetBuffers();
-
-        for (Graphics::BufferMap::value_type value : buffers) {
-            std::shared_ptr<Graphics::Buffer> buffer = value.second;
-            int id = GetBuffer(value.second);
-
-            if (id < 0) {
-                GLenum bufferType;
-
-                switch (buffer->GetType()) {
-                    case Graphics::CONST_BUFFER:
-                        bufferType = GL_STATIC_DRAW;
-                        break;
-                    case Graphics::DYNAMIC_BUFFER:
-                        bufferType = GL_DYNAMIC_DRAW;
-                        break;
-                    default:
-                        throw std::runtime_error("Unrecognised buffer type!");
-                        break;
-                }
-
-                glGenBuffers(1, (GLuint *) & id);
-                //glBindBuffer(GL_ARRAY_BUFFER, id);
-                //glBufferData(GL_ARRAY_BUFFER, buffer->GetSize(), buffer->GetData(), bufferType);
-            }
-
-            mapping.emplace(value.first, std::pair{value.second, id});
-        }
-    }
-
-    return mapping;
-}
- */
-
