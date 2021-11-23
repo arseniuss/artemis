@@ -18,6 +18,7 @@
 
 #include <random>
 
+#include <Common/Debug.hpp>
 #include <Galaxy/SphereGalaxyGenerator.hpp>
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Cameras/PerspectiveCamera.hpp>
@@ -34,33 +35,47 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     auto graph = app->GetGraphics();
 
     Utility::Random rand(0);
-    auto gen = new Galaxy::SphereGalaxyGenerator(1000);
+    auto gen = new Galaxy::SphereGalaxyGenerator(10000);
     std::vector<Galaxy::Star>& stars = gen->Generate(rand);
-
-
 
     auto geo = std::make_shared<Graphics::Geometry>();
     std::vector<float> positions;
     std::vector<float> colors;
 
+    glm::vec3 maxes(0);
+    glm::vec3 mines(0);
+    
     for (size_t i = 0; i < stars.size(); i++) {
         auto& star = stars[i];
 
-        positions.emplace_back(star.position.x);
-        positions.emplace_back(star.position.y);
-        positions.emplace_back(star.position.z);
+        auto pos = star.position * 50.0f;
+        
+        positions.emplace_back(pos.x);
+        positions.emplace_back(pos.y);
+        positions.emplace_back(pos.z);
+        
+        if(maxes.x < star.position.x) maxes.x = star.position.x;
+        if(maxes.y < star.position.y) maxes.y = star.position.y;
+        if(maxes.z < star.position.z) maxes.z = star.position.z;
+        
+        if(mines.x > star.position.x) mines.x = star.position.x;
+        if(mines.y > star.position.y) mines.y = star.position.y;
+        if(mines.z > star.position.z) mines.z = star.position.z;
+        
 
         colors.emplace_back(1.0f);
         colors.emplace_back(1.0f);
         colors.emplace_back(1.0f); // TODO: convert
     }
+    
+    DEBUG("Max is " << maxes << " Min is " << mines);
 
-    geo->AddBuffer("position", std::make_shared<Graphics::Buffer>(positions, 3));
-    geo->AddBuffer("color", std::make_shared<Graphics::Buffer>(colors, 3));
+    geo->AddBuffer("position", std::make_shared<Graphics::Buffer<float>>(positions, 3));
+    geo->AddBuffer("color", std::make_shared<Graphics::Buffer<float>>(colors, 3));
 
     geo->Compute();
 
-    auto mat = std::make_shared<Graphics::PointsMaterial>(15);
+    auto mat = std::make_shared<Graphics::PointsMaterial>(1);
 
     auto system = std::make_shared<Graphics::Points>(geo, mat);
 
@@ -68,7 +83,10 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
 
     auto windowSize = graph->GetSize();
     _scene->Add(system->shared_from_this());
-    _camera = std::make_shared<Graphics::PerspectiveCamera>(27, windowSize.x / windowSize.y, 5, 3500);
+    _camera = std::make_shared<Graphics::PerspectiveCamera>(27, windowSize.x / windowSize.y, 1, 10000);
+    _camera->LookAt({0, 0, 0});
+    _camera->SetPosition({0, 0, 1000});
+    _camera->UpdateWorldMatrix(true, true);
 }
 
 void GalaxyState::BuildUI(Gui::LayoutBuilder& builder) {
@@ -88,6 +106,11 @@ bool GalaxyState::HandleEvent(const SDL_Event& event) {
 }
 
 void GalaxyState::Render(Graphics::Renderer& renderer) {
+    Utility::Random rand(0);
+    
+    _camera->LookAt({0, 0, rand.next()});
+    _camera->UpdateMatrix();
+    
     renderer.Render(_scene, _camera);
 }
 

@@ -23,7 +23,6 @@
 #include <Client/State.hpp>
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Camera.hpp>
-#include <Graphics/Shader.hpp>
 
 namespace Client {
     class TestState : public State {
