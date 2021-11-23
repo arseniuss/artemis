@@ -23,12 +23,15 @@ using namespace Graphics;
 static int materialCounter = 0;
 std::string unnamed = "unnamed material";
 
-size_t Material::Hash = typeid(Material).hash_code();
+size_t Material::Hash = typeid (Material).hash_code();
 
-Material::Material() : _typeName(unnamed) { 
+Material::Material() : _typeName(unnamed) {
+    _hash = Material::Hash;
     _id = ++materialCounter;
+    _typeName = "unnamed material";
     _name = "unnamed material #" + std::to_string(_id);
     _version = 1;
+    _sides = SINGLE_SIDED;
 
     _isVisible = true;
 

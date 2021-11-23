@@ -25,6 +25,7 @@
 namespace Graphics {
 
     enum {
+        SINGLE_SIDED,
         DOUBLE_SIDED
     };
 
@@ -42,7 +43,7 @@ namespace Graphics {
         bool _transparent;
     public:
         static size_t Hash;
-        
+
         Material();
         Material(const std::string& name, const std::string& typeName);
 

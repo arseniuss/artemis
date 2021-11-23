@@ -23,9 +23,14 @@ using namespace Graphics;
 
 size_t PointsMaterial::Hash = typeid (PointsMaterial).hash_code();
 
-PointsMaterial::PointsMaterial(size_t pointSize) : Material() {
+PointsMaterial::PointsMaterial() : Material() {
     _name = "point material #" + std::to_string(_id);
     _typeName = "point material";
+    _hash = PointsMaterial::Hash;
+    
+    _pointSize = 1;
+}
 
+PointsMaterial::PointsMaterial(size_t pointSize) : PointsMaterial() {
     _pointSize = pointSize;
 }

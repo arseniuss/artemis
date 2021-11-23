@@ -35,18 +35,19 @@ Object::Object() {
     _name = "unnamed object";
 
     _position = {0, 0, 0};
+    _up = {0, 1, 0};
     _translation = glm::mat4(1.0f);
-    _quaternion = {1, 0, 0, 0};
+    _quaternion = {0, 0, 0, 0};
     _scale = {1, 1, 1};
 
-    _matrix = glm::mat4(1);
     _matrixAutoUpdate = true;
 
-    _up = {0, 1, 0};
+    
     _visible = true;
     _isImmediateObject = true;
     _isInstancedMesh = false;
-
+    
+    UpdateMatrix();
 }
 
 Object::~Object() {

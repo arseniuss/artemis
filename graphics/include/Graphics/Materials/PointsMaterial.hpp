@@ -31,6 +31,7 @@ namespace Graphics {
     public:
         static size_t Hash;
 
+        PointsMaterial();
         PointsMaterial(size_t pointSize);
 
         float GetPointSize() const {
