@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,12 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef COMMON_DEBUG_HPP
-#define COMMON_DEBUG_HPP
+#include <glm/gtx/string_cast.hpp>
 
-#include <iostream>
+#include <Common/Debug.hpp>
 
-#include <glm/glm.hpp>
-
-#ifdef NDEBUG
-#define DEBUG(x)
-#define DEBUG_ONCE(x)
-#else
-#define DEBUG(x)            std::cout << x << std::endl;
-#define DEBUG_ONCE(x)       ({static bool sent = false; if(!sent) { std::cout << x << std::endl; sent = true; }})
-#endif
-
-std::ostream& operator<<(std::ostream& os, const glm::vec3& v);
-
-#endif /* !COMMON_DEBUG_HPP */
+std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
+    os << glm::to_string(v);
+    
+    return os;
+}

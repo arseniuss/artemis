@@ -23,17 +23,29 @@
 
 namespace Utility {
 
-    class Random {
+    template<typename _RetType>
+    class BaseRandom {
+    public:
+        typedef _RetType result_type;
+
+        virtual result_type operator()() = 0;
+
+        virtual result_type min() = 0;
+
+        virtual result_type max() = 0;
+    };
+
+    class Random : public BaseRandom<uint32_t> {
     private:
         uint32_t _seed;
     public:
         typedef uint32_t result_type;
-        
+
         Random(uint32_t seed);
-        
+
         result_type get(int x);
         result_type get(int x, Random::result_type seedOvrd);
-        
+
         result_type operator()() {
             return next();
         }
