@@ -17,9 +17,11 @@
  */
 
 #include <random>
+#include <functional>
 
 #include <Common/Debug.hpp>
 #include <Galaxy/SphereGalaxyGenerator.hpp>
+#include <Utility/BoxMuller.hpp>
 
 using namespace Galaxy;
 
@@ -30,28 +32,29 @@ SphereGalaxyGenerator::SphereGalaxyGenerator(size_t sz, float densityDev, float 
     _densityDeviation = densityDev;
     _densityMean = densityMean;
     _deviation = deviation;
-    
-    DEBUG("size=" << _size 
-            << " densityDeviation=" << _densityDeviation 
-            << " densituMean=" << _densityMean
-            << " deviation=[" << _deviation.x << "," << _deviation.y << "," << _deviation.z << "]");
+
+    DEBUG("size=" << _size
+            << " densityDeviation=" << _densityDeviation
+            << " densityMean=" << _densityMean
+            << " deviation=[" << _deviation << "]");
 }
 
 std::vector<Star>& SphereGalaxyGenerator::Generate(Utility::Random& random) {
     if (!_isGenerated) {
-        std::normal_distribution<double> nd(_densityMean, _densityDeviation);
-        auto density = std::max(0.0, (double)nd(random));
-        auto countMax = std::max(0.0, _size * _size * _size * density);
+        Utility::BoxMuller<float> bm(_densityDeviation, _densityMean);
+        auto density = std::max(0.0f, bm(random));
+        auto countMax = std::max<float>(0.0f, _size * _size * _size * density);
 
         std::uniform_int_distribution<> uid(0, countMax);
 
         auto count = uid(random);
 
-        DEBUG("Generating " << count << " stars [0 .. " << countMax << "]");
+        Utility::BoxMuller<float> xnd(_deviation.x * _size, 0);
+        Utility::BoxMuller<float> ynd(_deviation.y * _size, 0);
+        Utility::BoxMuller<float> znd(_deviation.z * _size, 0);
 
-        std::normal_distribution<double> xnd(0, _deviation.x * _size);
-        std::normal_distribution<double> ynd(0, _deviation.y * _size);
-        std::normal_distribution<double> znd(0, _deviation.z * _size);
+        DEBUG("Generating " << count << " stars [0 .. " << countMax << "]");
+        DEBUG("Density " << density);
 
         for (int i = 0; i < count; i++) {
             glm::vec3 pos;
@@ -60,14 +63,14 @@ std::vector<Star>& SphereGalaxyGenerator::Generate(Utility::Random& random) {
             pos.y = ynd(random);
             pos.z = znd(random);
 
-            auto d = pos.length() / _size;
-            auto m = d * 2000 + (1 - d) * 150000;
+            auto d = (float) pos.length() / (float) _size;
+            float m = d * 2000.0f + (1.0f - d) * 15000.0f;
 
-            std::normal_distribution<double> tnd(m, 4000);
+            std::normal_distribution<float> tnd(m, 40000.0f);
 
             auto t = tnd(random);
 
-            //Common::Debug() << "Star[" << pos.x << "," << pos.y << "," << pos.z << "] temp=" << t << std::endl;
+            //DEBUG("Star[" << pos.x << "," << pos.y << "," << pos.z << "] temp=" << t);
 
             _stars.push_back(Star(pos, "", t));
         }

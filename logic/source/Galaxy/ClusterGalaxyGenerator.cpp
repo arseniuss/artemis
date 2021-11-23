@@ -33,12 +33,12 @@ std::vector<Star>& ClusterGalaxyGenerator::Generate(Utility::Random& random) {
     auto& stars = _gen.Generate(random);
 
     if (!_generated) {
-        std::normal_distribution<double> nd(_countMean, _countDeviation);
+        std::normal_distribution<float> nd(_countMean, _countDeviation);
         auto count = nd(random);
 
-        std::normal_distribution<double> xnd(0, _deviation.x);
-        std::normal_distribution<double> ynd(0, _deviation.y);
-        std::normal_distribution<double> znd(0, _deviation.z);
+        std::normal_distribution<float> xnd(0, _deviation.x);
+        std::normal_distribution<float> ynd(0, _deviation.y);
+        std::normal_distribution<float> znd(0, _deviation.z);
 
         for (size_t i = 0; i < count; i++) {
             glm::vec3 center;
