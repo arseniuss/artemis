@@ -1,0 +1,8 @@
+material:
+  name: point_material
+  precision: highp
+  vertex colors: true
+  vertex alphas: false
+  vertex UVs: false
+  GLSL version: 330 core
+  shader name: points

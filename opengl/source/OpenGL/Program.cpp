@@ -243,10 +243,9 @@ void Program::Build(const MaterialProperties& props) {
 
     std::vector<std::string> prefixVector = {
         //generatePrecision(props),
+        "#define VERTEX_SHADER",
         "#define SHADER_NAME " + props.GetName() + "_vertex",
-
         props.HasVertexColor() ? "#define USE_COLOR" : "",
-
         "uniform mat4 modelMatrix;",
         "uniform mat4 modelViewMatrix;",
         "uniform mat4 projectionMatrix;",
@@ -256,6 +255,8 @@ void Program::Build(const MaterialProperties& props) {
     };
     std::vector<std::string> prefixFragment = {
         //generatePrecision(props),
+        "#define FRAGMENT_SHADER",
+        props.HasVertexColor() ? "#define USE_COLOR" : "",
         "#define SHADER_NAME " + props.GetName() + "_fragment",
         ""
     };

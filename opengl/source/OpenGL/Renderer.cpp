@@ -46,6 +46,7 @@ void SetProperty(Common::Dictionary& dic) {
 
 Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx) {
     SetProperty<Graphics::BasicMeshMaterial>(_properties);
+    SetProperty<Graphics::PointsMaterial>(_properties);
 }
 
 Renderer::~Renderer() {
