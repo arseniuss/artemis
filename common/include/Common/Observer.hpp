@@ -65,7 +65,7 @@ namespace Common {
 
     template<class TObserver, class TObservable>
     inline void RegisterOnDestruct(TObserver* observer, std::shared_ptr<TObservable> observable,
-            std::function<void(TObserver*, std::weak_ptr<TObservable>) > func) {
+            std::function<void(TObserver*, TObservable*) > func) {
         //std::weak_ptr<TObserver> w = a->weak_from_this();
 
         DEBUG("Registering " << Utility::NameOf<TObserver>() << " to " << Utility::NameOf<TObservable>());
@@ -78,7 +78,7 @@ namespace Common {
             //if (auto s = w.lock()) {
             DEBUG(Utility::NameOf<TObservable>() << " died --> calling " << Utility::NameOf<TObserver>());
 
-            func(observer, b->weak_from_this());
+            func(observer, b);
             //}
         });
     }
