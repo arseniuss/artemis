@@ -22,7 +22,7 @@
 #include <Galaxy/SphereGalaxyGenerator.hpp>
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Cameras/PerspectiveCamera.hpp>
-#include <Graphics/Geometry.hpp>
+#include <Graphics/BufferGeometry.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Points.hpp>
 
@@ -38,7 +38,7 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     auto gen = new Galaxy::SphereGalaxyGenerator(10000);
     std::vector<Galaxy::Star>& stars = gen->Generate(rand);
 
-    auto geo = std::make_shared<Graphics::Geometry>();
+    auto geo = std::make_shared<Graphics::BufferGeometry>();
     std::vector<float> positions;
     std::vector<float> colors;
 
@@ -70,8 +70,8 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     
     DEBUG("Max is " << maxes << " Min is " << mines);
 
-    geo->AddBuffer("position", std::make_shared<Graphics::Buffer<float>>(positions, 3));
-    geo->AddBuffer("color", std::make_shared<Graphics::Buffer<float>>(colors, 3));
+    geo->SetAttribute("position", std::make_shared<Graphics::Buffer<float>>(positions, 3));
+    geo->SetAttribute("color", std::make_shared<Graphics::Buffer<float>>(colors, 3));
 
     geo->Compute();
 
