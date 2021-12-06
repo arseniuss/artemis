@@ -43,12 +43,10 @@ Camera::~Camera() {
 }
 
 glm::mat4 Camera::GetProjectionMatrix() const {
-
     return _projectionMatrix;
 }
 
 glm::mat4 Camera::GetViewMatrix() const {
-
     return _viewMatrix;
 }
 

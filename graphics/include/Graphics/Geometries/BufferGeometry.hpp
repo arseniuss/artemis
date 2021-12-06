@@ -39,6 +39,8 @@ namespace Graphics {
         virtual ~BufferGeometry();
 
         virtual void SetAttribute(const std::string& name, std::shared_ptr<BaseBuffer> buffer);
+        virtual bool HasAttribute(const std::string& name) const;
+        const std::shared_ptr<BaseBuffer> GetAttribute(const std::string& name);
 
         BufferMap& GetBuffers();
 

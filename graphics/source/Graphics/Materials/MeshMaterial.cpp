@@ -28,5 +28,19 @@ MeshMaterial::MeshMaterial() : Material() {
     _hash = MeshMaterial::Hash;
     _name = "mesh material #" + std::to_string(++meshMaterialCounter);
     _typeName = "mesh material";
+
+    _hasTexture = false;
 }
 
+bool MeshMaterial::HasTexture() const {
+    return _hasTexture;
+}
+
+void MeshMaterial::SetTexture(std::shared_ptr<Texture> texture) {
+    _texture = texture;
+    _hasTexture = texture.get() ? true : false;
+}
+
+std::shared_ptr<Texture> MeshMaterial::GetTexture() {
+    return _texture;
+}

@@ -19,16 +19,28 @@
 #ifndef GRAPHICS_TEXTURE_HPP
 #define GRAPHICS_TEXTURE_HPP
 
+#include <SDL2/SDL_image.h>
+
+#include <Common/Observer.hpp>
 #include <Graphics/Property.hpp>
 
 namespace Graphics {
 
-    class Texture : public Property {
+    class Texture : public Property, public Common::Observable {
     private:
+        SDL_Surface *_image;
     public:
         static size_t Hash;
 
+        Texture();
+        Texture(SDL_Surface* image);
+        ~Texture();
+        
+        ssize_t GetWidth() const;
+        ssize_t GetHeight() const;
+        const void *GetData() const;
 
+        static std::shared_ptr<Texture> Load(const std::string& filename);
     };
 }
 

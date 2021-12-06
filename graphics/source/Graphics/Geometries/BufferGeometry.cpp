@@ -34,6 +34,19 @@ void BufferGeometry::SetAttribute(const std::string& name, std::shared_ptr<BaseB
     _buffers.emplace(name, buffer);
 }
 
+bool BufferGeometry::HasAttribute(const std::string& name) const {
+    return _buffers.find(name) != _buffers.end();
+}
+
+const std::shared_ptr<BaseBuffer> BufferGeometry::GetAttribute(const std::string& name) {
+    auto it = _buffers.find(name);
+
+    if (it != _buffers.end())
+        return it->second;
+
+    return {};
+}
+
 BufferMap& BufferGeometry::GetBuffers() {
     return _buffers;
 }

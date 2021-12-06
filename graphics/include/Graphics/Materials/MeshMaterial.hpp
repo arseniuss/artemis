@@ -22,11 +22,20 @@
 #include <Graphics/Material.hpp>
 
 namespace Graphics {
+    class Texture;
+
     class MeshMaterial : public Material {
+    private:
+        bool _hasTexture;
+        std::shared_ptr<Texture> _texture;
     public:
         static size_t Hash;
-        
+
         MeshMaterial();
+
+        bool HasTexture() const;
+        void SetTexture(std::shared_ptr<Texture> texture);
+        std::shared_ptr<Texture> GetTexture();
     };
 }
 
