@@ -21,9 +21,11 @@
 #include <Common/Dictionary.hpp>
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Camera.hpp>
-#include <Graphics/Geometry.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Material.hpp>
+#include <Graphics/Materials/BasicMeshMaterial.hpp>
 #include <Graphics/Materials/CustomMaterial.hpp>
+#include <Graphics/Materials/MeshMaterial.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Line.hpp>
 #include <Graphics/Objects/Points.hpp>
@@ -36,8 +38,6 @@
 #include <OpenGL/RenderItem.hpp>
 
 #include <glad.h>
-
-#include "Graphics/Materials/BasicMeshMaterial.hpp"
 
 using namespace OpenGL;
 
@@ -60,24 +60,23 @@ bool RenderItem::needsUpdate() {
 std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary& properties,
         std::shared_ptr<Graphics::Camera> camera, std::shared_ptr<Graphics::Material> mat,
         std::shared_ptr<Graphics::Object> obj) {
-    MaterialProperties& materialProperties = properties.Get<MaterialProperties>(mat->GetTypeName());
 
+    std::shared_ptr<MaterialProperties> props = MaterialProperties::GetOrEmpty(mat);
     bool needsProgramChange = false;
 
-    if (mat->GetVersion() == materialProperties.GetVersion()) {
-
-    } else {
+    if (mat->GetVersion() != props->GetVersion()) {
         needsProgramChange = true;
-        materialProperties.SetVersion(mat->GetVersion());
+        props->Update(mat);
     }
 
-    std::shared_ptr<Program> program = materialProperties.GetProgram();
+
+    std::shared_ptr<Program> program = props->GetProgram();
     if (needsProgramChange || !program.get()) {
         program = std::make_shared<Program>();
 
-        program->Build(materialProperties);
+        program->Build(props);
 
-        materialProperties.SetProgram(program);
+        props->SetProgram(program);
     }
 
     bool refreshProgram = false;
@@ -111,7 +110,9 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
             auto pm = std::static_pointer_cast<Graphics::PointsMaterial> (mat);
 
             programUniforms.Set("size", pm->GetPointSize());
-
+        } else if (h == Graphics::MeshMaterial::Hash) {
+            auto m = std::static_pointer_cast<Graphics::MeshMaterial>(mat);
+            
         } else if (h == Graphics::BasicMeshMaterial::Hash) {
             auto m = std::static_pointer_cast<Graphics::BasicMeshMaterial>(mat);
 
@@ -119,8 +120,10 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
         } else {
             throw std::runtime_error("Unsupported material: " + mat->GetName());
         }
+
+        props->SetVersion(mat->GetVersion());
     }
-    
+
     if (programUniforms.Exists("viewMatrix"))
         programUniforms.Set("viewMatrix", camera->GetViewMatrix());
     //programUniforms.Set("normalMatrix", camera->normalMatrix);

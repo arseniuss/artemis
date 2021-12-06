@@ -69,7 +69,7 @@ namespace OpenGL {
          */
         void ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_ptr<Graphics::Camera> camera);
 
-        void Push(Graphics::Object& objects, Graphics::Geometry& geometry, Graphics::Material& material);
+        void Push(Graphics::Object& objects, Graphics::BufferGeometry& geometry, Graphics::Material& material);
 
 
         void findProgram();

@@ -18,7 +18,7 @@
 
 #include <Common/Observer.hpp>
 #include <Graphics/Buffer.hpp>
-#include <Graphics/Geometry.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <OpenGL/Binding.hpp>
 #include <OpenGL/Buffer.hpp>
 #include <OpenGL/Debug.hpp>
@@ -28,7 +28,7 @@
 
 using namespace OpenGL;
 
-Binding::Binding(std::weak_ptr<Graphics::Geometry> geometry, std::shared_ptr<Program> program) : _geometry(geometry) {
+Binding::Binding(std::weak_ptr<Graphics::BufferGeometry> geometry, std::shared_ptr<Program> program) : _geometry(geometry) {
     GL_CHECK2(glGenVertexArrays, 1, &_id);
 
     GL_CHECK2(glBindVertexArray, _id);

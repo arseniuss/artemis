@@ -32,8 +32,8 @@ extern "C" {
 
     std::shared_ptr<Graphics::Context> CreateContext(const std::string& title,
             std::shared_ptr<const Common::Config> config) {
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 
         if (!OpenGL::Context::Instance) {
             OpenGL::Context::Instance =

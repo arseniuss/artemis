@@ -28,7 +28,7 @@
 
 namespace Graphics {
     class BaseBuffer;
-    class Geometry;
+    class BufferGeometry;
 }
 
 namespace OpenGL {
@@ -42,12 +42,12 @@ namespace OpenGL {
     private:
         GLuint _id = 0;
 
-        std::weak_ptr<Graphics::Geometry> _geometry;
+        std::weak_ptr<Graphics::BufferGeometry> _geometry;
         BufferMap _buffers;
 
         void createMapping(std::shared_ptr<Program> program);
     public:
-        Binding(std::weak_ptr<Graphics::Geometry> geometry, std::shared_ptr<Program> program);
+        Binding(std::weak_ptr<Graphics::BufferGeometry> geometry, std::shared_ptr<Program> program);
         virtual ~Binding();
 
         void Use();

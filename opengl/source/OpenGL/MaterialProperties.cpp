@@ -21,10 +21,17 @@
 #include <map>
 
 #include <Common/Config.hpp>
+#include <Common/Observer.hpp>
+#include <Graphics/Material.hpp>
+#include <Graphics/Materials/BasicMeshMaterial.hpp>
+#include <Graphics/Materials/CustomMaterial.hpp>
+#include <Graphics/Materials/PointsMaterial.hpp>
 #include <OpenGL/MaterialProperties.hpp>
 #include <Utility/Filesystem.hpp>
+#include <Utility/String.hpp>
 
 #include "glad.h"
+#include "Graphics/Materials/MeshMaterial.hpp"
 
 using namespace OpenGL;
 
@@ -33,6 +40,28 @@ std::map<unsigned int, std::string> shaderExtensions = {
     {GL_FRAGMENT_SHADER, "_frag.glsl"},
     {GL_GEOMETRY_SHADER, "_geom.glsl"}
 };
+
+MaterialPropertyMap MaterialProperties::_properties;
+
+std::shared_ptr<MaterialProperties> MaterialProperties::GetOrEmpty(std::shared_ptr<Graphics::Material> mat) {
+    auto it = _properties.find(mat->weak_from_this());
+
+    if (it != _properties.end())
+        return it->second;
+
+    auto props = std::make_shared<MaterialProperties>();
+
+    _properties.emplace(mat->weak_from_this(), props);
+    Common::RegisterOnDestruct<Graphics::Material>(mat, [](auto a) {
+        MaterialProperties::Remove(a);
+    });
+
+    return props;
+}
+
+void MaterialProperties::Remove(std::weak_ptr<Graphics::Material> mat) {
+    _properties.erase(mat);
+}
 
 MaterialProperties::MaterialProperties() {
 
@@ -47,27 +76,35 @@ void loadOptional(Common::Config& config, const std::string& section, const std:
     }
 }
 
-void MaterialProperties::Load(const std::string& name) {
-    std::string filename = "data/props/" + name + ".yaml";
+void MaterialProperties::Update(std::shared_ptr<Graphics::Material> mat) {
+    size_t h = mat->GetHash();
 
-    if (!std::filesystem::exists(filename))
-        throw std::runtime_error("Material properties " + filename + " do not exist!");
+    if (h == Graphics::CustomMaterial::Hash) {
 
-    Common::Config config(filename);
+    } else {
+        _name = mat->GetTypeName();
+        _shaderName = Utility::Replace(mat->GetTypeName(), ' ', '_');
 
-    loadOptional(config, "material", "name", _name);
-    loadOptional(config, "material", "precision", _precision);
+        if (h == Graphics::MeshMaterial::Hash) {
+            auto m = std::static_pointer_cast<Graphics::MeshMaterial>(mat);
+            
+            _uniformColor = false;
+            _vertexColors = true;
+        } else if (h == Graphics::BasicMeshMaterial::Hash) {
+            auto m = std::static_pointer_cast<Graphics::BasicMeshMaterial>(mat);
 
-    loadOptional(config, "material", "vertex colors", _vertexColors);
-    loadOptional(config, "material", "vertex alphas", _vertexAlphas);
-    loadOptional(config, "material", "vertex UVs", _vertexUVs);
+            _uniformColor = true;
+            if (_uniformColor) _colorAlphas = true;
+        } else if (h == Graphics::PointsMaterial::Hash) {
+            auto m = std::static_pointer_cast<Graphics::PointsMaterial>(mat);
 
-    loadOptional(config, "material", "GLSL version", _glslVersion);
-    loadOptional(config, "material", "shader name", _shaderName);
+            _vertexColors = true;
+        } else {
+            throw std::runtime_error("Unrecognised material " + mat->GetTypeName());
+        }
+    }
 
-    config.Save();
-
-    std::string shaderFilename = "data/shaders/" + _name;
+    std::string shaderFilename = "data/shaders/" + _shaderName;
 
     _vertexShaderText = Utility::LoadFullFile(shaderFilename + shaderExtensions[GL_VERTEX_SHADER]);
     _fragmentShaderText = Utility::LoadFullFile(shaderFilename + shaderExtensions[GL_FRAGMENT_SHADER]);
@@ -83,6 +120,10 @@ void MaterialProperties::SetVersion(int version) {
 
 const std::string& MaterialProperties::GetName() const {
     return _name;
+}
+
+const std::string& MaterialProperties::GetShaderName() const {
+    return _shaderName;
 }
 
 const std::string& MaterialProperties::GetPrecision() const {
@@ -104,3 +145,20 @@ const std::string& MaterialProperties::GetVertextShaderText() const {
 const std::string& MaterialProperties::GetFragmentShaderText() const {
     return _fragmentShaderText;
 }
+
+bool MaterialProperties::HasUniformColor() const {
+    return _uniformColor;
+}
+
+void MaterialProperties::HasUniformColor(bool value) {
+    _uniformColor = value;
+}
+
+bool MaterialProperties::HasColorAphas() const {
+    return _colorAlphas;
+}
+
+bool MaterialProperties::HasVertexColor() const {
+    return _vertexColors;
+}
+

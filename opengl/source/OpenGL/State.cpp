@@ -19,7 +19,7 @@
 #include <memory>
 
 #include <Graphics/Buffer.hpp>
-#include <Graphics/Geometry.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Material.hpp>
 #include <OpenGL/Binding.hpp>
 #include <OpenGL/Program.hpp>
@@ -54,7 +54,7 @@ void State::SetMaterial(std::shared_ptr<Graphics::Material> material) {
     // TODO
 }
 
-std::shared_ptr<Binding> State::GetBindingState(std::shared_ptr<Graphics::Geometry> geometry,
+std::shared_ptr<Binding> State::GetBindingState(std::shared_ptr<Graphics::BufferGeometry> geometry,
         std::shared_ptr<Program> program) {
     auto weak_geo = geometry->weak_from_this();
 
@@ -65,14 +65,14 @@ std::shared_ptr<Binding> State::GetBindingState(std::shared_ptr<Graphics::Geomet
     auto binding = std::make_shared<Binding>(weak_geo, program);
 
     _bindings.emplace(geometry, binding);
-    Common::RegisterOnDestruct<State, Graphics::Geometry>(this, geometry, [](auto a, auto b) {
+    Common::RegisterOnDestruct<State, Graphics::BufferGeometry>(this, geometry, [](auto a, auto b) {
         a->Remove(b);
     });
 
     return binding;
 }
 
-void State::Remove(std::weak_ptr<Graphics::Geometry> geometry) {
+void State::Remove(std::weak_ptr<Graphics::BufferGeometry> geometry) {
     DEBUG("Removing geometry");
     if (_bindings.contains(geometry)) {
         _bindings.erase(geometry);

@@ -65,7 +65,12 @@ std::string Program::generatePrecision(const MaterialProperties& props) {
     return str;
 }
 
-std::string Program::resolveIncludes(std::string& text) {
+std::string Program::resolveIncludes(std::string& prefix, std::string& text) {
+    text = Utility::RegexReplace(text, "[ \\t]*#include[ \t]+\"common\"",
+            [prefix](std::string match, const std::vector<std::string>& groups) {
+                return prefix;
+            });
+
     return Utility::RegexReplace(text, "[ \\t]*#include +<(.*)>",
             [](std::string match, const std::vector<std::string>& groups) {
                 std::string include = groups[1];
@@ -107,6 +112,8 @@ void Program::createProgram(const std::string& vertexSource, const std::string& 
 
     GL_CHECK2(glDeleteShader, vertexShader);
     GL_CHECK2(glDeleteShader, fragmentShader);
+
+    Use();
 }
 
 void Program::updateAttributes() {
@@ -231,21 +238,19 @@ void Program::updateUniforms() {
     }
 }
 
-void Program::Build(const MaterialProperties& props) {
-    std::string vertextShaderContent = props.GetVertextShaderText();
-    std::string fragmentShaderContent = props.GetFragmentShaderText();
-
-    std::string versionString = "";
-
-    if (!props.GetGLSLVersion().empty()) {
-        versionString = "#version " + props.GetGLSLVersion() + "\n";
-    }
+void Program::Build(std::shared_ptr<MaterialProperties> props) {
+    std::string vertextShaderContent = props->GetVertextShaderText();
+    std::string fragmentShaderContent = props->GetFragmentShaderText();
 
     std::vector<std::string> prefixVector = {
         //generatePrecision(props),
-        "#define VERTEX_SHADER",
-        "#define SHADER_NAME " + props.GetName() + "_vertex",
-        props.HasVertexColor() ? "#define USE_COLOR" : "",
+        "#define VERTEX_SHADER 1",
+        "#define SHADER_NAME " + props->GetShaderName() + "_vertex",
+        "",
+        props->HasVertexColor() ? "#define USE_VECTOR_COLOR 1" :
+        (props->HasUniformColor() ? "#define USE_UNIFORM_COLOR 1" : ""),
+        (props->HasColorAphas() ? "#define USE_COLOR_ALPHA 1" : ""),
+        "",
         "uniform mat4 modelMatrix;",
         "uniform mat4 modelViewMatrix;",
         "uniform mat4 projectionMatrix;",
@@ -255,29 +260,29 @@ void Program::Build(const MaterialProperties& props) {
     };
     std::vector<std::string> prefixFragment = {
         //generatePrecision(props),
-        "#define FRAGMENT_SHADER",
-        props.HasVertexColor() ? "#define USE_COLOR" : "",
-        "#define SHADER_NAME " + props.GetName() + "_fragment",
+        "#define FRAGMENT_SHADER 1",
+        "#define SHADER_NAME " + props->GetShaderName() + "_fragment",
+        "",
+        props->HasVertexColor() ? "#define USE_VECTOR_COLOR 1" :
+        (props->HasUniformColor() ? "#define USE_UNIFORM_COLOR 1" : ""),
+        (props->HasColorAphas() ? "#define USE_COLOR_ALPHA 1" : ""),
         ""
     };
-
-    vertextShaderContent = resolveIncludes(vertextShaderContent);
-    fragmentShaderContent = resolveIncludes(fragmentShaderContent);
 
     std::string vertexPrefixText = Utility::join(prefixVector.begin(), prefixVector.end(), "\n");
     std::string fragmentPrefixText = Utility::join(prefixFragment.begin(), prefixFragment.end(), "\n");
 
-    const std::string fullVertexShader = versionString + vertexPrefixText + vertextShaderContent;
-    const std::string fullFragmentShader = versionString + fragmentPrefixText + fragmentShaderContent;
+    vertextShaderContent = resolveIncludes(vertexPrefixText, vertextShaderContent);
+    fragmentShaderContent = resolveIncludes(fragmentPrefixText, fragmentShaderContent);
 
     DEBUG("--------------------------------------------------");
-    DEBUG(fullVertexShader);
+    DEBUG(vertextShaderContent);
     DEBUG("--------------------------------------------------");
-    DEBUG(fullFragmentShader);
+    DEBUG(fragmentShaderContent);
     DEBUG("--------------------------------------------------");
 
 
-    createProgram(fullVertexShader, fullFragmentShader);
+    createProgram(vertextShaderContent, fragmentShaderContent);
 
     updateUniforms();
     updateAttributes();

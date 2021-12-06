@@ -49,7 +49,7 @@ namespace OpenGL {
         unsigned int load(unsigned int type, const std::string& filename);
 
         std::string generatePrecision(const MaterialProperties& parameters);
-        std::string resolveIncludes(std::string& text);
+        std::string resolveIncludes(std::string& prefix, std::string& text);
 
         GLuint compilerShader(GLenum shader_type, const std::string& source);
         void createProgram(const std::string& vertexSource, const std::string& fragmentSource);
@@ -62,7 +62,7 @@ namespace OpenGL {
         Program();
         ~Program();
 
-        void Build(const MaterialProperties& props);
+        void Build(std::shared_ptr<MaterialProperties> props);
 
         Uniforms& GetUniforms();
         const ProgramAttributes& GetAttributes();

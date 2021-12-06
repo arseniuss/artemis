@@ -19,6 +19,7 @@
 #include <Common.hpp>
 #include <Common/Dictionary.hpp>
 #include <Graphics/Common.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Materials/BasicMeshMaterial.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Group.hpp>
@@ -35,18 +36,8 @@
 
 using namespace OpenGL;
 
-template <typename T>
-void SetProperty(Common::Dictionary& dic) {
-    std::string name = T().GetTypeName();
-    MaterialProperties prop;
-
-    prop.Load(name);
-    dic.Set(name, prop);
-}
-
 Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx) {
-    SetProperty<Graphics::BasicMeshMaterial>(_properties);
-    SetProperty<Graphics::PointsMaterial>(_properties);
+
 }
 
 Renderer::~Renderer() {
@@ -146,7 +137,7 @@ void Renderer::ProjectObject(std::shared_ptr<Graphics::Object> o, std::shared_pt
     }
 }
 
-void Renderer::Push(Graphics::Object& object, Graphics::Geometry& geometry, Graphics::Material& material) {
+void Renderer::Push(Graphics::Object& object, Graphics::BufferGeometry& geometry, Graphics::Material& material) {
     std::shared_ptr<RenderItem> item;
     auto it = _items.find(object.weak_from_this());
 

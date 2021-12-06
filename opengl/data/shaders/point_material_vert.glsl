@@ -1,5 +1,10 @@
+#version 400 core
+
+#include "common"
+
 #include <common>
-#include <project_params>
+
+in vec3 position;
 
 uniform float size;
 uniform float scale;
@@ -11,7 +16,7 @@ void main() {
     
     gl_PointSize = size; 
     
-    #include <project_vertex>  
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1);
     
     frag_color = color;
 }

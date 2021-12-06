@@ -23,7 +23,6 @@
 
 #include <Gui/Widget.hpp>
 #include <NanoVG/NanoVG.hpp>
-#include <OpenGL/Context.hpp>
 
 #include "oui.h"
 

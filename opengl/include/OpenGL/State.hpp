@@ -23,7 +23,7 @@
 
 namespace Graphics {
     class Camera;
-    class Geometry;
+    class BufferGeometry;
     class Material;
     class BaseBuffer;
 }
@@ -33,7 +33,7 @@ namespace OpenGL {
     class Binding;
 
     using MappingMap = std::map<std::string, std::pair<std::shared_ptr<Graphics::BaseBuffer>, int>>;
-    using BindingMap = std::map<std::weak_ptr<Graphics::Geometry>, std::shared_ptr<Binding>, std::owner_less<>>;
+    using BindingMap = std::map<std::weak_ptr<Graphics::BufferGeometry>, std::shared_ptr<Binding>, std::owner_less<>>;
 
     class State : public std::enable_shared_from_this<State> {
         float _lineWidth;
@@ -66,9 +66,9 @@ namespace OpenGL {
         void SetMaterial(std::shared_ptr<Graphics::Material> material);
 
 
-        std::shared_ptr<Binding> GetBindingState(std::shared_ptr<Graphics::Geometry> geometry,
+        std::shared_ptr<Binding> GetBindingState(std::shared_ptr<Graphics::BufferGeometry> geometry,
                 std::shared_ptr<Program> program);
-        void Remove(std::weak_ptr<Graphics::Geometry> geometry);
+        void Remove(std::weak_ptr<Graphics::BufferGeometry> geometry);
     };
 }
 

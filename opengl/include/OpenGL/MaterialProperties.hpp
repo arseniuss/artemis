@@ -24,24 +24,35 @@
 
 #include "glad.h"
 
+namespace Graphics {
+    class Material;
+}
+
 namespace OpenGL {
     class Program;
+    class MaterialProperties;
+
+    using MaterialPropertyMap = std::map<std::weak_ptr<Graphics::Material>,
+            std::shared_ptr<MaterialProperties>, std::owner_less<>>;
 
     class MaterialProperties {
     private:
+        static MaterialPropertyMap _properties;
+
         int _version = 0;
 
         std::string _name;
         std::string _precision = "highp";
-        
+
         bool _instancing = false;
         bool _instancedColor = false;
-        
+
         bool _vertexColors = false;
-        bool _vertexAlphas = false;
+        bool _colorAlphas = false;
         bool _vertexUVs = false;
-        
-        std::string _glslVersion = "330 core";
+
+        bool _uniformColor = false;
+
         std::string _shaderName;
 
         std::string _vertexShaderText;
@@ -49,31 +60,32 @@ namespace OpenGL {
 
         std::shared_ptr<Program> _program;
     public:
+        static std::shared_ptr<MaterialProperties> GetOrEmpty(std::shared_ptr<Graphics::Material> mat);
+        static void Remove(std::weak_ptr<Graphics::Material> mat);
+
         MaterialProperties();
 
-        void Load(const std::string& name);
+        void Update(std::shared_ptr<Graphics::Material> mat);
 
         int GetVersion() const;
         void SetVersion(int version);
 
         const std::string& GetName() const;
+        const std::string& GetShaderName() const;
 
         const std::string& GetPrecision() const;
 
         std::shared_ptr<Program> GetProgram();
         void SetProgram(std::shared_ptr<Program> program);
 
-        std::string GetGLSLVersion() const {
-            return _glslVersion;
-        }
-
         const std::string& GetVertextShaderText() const;
 
         const std::string& GetFragmentShaderText() const;
 
-        bool HasVertexColor() const {
-            return _vertexColors;
-        }
+        bool HasVertexColor() const;
+        bool HasUniformColor() const;
+        void HasUniformColor(bool value);
+        bool HasColorAphas() const;
     };
 }
 

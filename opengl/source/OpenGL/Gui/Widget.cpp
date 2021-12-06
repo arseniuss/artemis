@@ -16,8 +16,9 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <Blendish/Blendish.hpp>
+#include <OpenGL/Context.hpp>
 #include <OpenGL/Gui/Widget.hpp>
-#include <Blendish/Blendish.hpp>    
 
 #include "oui.h"
 

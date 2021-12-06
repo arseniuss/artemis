@@ -51,7 +51,7 @@ namespace OpenGL {
     public:
         std::weak_ptr<Graphics::Object> object;
         std::weak_ptr<Graphics::Material> material;
-        std::weak_ptr<Graphics::Geometry> geometry;
+        std::weak_ptr<Graphics::BufferGeometry> geometry;
 
         ~RenderItem();
 

@@ -1,3 +1,7 @@
+#version 400 core
+
+#include "common"
+
 #include <common>
 
 in vec3 frag_color;
