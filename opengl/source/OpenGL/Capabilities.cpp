@@ -28,55 +28,59 @@ Capabilities::Capabilities() {
     GLint range[2] = {0, 0};
     GLint precision;
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_VERTEX_SHADER, GL_HIGH_FLOAT, range, &precision);
+    glGetShaderPrecisionFormat(GL_VERTEX_SHADER, GL_HIGH_FLOAT, range, &precision);
     DEBUG("VERTEX_SHADER HIGH_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_VERTEX_SHADER, GL_MEDIUM_FLOAT, range, &precision);
+    glGetShaderPrecisionFormat(GL_VERTEX_SHADER, GL_MEDIUM_FLOAT, range, &precision);
     DEBUG("VERTEX_SHADER MEDIUM_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_VERTEX_SHADER, GL_LOW_FLOAT, range, &precision);
+    glGetShaderPrecisionFormat(GL_VERTEX_SHADER, GL_LOW_FLOAT, range, &precision);
     DEBUG("VERTEX_SHADER LOW_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, range, &precision);
+    glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, range, &precision);
     DEBUG("FRAGMENT_SHADER HIGH_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_FRAGMENT_SHADER, GL_MEDIUM_FLOAT, range, &precision);
+    glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_MEDIUM_FLOAT, range, &precision);
     DEBUG("FRAGMENT_SHADER MEDIUM_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_FRAGMENT_SHADER, GL_LOW_FLOAT, range, &precision);
+    glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_LOW_FLOAT, range, &precision);
     DEBUG("FRAGMENT_SHADER LOW_FLOAT range=[" << range[0] << ".." << range[1] << "] precision=" << precision);
 
     GLint tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_TEXTURE_IMAGE_UNITS, &tmp);
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &tmp);
+    DEBUG("MAX_COMBINED_TEXTURE_IMAGE_UNITS = " << tmp);
+    _maxCombinedTextures = tmp;
+
+    glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &tmp);
     DEBUG("MAX_TEXTURE_IMAGE_UNITS = " << tmp);
     _maxTextures = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &tmp);
+    glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &tmp);
     DEBUG("MAX_VERTEX_TEXTURE_IMAGE_UNITS = " << tmp);
     _maxVertexTextures = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_TEXTURE_SIZE, &tmp);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &tmp);
     DEBUG("MAX_TEXTURE_SIZE = " << tmp);
     _maxTextureSize = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_CUBE_MAP_TEXTURE_SIZE, &tmp);
+    glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &tmp);
     DEBUG("MAX_CUBE_MAP_TEXTURE_SIZE = " << tmp);
     _maxCubemapSize = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_VERTEX_ATTRIBS, &tmp);
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &tmp);
     DEBUG("MAX_VERTEX_ATTRIBS = " << tmp);
     _maxAttributes = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_VERTEX_UNIFORM_VECTORS, &tmp);
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &tmp);
     DEBUG("MAX_VERTEX_UNIFORM_VECTORS = " << tmp);
     _maxVertexUniform = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_VARYING_VECTORS, &tmp);
+    glGetIntegerv(GL_MAX_VARYING_VECTORS, &tmp);
     DEBUG("MAX_VARYING_VECTORS = " << tmp);
     _maxVarying = tmp;
 
-    GL_CHECK2(glGetIntegerv, GL_MAX_FRAGMENT_UNIFORM_VECTORS, &tmp);
+    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &tmp);
     DEBUG("MAX_FRAGMENT_UNIFORM_VECTORS = " << tmp);
     _maxFragmentUnifoms = tmp;
 }
@@ -85,12 +89,20 @@ static bool isPrecisionOK(GLenum precisionType) {
     bool ok = true;
     GLint precision;
 
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_VERTEX_SHADER, precisionType, nullptr, &precision);
+    glGetShaderPrecisionFormat(GL_VERTEX_SHADER, precisionType, nullptr, &precision);
     ok &= precision > 0;
-    GL_CHECK2(glGetShaderPrecisionFormat, GL_FRAGMENT_SHADER, precisionType, nullptr, &precision);
+    glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, precisionType, nullptr, &precision);
     ok &= precision > 0;
 
     return ok;
+}
+
+int Capabilities::GetMaxCombinedTextures() const {
+    return _maxCombinedTextures;
+}
+
+int Capabilities::GetMaxTextures() const {
+    return _maxTextures;
 }
 
 std::string Capabilities::VerifyPrecision(std::string precision) const {

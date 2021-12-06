@@ -36,7 +36,7 @@
 
 using namespace OpenGL;
 
-Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx) {
+Renderer::Renderer(OpenGL::Context& ctx) : _context(ctx), _state(_capabilities) {
 
 }
 

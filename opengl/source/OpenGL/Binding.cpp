@@ -90,7 +90,7 @@ std::shared_ptr<Buffer> Binding::GetBuffer(std::shared_ptr<Graphics::BaseBuffer>
 
     RegisterOnDestruct<Binding, Graphics::BaseBuffer>(this, buffer,
             [](auto a, auto b) {
-                a->RemoveBuffer(b); });
+                a->RemoveBuffer(b->weak_from_this()); });
 
     return entry;
 }

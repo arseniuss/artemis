@@ -22,16 +22,18 @@
 
 #include <Common/Config.hpp>
 #include <Common/Observer.hpp>
+#include <Graphics/Buffer.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Material.hpp>
 #include <Graphics/Materials/BasicMeshMaterial.hpp>
 #include <Graphics/Materials/CustomMaterial.hpp>
+#include <Graphics/Materials/MeshMaterial.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <OpenGL/MaterialProperties.hpp>
 #include <Utility/Filesystem.hpp>
 #include <Utility/String.hpp>
 
 #include "glad.h"
-#include "Graphics/Materials/MeshMaterial.hpp"
 
 using namespace OpenGL;
 
@@ -76,7 +78,7 @@ void loadOptional(Common::Config& config, const std::string& section, const std:
     }
 }
 
-void MaterialProperties::Update(std::shared_ptr<Graphics::Material> mat) {
+void MaterialProperties::Update(std::shared_ptr<Graphics::Material> mat, std::shared_ptr<Graphics::BufferGeometry> geo) {
     size_t h = mat->GetHash();
 
     if (h == Graphics::CustomMaterial::Hash) {
@@ -87,9 +89,28 @@ void MaterialProperties::Update(std::shared_ptr<Graphics::Material> mat) {
 
         if (h == Graphics::MeshMaterial::Hash) {
             auto m = std::static_pointer_cast<Graphics::MeshMaterial>(mat);
-            
-            _uniformColor = false;
-            _vertexColors = true;
+
+            if (geo->HasAttribute("color")) {
+                _vertexColors = true;
+                switch (geo->GetAttribute("color")->GetItemSize()) {
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        throw std::runtime_error("Unrecognised color buffer item size: " +
+                                std::to_string(geo->GetAttribute("color")->GetItemSize()));
+                }
+            }
+            if (m->HasTexture())
+                _hasTexture = true;
+
+            if (geo->HasAttribute("uv")) {
+                if (!_hasTexture)
+                    throw std::runtime_error("Texture UVs are defined but texture is not provided!");
+                _vertexUVs = true;
+            }
+
         } else if (h == Graphics::BasicMeshMaterial::Hash) {
             auto m = std::static_pointer_cast<Graphics::BasicMeshMaterial>(mat);
 
@@ -158,7 +179,14 @@ bool MaterialProperties::HasColorAphas() const {
     return _colorAlphas;
 }
 
+bool MaterialProperties::HasVertexUVs() const {
+    return _vertexUVs;
+}
+
 bool MaterialProperties::HasVertexColor() const {
     return _vertexColors;
 }
 
+bool MaterialProperties::HasTexture() const {
+    return _hasTexture;
+}

@@ -133,7 +133,7 @@ bool Uniforms::Dump() {
         DEBUG("[DEBUG] " << p.first << " " << (p.second.isSet ? "is set" : "is not set") << " "
                 << (p.second.isSet ? p.second.value : ""));
     }
-    
+
     return true;
 }
 

@@ -57,18 +57,16 @@ bool RenderItem::needsUpdate() {
     return true;
 }
 
-std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary& properties,
-        std::shared_ptr<Graphics::Camera> camera, std::shared_ptr<Graphics::Material> mat,
-        std::shared_ptr<Graphics::Object> obj) {
+std::shared_ptr<Program> RenderItem::setProgram(State& state, Common::Dictionary& properties,
+        std::shared_ptr<Graphics::Camera> camera) {
 
     std::shared_ptr<MaterialProperties> props = MaterialProperties::GetOrEmpty(mat);
     bool needsProgramChange = false;
 
     if (mat->GetVersion() != props->GetVersion()) {
         needsProgramChange = true;
-        props->Update(mat);
+        props->Update(mat, geo);
     }
-
 
     std::shared_ptr<Program> program = props->GetProgram();
     if (needsProgramChange || !program.get()) {
@@ -112,7 +110,17 @@ std::shared_ptr<Program> RenderItem::setProgram(State state, Common::Dictionary&
             programUniforms.Set("size", pm->GetPointSize());
         } else if (h == Graphics::MeshMaterial::Hash) {
             auto m = std::static_pointer_cast<Graphics::MeshMaterial>(mat);
-            
+
+            if (m->HasTexture()) {
+                auto tex = state.GetTexture(m->GetTexture());
+
+                int index = state.BindTexture(tex);
+                if (index < 0)
+                    throw std::runtime_error("Cannot bind texture");
+
+                programUniforms.Set("texture0", index);
+            }
+
         } else if (h == Graphics::BasicMeshMaterial::Hash) {
             auto m = std::static_pointer_cast<Graphics::BasicMeshMaterial>(mat);
 
@@ -155,16 +163,16 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
         return;
     }
 
-    auto obj = object.lock();
-    auto mat = material.lock();
-    auto geo = geometry.lock();
+    obj = object.lock();
+    mat = material.lock();
+    geo = geometry.lock();
 
     geo->Compute();
 
     //obj->modelViewMatrix = camera->matrixWorldInverse * obj->matrixWorld;
     //obj->normalMatrix = glm::transpose(glm::inverse(obj->modelViewMatrix));
 
-    auto program = setProgram(state, properties, camera, mat, obj);
+    auto program = setProgram(state, properties, camera);
 
     state.SetMaterial(mat);
     auto binding = state.GetBindingState(geo, program);
@@ -201,5 +209,9 @@ void RenderItem::Render(State& state, Common::Dictionary& properties, std::share
     } else {
         GL_CHECK2(glDrawArrays, mode, start, count);
     }
+
+    obj.reset();
+    mat.reset();
+    geo.reset();
 }
 

@@ -232,6 +232,9 @@ void Program::updateUniforms() {
             case GL_DOUBLE_MAT4: _uniforms.Add<glm::dmat4>(i, name, size);
                 break;
 
+            case GL_SAMPLER_2D: _uniforms.Add<void>(i, name, size);
+                break;
+
             default:
                 throw std::runtime_error(std::string("Unrecognised uniform type: ") + std::to_string(type));
         }
@@ -244,12 +247,13 @@ void Program::Build(std::shared_ptr<MaterialProperties> props) {
 
     std::vector<std::string> prefixVector = {
         //generatePrecision(props),
-        "#define VERTEX_SHADER 1",
+        "#define VERTEX_SHADER",
         "#define SHADER_NAME " + props->GetShaderName() + "_vertex",
         "",
-        props->HasVertexColor() ? "#define USE_VECTOR_COLOR 1" :
-        (props->HasUniformColor() ? "#define USE_UNIFORM_COLOR 1" : ""),
-        (props->HasColorAphas() ? "#define USE_COLOR_ALPHA 1" : ""),
+        props->HasVertexColor() ? "#define USE_VECTOR_COLOR" :
+        (props->HasUniformColor() ? "#define USE_UNIFORM_COLOR" : ""),
+        (props->HasColorAphas() ? "#define USE_COLOR_ALPHA" : ""),
+        (props->HasVertexUVs() ? "#define USE_VECTOR_UVS" : ""),
         "",
         "uniform mat4 modelMatrix;",
         "uniform mat4 modelViewMatrix;",
@@ -260,12 +264,14 @@ void Program::Build(std::shared_ptr<MaterialProperties> props) {
     };
     std::vector<std::string> prefixFragment = {
         //generatePrecision(props),
-        "#define FRAGMENT_SHADER 1",
+        "#define FRAGMENT_SHADER",
         "#define SHADER_NAME " + props->GetShaderName() + "_fragment",
         "",
-        props->HasVertexColor() ? "#define USE_VECTOR_COLOR 1" :
-        (props->HasUniformColor() ? "#define USE_UNIFORM_COLOR 1" : ""),
-        (props->HasColorAphas() ? "#define USE_COLOR_ALPHA 1" : ""),
+        props->HasVertexColor() ? "#define USE_VECTOR_COLOR" :
+        (props->HasUniformColor() ? "#define USE_UNIFORM_COLOR" : ""),
+        (props->HasColorAphas() ? "#define USE_COLOR_ALPHA" : ""),
+        (props->HasVertexUVs() ? "#define USE_VECTOR_UVS" : ""),
+        (props->HasTexture() ? "#define USE_TEXTURE0" : ""),
         ""
     };
 

@@ -26,6 +26,7 @@
 
 namespace Graphics {
     class Material;
+    class BufferGeometry;
 }
 
 namespace OpenGL {
@@ -52,6 +53,8 @@ namespace OpenGL {
         bool _vertexUVs = false;
 
         bool _uniformColor = false;
+        
+        bool _hasTexture = false;
 
         std::string _shaderName;
 
@@ -65,7 +68,7 @@ namespace OpenGL {
 
         MaterialProperties();
 
-        void Update(std::shared_ptr<Graphics::Material> mat);
+        void Update(std::shared_ptr<Graphics::Material> mat, std::shared_ptr<Graphics::BufferGeometry> geo);
 
         int GetVersion() const;
         void SetVersion(int version);
@@ -86,6 +89,9 @@ namespace OpenGL {
         bool HasUniformColor() const;
         void HasUniformColor(bool value);
         bool HasColorAphas() const;
+        bool HasVertexUVs() const;
+        
+        bool HasTexture() const;
     };
 }
 

@@ -21,54 +21,55 @@
 
 #include <memory>
 
+#include <OpenGL/Capabilities.hpp>
+
 namespace Graphics {
-    class Camera;
-    class BufferGeometry;
-    class Material;
     class BaseBuffer;
+    class BufferGeometry;
+    class Camera;
+    class Material;
+    class Texture;
 }
 
 namespace OpenGL {
-    class Program;
     class Binding;
+    class Program;
+    class Texture;
 
     using MappingMap = std::map<std::string, std::pair<std::shared_ptr<Graphics::BaseBuffer>, int>>;
     using BindingMap = std::map<std::weak_ptr<Graphics::BufferGeometry>, std::shared_ptr<Binding>, std::owner_less<>>;
+    using TextureMap = std::map<std::weak_ptr<Graphics::Texture>, std::shared_ptr<Texture>, std::owner_less<>>;
 
     class State : public std::enable_shared_from_this<State> {
+        Capabilities& _capabilities;
+
         float _lineWidth;
 
         std::shared_ptr<Graphics::Camera> _camera;
         std::shared_ptr<Program> _lastProgram;
 
         BindingMap _bindings;
+        TextureMap _textures;
+
+        std::vector<std::weak_ptr<Texture>> _textureBindings;
     public:
-        State();
+        State(Capabilities& caps);
 
         bool ChangeProgram(std::shared_ptr<Program> program);
 
-        float GetLineWidth() const {
-            return _lineWidth;
-        }
+        float GetLineWidth() const;
+        void SetLineWidth(float lineWidth);
 
-        void SetLineWidth(float lineWidth) {
-            _lineWidth = lineWidth;
-        }
-
-        std::shared_ptr<Graphics::Camera> GetCamera() {
-            return _camera;
-        }
-
-        void SetCamera(std::shared_ptr<Graphics::Camera> camera) {
-            _camera = camera;
-        }
+        std::shared_ptr<Graphics::Camera> GetCamera();
+        void SetCamera(std::shared_ptr<Graphics::Camera> camera);
 
         void SetMaterial(std::shared_ptr<Graphics::Material> material);
 
+        std::shared_ptr<Texture> GetTexture(std::shared_ptr<Graphics::Texture> texture);
+        int BindTexture(std::shared_ptr<Texture> texture);
 
         std::shared_ptr<Binding> GetBindingState(std::shared_ptr<Graphics::BufferGeometry> geometry,
                 std::shared_ptr<Program> program);
-        void Remove(std::weak_ptr<Graphics::BufferGeometry> geometry);
     };
 }
 

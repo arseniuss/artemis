@@ -32,6 +32,7 @@ SOURCES = \
     source/OpenGL/RenderItem.cpp \
     source/OpenGL/Renderer.cpp \
     source/OpenGL/State.cpp \
+    source/OpenGL/Texture.cpp \
     source/OpenGL/Uniforms.cpp \
     source/Plugin.cpp \
     source/glad.c \

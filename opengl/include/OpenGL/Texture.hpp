@@ -1,6 +1,6 @@
 /**
  *  Artemis game
- *  Copyright (C) 2020 Armands Arseniuss Skolmeisters
+ *  Copyright (C) 2021 Armands Arseniuss Skolmeisters
  *
  *  This library is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,30 +16,28 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENGL_CAPABILITIES_HPP
-#define OPENGL_CAPABILITIES_HPP
+#ifndef OPENGL_TEXTURE_HPP
+#define OPENGL_TEXTURE_HPP
+
+#include <Common/Observer.hpp>
+
+#include "glad.h"
+
+namespace Graphics {
+    class Texture;
+}
 
 namespace OpenGL {
 
-    class Capabilities {
+    class Texture : public Common::Observable {
     private:
-        int _maxCombinedTextures;
-        int _maxTextures;
-        int _maxVertexTextures;
-        int _maxTextureSize;
-        int _maxCubemapSize;
-        int _maxAttributes;
-        int _maxVertexUniform;
-        int _maxVarying;
-        int _maxFragmentUnifoms;
+        GLuint _id;
     public:
-        Capabilities();
+        Texture(std::shared_ptr<Graphics::Texture> texture);
+        ~Texture();
 
-        int GetMaxCombinedTextures() const;
-        int GetMaxTextures() const;
-
-        std::string VerifyPrecision(std::string precision) const;
+        GLuint GetId() const;
     };
 }
 
-#endif /* !OPENGL_CAPABILITIES_HPP */
+#endif /* !OPENGL_TEXTURE_HPP */

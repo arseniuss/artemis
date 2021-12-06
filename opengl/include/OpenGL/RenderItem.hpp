@@ -41,13 +41,15 @@ namespace OpenGL {
         GLenum _mode = 0;
 
         std::shared_ptr<Program> _program;
-        State _state;
+
+        std::shared_ptr<Graphics::Object> obj;
+        std::shared_ptr<Graphics::Material> mat;
+        std::shared_ptr<Graphics::BufferGeometry> geo;
 
         bool needsUpdate();
 
-        std::shared_ptr<Program> setProgram(State state, Common::Dictionary& properties,
-                std::shared_ptr<Graphics::Camera> camera, std::shared_ptr<Graphics::Material> mat,
-                std::shared_ptr<Graphics::Object> obj);
+        std::shared_ptr<Program> setProgram(State& state, Common::Dictionary& properties,
+                std::shared_ptr<Graphics::Camera> camera);
     public:
         std::weak_ptr<Graphics::Object> object;
         std::weak_ptr<Graphics::Material> material;

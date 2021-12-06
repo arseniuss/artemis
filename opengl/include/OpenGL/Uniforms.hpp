@@ -20,6 +20,7 @@
 #define OPENGL_UNIFORMS_HPP
 
 #include <map>
+#include <memory>
 #include <string>
 
 #include <glm/glm.hpp>
@@ -29,6 +30,7 @@
 #include "glad.h"
 
 namespace OpenGL {
+    class Texture;
 
     struct Uniform {
         int location;
