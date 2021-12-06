@@ -43,6 +43,7 @@ namespace TestingFramework {
         const std::string& GetName() const;
 
         virtual void Init(std::shared_ptr<Graphics::Context> context) = 0;
+        virtual void Deinit() = 0;
 
         virtual std::shared_ptr<Graphics::Scene> GetScene() = 0;
         virtual std::shared_ptr<Graphics::Camera> GetCamera() = 0;

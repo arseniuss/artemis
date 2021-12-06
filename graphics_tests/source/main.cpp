@@ -49,7 +49,9 @@ void loop() {
                     running = false;
                 }
                 if (event.key.keysym.sym == SDLK_SPACE) {
-                    DEBUG("Moving to test test");
+                    DEBUG("Deinit last test");
+                    (*testIt)->Deinit();
+                    DEBUG("Moving to next test");
                     testIt++;
                     if (testIt != Tests.end()) {
                         DEBUG("Next test name is " << (*testIt)->GetName());

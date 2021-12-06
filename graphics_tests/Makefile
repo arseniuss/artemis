@@ -13,6 +13,7 @@ INCLUDES = \
     ../common/include
 SOURCES = \
     source/03_matrices_test.cpp \
+    source/04_colored_cube.cpp \
     source/Test.cpp \
     source/main.cpp
 

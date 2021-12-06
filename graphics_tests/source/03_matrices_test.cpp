@@ -22,6 +22,7 @@
 #include <Graphics/Cameras/PerspectiveCamera.hpp>
 #include <Graphics/Color.hpp>
 #include <Graphics/Context.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Materials/BasicMeshMaterial.hpp>
 #include <Graphics/Materials/CustomMaterial.hpp>
 #include <Graphics/Objects/Mesh.hpp>
@@ -38,7 +39,7 @@ private:
 
     std::shared_ptr<Graphics::Property> _background;
 
-    std::shared_ptr<Graphics::Geometry> _geometry;
+    std::shared_ptr<Graphics::BufferGeometry> _geometry;
     std::shared_ptr<Graphics::BasicMeshMaterial> _material;
     std::shared_ptr<Graphics::Mesh> _object;
 
@@ -61,7 +62,7 @@ public:
         _background = std::make_shared<Graphics::Color>(0.0f, 0.0f, 0.4f, 0.0f);
         _scene->SetBackground(_background);
 
-        _geometry = std::make_shared<Graphics::Geometry>();
+        _geometry = std::make_shared<Graphics::BufferGeometry>();
         _material = std::make_shared<Graphics::BasicMeshMaterial>();
         _object = std::make_shared<Graphics::Mesh>(_geometry, _material);
 
@@ -71,15 +72,24 @@ public:
             0.0f, 1.0f, 0.0f,
         };
 
-        auto positionBuffer = std::make_shared<Graphics::Buffer<float>>(position, sizeof(position), 3);
+        auto positionBuffer = std::make_shared<Graphics::Buffer<float>>(position, sizeof (position), 3);
 
-        _geometry->AddBuffer("position", positionBuffer);
+        _geometry->SetAttribute("position", positionBuffer);
 
 
 
         _material->SetColor({1, 0, 0});
 
         _scene->Add(_object);
+    }
+
+    void Deinit() override {
+        _object.reset();
+        _material.reset();
+        _geometry.reset();
+        _background.reset();
+        _scene.reset();
+        _camera.reset();
     }
 
     std::shared_ptr<Graphics::Scene> GetScene() override {
