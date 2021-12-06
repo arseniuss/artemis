@@ -25,6 +25,7 @@ namespace Utility {
 
     using MatcherFunction = std::function<std::string(std::string, const std::vector<std::string>&)>;
 
+    std::string Replace(std::string text, char from, char to);
     std::string RegexReplace(std::string text, std::string pattern, MatcherFunction matcher);
 
     std::string Demangle(const std::string& name);

@@ -53,6 +53,16 @@ namespace Common {
         }
     };
 
+    template<class TObservable>
+    inline void RegisterOnDestruct(std::shared_ptr<TObservable> observable,
+            std::function<void(std::weak_ptr<TObservable>) > func) {
+        observable->OnDestruct([func](Common::Observable * o) {
+            TObservable* b = reinterpret_cast<TObservable*> (o);
+
+            func(b->weak_from_this());
+        });
+    }
+
     template<class TObserver, class TObservable>
     inline void RegisterOnDestruct(TObserver* observer, std::shared_ptr<TObservable> observable,
             std::function<void(TObserver*, std::weak_ptr<TObservable>) > func) {

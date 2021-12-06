@@ -24,6 +24,14 @@
 
 using namespace Utility;
 
+std::string Utility::Replace(std::string text, char from, char to) {
+    std::string s = text;
+
+    std::replace(s.begin(), s.end(), from, to);
+
+    return s;
+}
+
 std::string Utility::RegexReplace(std::string text, std::string pattern, MatcherFunction matcher) {
     std::regex r(pattern);
     std::smatch matches;
