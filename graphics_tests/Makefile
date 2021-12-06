@@ -14,6 +14,7 @@ INCLUDES = \
 SOURCES = \
     source/03_matrices_test.cpp \
     source/04_colored_cube.cpp \
+    source/05_textured_cube.cpp \
     source/Test.cpp \
     source/main.cpp
 
@@ -31,11 +32,14 @@ STATIC_LIBS = \
 SHARED_LIBS = \
     ../opengl/libartemis_opengl.so
 
-.PHONY: all clean depends $(STATIC_LIBS) $(SHARED_LIBS) copy-shared-libs
+.PHONY: all clean depends $(STATIC_LIBS) $(SHARED_LIBS) copy-shared-libs copy-data
 
-all: depends $(TARGET) $(SHARED_LIBS) copy-shared-libs
+all: depends $(TARGET) $(SHARED_LIBS) copy-shared-libs copy-data
 	
 include ../scripts/common.mk
+
+copy-data: 
+	cp -vr data $(BUILDDIR)
 
 copy-shared-libs: $(SHARED_LIBS)
 	@ mkdir -p $(LIBDIR)
