@@ -16,7 +16,7 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Graphics/Geometry.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Material.hpp>
 #include <Graphics/Objects/Points.hpp>
 
@@ -26,7 +26,7 @@ static unsigned int pointIndex = 0;
 
 size_t Points::Hash = typeid (Points).hash_code();
 
-Points::Points(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat) {
+Points::Points(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat) {
     _name = "Points #" + std::to_string(pointIndex++);
     _hash = typeid (Points).hash_code();
 }

@@ -32,7 +32,7 @@ namespace Graphics {
     public:
         static size_t Hash;
 
-        Line(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+        Line(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat);
 
         float GetLineWidth() const;
 

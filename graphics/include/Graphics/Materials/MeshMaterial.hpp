@@ -16,37 +16,18 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Graphics/Buffer.hpp>
-#include <Graphics/Geometry.hpp>
+#ifndef GRAPHICS_MATERIALS_MESHMATERIAL_HPP
+#define GRAPHICS_MATERIALS_MESHMATERIAL_HPP
 
-using namespace Graphics;
+#include <Graphics/Material.hpp>
 
-Geometry::Geometry() {
-    _size = 0;
+namespace Graphics {
+    class MeshMaterial : public Material {
+    public:
+        static size_t Hash;
+        
+        MeshMaterial();
+    };
 }
 
-Geometry::~Geometry() {
-    DEBUG("Geometry died.");
-}
-
-void Geometry::AddBuffer(const std::string& name, std::shared_ptr<BaseBuffer> buffer) {
-    buffer->SetName(name);
-    _buffers.emplace(name, buffer);
-}
-
-BufferMap& Geometry::GetBuffers() {
-    return _buffers;
-}
-
-void Geometry::Compute() {
-    if (_buffers.contains("position")) {
-        _size = _buffers["position"]->GetCount() / 3;
-    }
-    _computed = true;
-}
-
-size_t Geometry::GetSize() const {
-    return _size;
-}
-
-
+#endif /* !GRAPHICS_MATERIALS_MESHMATERIAL_HPP */

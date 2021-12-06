@@ -30,7 +30,7 @@ namespace Graphics {
     public:
         static size_t Hash;
         
-        Mesh(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+        Mesh(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat);
         virtual ~Mesh();
     };
 }

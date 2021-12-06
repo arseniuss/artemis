@@ -16,30 +16,37 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_VIEWOBJECT_HPP
-#define GRAPHICS_VIEWOBJECT_HPP
+#include <Graphics/Buffer.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 
-#include <Graphics/Object.hpp>
+using namespace Graphics;
 
-namespace Graphics {
-    class BufferGeometry;
-    class Material;
-
-    class ViewObject : public Object {
-    protected:
-        std::shared_ptr<BufferGeometry> _geo;
-        std::shared_ptr<Material> _mat;
-    public:
-        ViewObject(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat);
-
-        std::shared_ptr<BufferGeometry> GetGeometry() {
-            return _geo;
-        }
-
-        std::shared_ptr<Material> GetMaterial() {
-            return _mat;
-        }
-    };
+BufferGeometry::BufferGeometry() {
+    _size = 0;
 }
 
-#endif /* !GRAPHICS_VIEWOBJECT_HPP */
+BufferGeometry::~BufferGeometry() {
+    DEBUG("Geometry died.");
+}
+
+void BufferGeometry::SetAttribute(const std::string& name, std::shared_ptr<BaseBuffer> buffer) {
+    buffer->SetName(name);
+    _buffers.emplace(name, buffer);
+}
+
+BufferMap& BufferGeometry::GetBuffers() {
+    return _buffers;
+}
+
+void BufferGeometry::Compute() {
+    if (_buffers.contains("position")) {
+        _size = _buffers["position"]->GetCount() / 3;
+    }
+    _computed = true;
+}
+
+size_t BufferGeometry::GetSize() const {
+    return _size;
+}
+
+

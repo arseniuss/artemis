@@ -16,30 +16,17 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_VIEWOBJECT_HPP
-#define GRAPHICS_VIEWOBJECT_HPP
+#include <Graphics/Materials/MeshMaterial.hpp>
 
-#include <Graphics/Object.hpp>
+using namespace Graphics;
 
-namespace Graphics {
-    class BufferGeometry;
-    class Material;
+int meshMaterialCounter = 0;
 
-    class ViewObject : public Object {
-    protected:
-        std::shared_ptr<BufferGeometry> _geo;
-        std::shared_ptr<Material> _mat;
-    public:
-        ViewObject(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat);
+size_t MeshMaterial::Hash = typeid (MeshMaterial).hash_code();
 
-        std::shared_ptr<BufferGeometry> GetGeometry() {
-            return _geo;
-        }
-
-        std::shared_ptr<Material> GetMaterial() {
-            return _mat;
-        }
-    };
+MeshMaterial::MeshMaterial() : Material() {
+    _hash = MeshMaterial::Hash;
+    _name = "mesh material #" + std::to_string(++meshMaterialCounter);
+    _typeName = "mesh material";
 }
 
-#endif /* !GRAPHICS_VIEWOBJECT_HPP */

@@ -24,7 +24,7 @@ using namespace Graphics;
 
 size_t Line::Hash = typeid (Line).hash_code();
 
-Line::Line(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat), _lineWidth(1.0f) {
+Line::Line(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat), _lineWidth(1.0f) {
 
 }
 

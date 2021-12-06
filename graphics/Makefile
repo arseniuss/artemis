@@ -16,10 +16,11 @@ SOURCES = \
     source/Graphics/Common.cpp \
     source/Graphics/Context.cpp \
     source/Graphics/CubeTexture.cpp \
-    source/Graphics/Geometry.cpp \
+    source/Graphics/Geometries/BufferGeometry.cpp \
     source/Graphics/Material.cpp \
     source/Graphics/Materials/BasicMeshMaterial.cpp \
     source/Graphics/Materials/CustomMaterial.cpp \
+    source/Graphics/Materials/MeshMaterial.cpp \
     source/Graphics/Materials/PointsMaterial.cpp \
     source/Graphics/Object.cpp \
     source/Graphics/Objects/LOD.cpp \

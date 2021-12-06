@@ -22,6 +22,8 @@
 #include <memory>
 #include <vector>
 
+#include <Common/Observer.hpp>
+
 namespace Graphics {
 
     enum {
@@ -29,7 +31,9 @@ namespace Graphics {
         DOUBLE_SIDED
     };
 
-    class Material : public std::enable_shared_from_this<Material> {
+    class Material : public std::enable_shared_from_this<Material>, public Common::Observable {
+    private:
+        bool _changed;
     protected:
         size_t _hash;
         int _id;
@@ -41,6 +45,8 @@ namespace Graphics {
         bool _isVisible;
 
         bool _transparent;
+
+        void changed();
     public:
         static size_t Hash;
 
@@ -49,26 +55,18 @@ namespace Graphics {
 
         const std::string& GetName() const;
 
-        const std::string& GetTypeName() const {
-            return _typeName;
-        }
+        const std::string& GetTypeName() const;
 
         bool IsVisible() const;
 
         float GetTransmission() const;
         bool IsTransparent() const;
 
-        int GetVersion() const {
-            return _version;
-        }
+        int GetVersion() const;
 
-        int GetSides() const {
-            return _sides;
-        }
+        int GetSides() const;
 
-        size_t GetHash() const {
-            return _hash;
-        }
+        size_t GetHash() const;
     };
 }
 

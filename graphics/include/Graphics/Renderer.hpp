@@ -20,7 +20,6 @@
 #define GRAPHICS_RENDERER_HPP
 
 #include <Graphics/Camera.hpp>
-#include <Graphics/Geometry.hpp>
 #include <Graphics/Material.hpp>
 #include <Graphics/Scene.hpp>
 

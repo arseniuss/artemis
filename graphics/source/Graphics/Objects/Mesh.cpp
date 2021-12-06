@@ -24,7 +24,7 @@ static unsigned int meshIndex = 0;
 
 size_t Mesh::Hash = typeid (Mesh).hash_code();
 
-Mesh::Mesh(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat) {
+Mesh::Mesh(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat) : ViewObject(geo, mat) {
     _name = "Mesh #" + std::to_string(meshIndex++);
     _hash = Mesh::Hash;
 }

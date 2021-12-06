@@ -16,13 +16,13 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <Graphics/Geometry.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Material.hpp>
 #include <Graphics/ViewObject.hpp>
 
 using namespace Graphics;
 
-ViewObject::ViewObject(std::shared_ptr<Graphics::Geometry> geo, std::shared_ptr<Graphics::Material> mat) :
+ViewObject::ViewObject(std::shared_ptr<Graphics::BufferGeometry> geo, std::shared_ptr<Graphics::Material> mat) :
 _geo(geo), _mat(mat) {
 
 }

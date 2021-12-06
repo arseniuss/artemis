@@ -24,7 +24,7 @@
 #include <Graphics/ViewObject.hpp>
 
 namespace Graphics {
-    class Geometry;
+    class BufferGeometry;
     class Material;
 
     class Points : public ViewObject {
@@ -33,7 +33,7 @@ namespace Graphics {
     public:
         static size_t Hash;
 
-        Points(std::shared_ptr<Geometry> geo, std::shared_ptr<Material> mat);
+        Points(std::shared_ptr<BufferGeometry> geo, std::shared_ptr<Material> mat);
         virtual ~Points();
 
     };
