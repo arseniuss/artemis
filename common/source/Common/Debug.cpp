@@ -22,6 +22,12 @@
 
 std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
     os << glm::to_string(v);
-    
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const glm::mat4& v) {
+    os << glm::to_string(v);
+
     return os;
 }

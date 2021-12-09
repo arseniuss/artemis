@@ -32,5 +32,6 @@
 #endif
 
 std::ostream& operator<<(std::ostream& os, const glm::vec3& v);
+std::ostream& operator<<(std::ostream& os, const glm::mat4& v);
 
 #endif /* !COMMON_DEBUG_HPP */
