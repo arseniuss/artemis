@@ -34,7 +34,7 @@ void Background::clearColor(Graphics::Color color) {
 }
 
 void Background::clear() {
-    //GL_CHECK2(glEnable, GL_DEPTH_TEST);
+    GL_CHECK2(glEnable, GL_DEPTH_TEST);
     //GL_CHECK2(glDepthFunc, GL_LESS);
     GL_CHECK2(glClear, (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
