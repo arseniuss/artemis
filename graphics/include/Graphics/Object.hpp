@@ -38,9 +38,9 @@ namespace Graphics {
         std::vector<std::shared_ptr<Object>> _children;
 
         glm::vec3 _position;
-        glm::vec3 _up;
+
         glm::mat4 _translation;
-        glm::quat _quaternion;
+        glm::quat _orientation;
         glm::vec3 _scale;
 
         // local transformation matrix
@@ -60,17 +60,18 @@ namespace Graphics {
         int GetId() const;
         size_t GetHash() const;
         const std::string& GetName() const;
-        
-        void SetPosition(glm::vec3 position);
+
+        glm::vec3 GetPosition() const;
+        virtual void SetPosition(glm::vec3 position);
+
+        glm::quat GetOrientation() const;
+        virtual void SetOrientation(glm::quat orientation);
 
         std::vector<std::shared_ptr<Object>>&GetChildren();
 
         Object& Add(std::shared_ptr<Object> obj);
         Object& Remove(std::shared_ptr<Object> obj);
-        
-        void UpdateMatrix();
-        void UpdateWorldMatrix(bool updateParents, bool updateChildren);
-        
+
         glm::mat4 GetMatrix() const;
         glm::mat4 GetMatrixWorld() const;
 
@@ -78,8 +79,8 @@ namespace Graphics {
         bool IsFrustumCulled() const;
         bool IsImmediateObject() const;
         bool IsInstancedMesh() const;
-        
-        void LookAt(glm::vec3 target);
+
+        void UpdateMatrix();
     };
 
     void Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func);

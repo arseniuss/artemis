@@ -16,41 +16,43 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAPHICS_CAMERA_HPP
-#define GRAPHICS_CAMERA_HPP
+#ifndef UI_FREEMOVEMENTHANDLER_HPP
+#define UI_FREEMOVEMENTHANDLER_HPP
 
-#include <glm/vec3.hpp>
-#include <glm/matrix.hpp>
+#include <memory>
 
-#include <Graphics/ViewFrustum.hpp>
+#include <glm/glm.hpp>
 
-#include <Graphics/Object.hpp>
+#include <SDL2/SDL_events.h>
 
 namespace Graphics {
+    class Object;
+    class Context;
+}
 
-    class Camera : public Object {
-    protected:          
-        glm::mat4 _projectionMatrix;
-        glm::mat4 _viewMatrix;
+namespace Ui {
+
+    class FreeMovementHandler {
+    private:
+        std::shared_ptr<Graphics::Object> _target;
         
-        void updateViewMatrix();
+        float _speed;
+        
+        float _sensitivity;
+        float _yaw;
+        float _pitch;
     public:
-        static bool IsCameraHash(size_t hash);
+        FreeMovementHandler();
         
-        Camera();
-        virtual ~Camera();
-        
-        void SetPosition(glm::vec3 position) override;
-        void SetOrientation(glm::quat orientation) override;
+        void Init(std::shared_ptr<Graphics::Context> context);
+        void Deinit();
 
-        glm::mat4 GetProjectionMatrix() const;
-        glm::mat4 GetViewMatrix() const;
-        
-        void LookAt(glm::vec3 target);
-        
-        virtual void UpdateProjectionMatrix();
+        void Attach(std::shared_ptr<Graphics::Object> object);
+
+        bool HandleEvent(const SDL_Event& event);
+
+        void Update(float deltaTime);
     };
 }
 
-#endif /* !GRAPHICS_CAMERA_HPP */
-
+#endif /* !UI_FREEMOVEMENTHANDLER_HPP */

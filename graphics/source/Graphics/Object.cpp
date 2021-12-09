@@ -18,7 +18,12 @@
 
 #include <algorithm>
 
-#include <glm/gtx/matrix_decompose.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <Common/Debug.hpp>
 #include <Graphics/Camera.hpp>
@@ -35,19 +40,17 @@ Object::Object() {
     _name = "unnamed object";
 
     _position = {0, 0, 0};
-    _up = {0, 1, 0};
     _translation = glm::mat4(1.0f);
-    _quaternion = {0, 0, 0, 0};
+    _orientation = glm::quat_identity<float, glm::defaultp>();
     _scale = {1, 1, 1};
+
+    _matrix = glm::mat4(1.0f);
 
     _matrixAutoUpdate = true;
 
-    
     _visible = true;
     _isImmediateObject = true;
     _isInstancedMesh = false;
-    
-    UpdateMatrix();
 }
 
 Object::~Object() {
@@ -66,8 +69,22 @@ const std::string& Object::GetName() const {
     return _name;
 }
 
+glm::vec3 Object::GetPosition() const {
+    return _position;
+}
+
 void Object::SetPosition(glm::vec3 position) {
     _position = position;
+    UpdateMatrix();
+}
+
+glm::quat Object::GetOrientation() const {
+    return _orientation;
+}
+
+void Object::SetOrientation(glm::quat orientation) {
+    _orientation = orientation;
+    UpdateMatrix();
 }
 
 std::vector<std::shared_ptr<Object> >& Object::GetChildren() {
@@ -117,63 +134,16 @@ bool Object::IsInstancedMesh() const {
     return _isInstancedMesh;
 }
 
-void Object::LookAt(glm::vec3 target) {
-    glm::mat4 m1;
-
-    UpdateWorldMatrix(true, false);
-
-    _position = _matrixWorld[3]; // decompose 3rd column
-
-    if (Graphics::Camera::IsCameraHash(_hash) || Graphics::Light::IsLightHash(_hash)) {
-        m1 = glm::lookAt(_position, target, _up);
-    } else {
-        m1 = glm::lookAt(target, _position, _up);
-    }
-
-    _quaternion = glm::quat_cast(m1);
-
-    if (auto p = _parent.lock()) {
-        m1 = Maths::ExtractRotation(p->GetMatrixWorld());
-        glm::quat q1 = glm::quat_cast(m1);
-        _quaternion = q1 * _quaternion;
-    }
-}
-
 void Object::UpdateMatrix() {
-    glm::mat4 rotation = (glm::mat4)_quaternion;
+    glm::mat4 rotation = (glm::mat4)_orientation;
     glm::mat4 translation = glm::translate(_translation, _position);
     translation = glm::scale(translation, _scale);
 
     _matrix = translation * rotation;
 }
 
-void Object::UpdateWorldMatrix(bool updateParents, bool updateChildren) {
-    if (updateParents) {
-        if (auto p = _parent.lock()) {
-            p->UpdateWorldMatrix(true, false);
-        }
-    }
-
-    if (_matrixAutoUpdate) UpdateMatrix();
-    if (auto p = _parent.lock()) {
-        _matrixWorld = p->GetMatrixWorld() * _matrix;
-    } else {
-        _matrixWorld = _matrix;
-    }
-
-    if (updateChildren) {
-        for (auto child : _children) {
-            child->UpdateWorldMatrix(false, true);
-        }
-    }
-}
-
 glm::mat4 Object::GetMatrix() const {
     return _matrix;
-}
-
-glm::mat4 Object::GetMatrixWorld() const {
-    return _matrixWorld;
 }
 
 void Graphics::Traverse(std::shared_ptr<Object>& o, std::function<void(std::shared_ptr<Object>&) > func) {

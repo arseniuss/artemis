@@ -34,7 +34,8 @@ SOURCES = \
     source/Graphics/Utils.cpp \
     source/Graphics/ViewFrustum.cpp \
     source/Graphics/ViewObject.cpp \
-    source/Maths/Frustum.cpp
+    source/Maths/Frustum.cpp \
+    source/Ui/FreeMovementHandler.cpp
 
 CFLAGS = $(addprefix -I,$(INCLUDES)) -fPIC -frtti
 CXXFLAGS = $(addprefix -I,$(INCLUDES)) -fPIC -std=c++2a -frtti
