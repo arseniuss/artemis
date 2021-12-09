@@ -22,9 +22,10 @@
 #include <Galaxy/SphereGalaxyGenerator.hpp>
 #include <Graphics/Buffer.hpp>
 #include <Graphics/Cameras/PerspectiveCamera.hpp>
-#include <Graphics/BufferGeometry.hpp>
+#include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Materials/PointsMaterial.hpp>
 #include <Graphics/Objects/Points.hpp>
+#include <Ui/FreeMovementHandler.hpp>
 
 #include "Client/GalaxyState.hpp"
 #include "Client/Application.hpp"
@@ -44,30 +45,30 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
 
     glm::vec3 maxes(0);
     glm::vec3 mines(0);
-    
+
     for (size_t i = 0; i < stars.size(); i++) {
         auto& star = stars[i];
 
         auto pos = star.position * 50.0f;
-        
+
         positions.emplace_back(pos.x);
         positions.emplace_back(pos.y);
         positions.emplace_back(pos.z);
-        
-        if(maxes.x < star.position.x) maxes.x = star.position.x;
-        if(maxes.y < star.position.y) maxes.y = star.position.y;
-        if(maxes.z < star.position.z) maxes.z = star.position.z;
-        
-        if(mines.x > star.position.x) mines.x = star.position.x;
-        if(mines.y > star.position.y) mines.y = star.position.y;
-        if(mines.z > star.position.z) mines.z = star.position.z;
-        
+
+        if (maxes.x < star.position.x) maxes.x = star.position.x;
+        if (maxes.y < star.position.y) maxes.y = star.position.y;
+        if (maxes.z < star.position.z) maxes.z = star.position.z;
+
+        if (mines.x > star.position.x) mines.x = star.position.x;
+        if (mines.y > star.position.y) mines.y = star.position.y;
+        if (mines.z > star.position.z) mines.z = star.position.z;
+
 
         colors.emplace_back(1.0f);
         colors.emplace_back(1.0f);
         colors.emplace_back(1.0f); // TODO: convert
     }
-    
+
     DEBUG("Max is " << maxes << " Min is " << mines);
 
     geo->SetAttribute("position", std::make_shared<Graphics::Buffer<float>>(positions, 3));
@@ -86,7 +87,8 @@ GalaxyState::GalaxyState(Application* app) : State(app, "Galaxy state") {
     _camera = std::make_shared<Graphics::PerspectiveCamera>(27, windowSize.x / windowSize.y, 1, 10000);
     _camera->LookAt({0, 0, 0});
     _camera->SetPosition({0, 0, 1000});
-    _camera->UpdateWorldMatrix(true, true);
+    _movement = std::make_shared<Ui::FreeMovementHandler>();
+    _movement->Attach(_camera);
 }
 
 void GalaxyState::BuildUI(Gui::LayoutBuilder& builder) {
@@ -101,16 +103,17 @@ bool GalaxyState::HandleEvent(const SDL_Event& event) {
                 return true;
         }
     }
+    if (_movement->HandleEvent(event))
+        return true;
 
     return State::HandleEvent(event);
 }
 
+void GalaxyState::Update(float deltaTime) {
+    _movement->Update(deltaTime);
+}
+
 void GalaxyState::Render(Graphics::Renderer& renderer) {
-    Utility::Random rand(0);
-    
-    _camera->LookAt({0, 0, rand.next()});
-    _camera->UpdateMatrix();
-    
     renderer.Render(_scene, _camera);
 }
 

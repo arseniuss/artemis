@@ -19,7 +19,6 @@
 #include <Client/ConnectState.hpp>
 #include <Client/MenuState.hpp>
 #include <Client/SettingState.hpp>
-#include <Client/TestState.hpp>
 #include <Gui/Button.hpp>
 #include <Gui/Panel.hpp>
 #include <Server/Engine.hpp>

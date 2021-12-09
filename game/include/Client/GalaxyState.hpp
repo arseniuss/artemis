@@ -21,18 +21,25 @@
 
 #include <Client/State.hpp>
 
+namespace Ui {
+    class FreeMovementHandler;
+}
+
 namespace Client {
 
     class GalaxyState : public State {
     private:
         std::shared_ptr<Graphics::Scene> _scene;
         std::shared_ptr<Graphics::Camera> _camera;
+        std::shared_ptr<Ui::FreeMovementHandler> _movement;
     public:
         GalaxyState(Application *app);
 
         void BuildUI(Gui::LayoutBuilder& builder) override;
 
         bool HandleEvent(const SDL_Event& event) override;
+        
+        void Update(float deltaTime) override;
 
         void Render(Graphics::Renderer& renderer) override;
 

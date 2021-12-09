@@ -20,7 +20,6 @@ SOURCES = \
     source/Client/MenuState.cpp \
     source/Client/SettingState.cpp \
     source/Client/State.cpp \
-    source/Client/TestState.cpp \
     source/Server/Engine.cpp \
     source/World/BlockManager.cpp \
     source/main.cpp
