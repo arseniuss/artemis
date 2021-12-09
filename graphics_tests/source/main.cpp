@@ -16,6 +16,7 @@
  *  along with this library.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <chrono>
 #include <memory>
 
 #include <Common/Config.hpp>
@@ -29,6 +30,9 @@ void loop() {
     std::shared_ptr<Common::Config> config = std::make_shared<Common::Config>("config.yaml");
     std::shared_ptr<Graphics::Context> graphics = Graphics::Context::Create(config);
     std::shared_ptr<Graphics::Renderer> renderer = graphics->GetRenderer();
+
+    std::chrono::high_resolution_clock timer;
+    auto start = timer.now();
 
     bool running = true;
     SDL_Event event;
@@ -60,8 +64,13 @@ void loop() {
                 }
             }
 
-            graphics->HandleEvent(event);
+            if (testIt != Tests.end())
+                (*testIt)->HandleEvent(event);
         }
+
+        auto stop = timer.now();
+        float deltaTime = std::chrono::duration<float, std::milli>(stop - start).count();
+        start = stop;
 
         if (testIt == Tests.end()) {
             DEBUG("Testing done");
@@ -69,6 +78,8 @@ void loop() {
         } else {
             auto scene = (*testIt)->GetScene();
             auto camera = (*testIt)->GetCamera();
+
+            (*testIt)->Update(deltaTime);
 
             renderer->Render(scene, camera);
         }

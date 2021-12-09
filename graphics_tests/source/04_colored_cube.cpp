@@ -17,13 +17,9 @@
  */
 
 #include <Graphics/Buffer.hpp>
-#include <Graphics/Cameras/PerspectiveCamera.hpp>
-#include <Graphics/Color.hpp>
-#include <Graphics/Context.hpp>
 #include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Materials/MeshMaterial.hpp>
 #include <Graphics/Objects/Mesh.hpp>
-#include <Graphics/Scene.hpp>
 
 #include "Test.hpp"
 
@@ -109,11 +105,6 @@ const float color_buffer_data[] = {
 
 class ColoredCube : public Test {
 private:
-    std::shared_ptr<Graphics::Camera> _camera;
-    std::shared_ptr<Graphics::Scene> _scene;
-
-    std::shared_ptr<Graphics::Property> _background;
-
     std::shared_ptr<Graphics::BufferGeometry> _geometry;
     std::shared_ptr<Graphics::MeshMaterial> _material;
     std::shared_ptr<Graphics::Mesh> _object;
@@ -124,14 +115,7 @@ public:
     }
 
     void Init(std::shared_ptr<Graphics::Context> context) override {
-        glm::ivec2 size = context->GetSize();
-
-        _scene = std::make_shared<Graphics::Scene>();
-        _camera = std::make_shared<Graphics::PerspectiveCamera>(glm::radians(45.0f), (float) size.x / (float) size.y,
-                0.1f, 100.0f);
-
-        _background = std::make_shared<Graphics::Color>(0.0f, 0.0f, 0.4f, 0.0f);
-        _scene->SetBackground(_background);
+        Test::Init(context);
 
         _geometry = std::make_shared<Graphics::BufferGeometry>();
         _material = std::make_shared<Graphics::MeshMaterial>();
@@ -142,30 +126,16 @@ public:
         
         _geometry->SetAttribute("position", posBuffer);
         _geometry->SetAttribute("color", colBuffer);
-
-        
+      
         _scene->Add(_object);
     }
 
-    void Deinit() override {
-        _scene.reset();
-        _camera.reset();
-        _background.reset();
+    void Deinit() override {  
         _geometry.reset();
         _material.reset();
         _object.reset();
+        Test::Deinit();
     }
-
-    std::shared_ptr<Graphics::Scene> GetScene() override {
-        return _scene;
-    }
-
-    std::shared_ptr<Graphics::Camera> GetCamera() override {
-        return _camera;
-    }
-
-
-
 };
 
 void ColoredCubeConstructor() __attribute__ ((constructor));

@@ -18,15 +18,11 @@
 
 #include <Common/Debug.hpp>
 #include <Graphics/Buffer.hpp>
-#include <Graphics/Camera.hpp>
-#include <Graphics/Cameras/PerspectiveCamera.hpp>
-#include <Graphics/Color.hpp>
-#include <Graphics/Context.hpp>
 #include <Graphics/Geometries/BufferGeometry.hpp>
 #include <Graphics/Materials/BasicMeshMaterial.hpp>
 #include <Graphics/Materials/CustomMaterial.hpp>
 #include <Graphics/Objects/Mesh.hpp>
-#include <Graphics/Scene.hpp>
+
 
 #include "Test.hpp"
 
@@ -34,11 +30,6 @@ using namespace TestingFramework;
 
 class MatricesTest : public Test {
 private:
-    std::shared_ptr<Graphics::Camera> _camera;
-    std::shared_ptr<Graphics::Scene> _scene;
-
-    std::shared_ptr<Graphics::Property> _background;
-
     std::shared_ptr<Graphics::BufferGeometry> _geometry;
     std::shared_ptr<Graphics::BasicMeshMaterial> _material;
     std::shared_ptr<Graphics::Mesh> _object;
@@ -50,17 +41,7 @@ public:
     }
 
     void Init(std::shared_ptr<Graphics::Context> context) override {
-        glm::ivec2 size = context->GetSize();
-
-        _camera = std::make_shared<Graphics::PerspectiveCamera>(glm::radians(45.0f), (float) size.x / (float) size.y,
-                0.1f, 100.0f);
-        _camera->SetPosition({4, 3, 3});
-        _camera->LookAt({4, 3, 3});
-
-        _scene = std::make_shared<Graphics::Scene>();
-
-        _background = std::make_shared<Graphics::Color>(0.0f, 0.0f, 0.4f, 0.0f);
-        _scene->SetBackground(_background);
+        Test::Init(context);
 
         _geometry = std::make_shared<Graphics::BufferGeometry>();
         _material = std::make_shared<Graphics::BasicMeshMaterial>();
@@ -76,8 +57,6 @@ public:
 
         _geometry->SetAttribute("position", positionBuffer);
 
-
-
         _material->SetColor({1, 0, 0});
 
         _scene->Add(_object);
@@ -87,20 +66,8 @@ public:
         _object.reset();
         _material.reset();
         _geometry.reset();
-        _background.reset();
-        _scene.reset();
-        _camera.reset();
+        Test::Deinit();
     }
-
-    std::shared_ptr<Graphics::Scene> GetScene() override {
-        return _scene;
-    }
-
-    std::shared_ptr<Graphics::Camera> GetCamera() override {
-        return _camera;
-    }
-
-
 };
 
 void MatricesTestConstructor() __attribute__ ((constructor));

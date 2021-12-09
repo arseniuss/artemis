@@ -108,14 +108,16 @@ const float uv_buffer_data[] = {
     0.667979f, 1.0f - 0.335851f
 };
 
-class TexturedCube : public Test {
+class RotateLookAtTest : public Test {
 private:
     std::shared_ptr<Graphics::BufferGeometry> _geometry;
     std::shared_ptr<Graphics::MeshMaterial> _material;
     std::shared_ptr<Graphics::Mesh> _object;
+
+    float _distance;
 public:
 
-    TexturedCube() : Test::Test("Textured cube") {
+    RotateLookAtTest() : Test::Test("Rotate lookat") {
 
     }
 
@@ -138,6 +140,20 @@ public:
         _geometry->SetAttribute("uv", uvBuffer);
 
         _scene->Add(_object);
+        _object->SetPosition({0, 0, 0});
+        _camera->SetPosition({0, 0, 4});
+        _camera->LookAt({0, 0, 0});
+
+
+        _distance = glm::distance(_camera->GetPosition(), _object->GetPosition());
+
+        DEBUG("DISTANCE = " << _distance);
+    }
+
+    void Update(float deltaTime) override {
+        Test::Update(deltaTime);
+
+
     }
 
     void Deinit() override {
@@ -148,8 +164,9 @@ public:
     }
 };
 
-void TexturedCubeConstructor() __attribute__ ((constructor));
+void RotateLookAtTestConstructor() __attribute__ ((constructor));
 
-void TexturedCubeConstructor() {
-    TestingFramework::Tests.emplace_back(std::make_shared<TexturedCube>());
+void RotateLookAtTestConstructor() {
+    TestingFramework::Tests.emplace_back(std::make_shared<RotateLookAtTest>());
 }
+

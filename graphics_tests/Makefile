@@ -15,6 +15,7 @@ SOURCES = \
     source/03_matrices_test.cpp \
     source/04_colored_cube.cpp \
     source/05_textured_cube.cpp \
+    source/06_rotate_lookat.cpp \
     source/Test.cpp \
     source/main.cpp
 
